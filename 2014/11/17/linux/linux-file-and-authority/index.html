@@ -1,0 +1,790 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="这篇文章是[Linux就是这个范儿]的读书笔记。记录了文件和目录的权限相关知识，还记录了文件有关的操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux中文件、目录和他们的权限">
+<meta property="og:url" content="http://coder-ss.github.io/2014/11/17/linux/linux-file-and-authority/index.html">
+<meta property="og:site_name" content="coder-ss">
+<meta property="og:description" content="这篇文章是[Linux就是这个范儿]的读书笔记。记录了文件和目录的权限相关知识，还记录了文件有关的操作。">
+<meta property="og:updated_time" content="2016-11-14T14:35:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux中文件、目录和他们的权限">
+<meta name="twitter:description" content="这篇文章是[Linux就是这个范儿]的读书笔记。记录了文件和目录的权限相关知识，还记录了文件有关的操作。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://coder-ss.github.io/2014/11/17/linux/linux-file-and-authority/"/>
+
+
+  <title> Linux中文件、目录和他们的权限 | coder-ss </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?7d7157a5836d43e3ad7dbd42e82697f3";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">coder-ss</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">do something interesting</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux中文件、目录和他们的权限
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-11-17T21:27:23+08:00" content="2014-11-17">
+              2014-11-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/11/17/linux/linux-file-and-authority/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/11/17/linux/linux-file-and-authority/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇文章是<a href="http://book.douban.com/subject/25918029/" target="_blank" rel="external">Linux就是这个范儿</a>的读书笔记。</p>
+<p>通过<code>ls -l</code>查看文件与目录及其属性：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">-rwxr-xr-x</th>
+<th style="text-align:right">1</th>
+<th style="text-align:center">root</th>
+<th style="text-align:center">root</th>
+<th style="text-align:center">27776</th>
+<th>Apr 17 2012</th>
+<th>arch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">文件类型和权限</td>
+<td style="text-align:right">连接数</td>
+<td style="text-align:center">拥有者</td>
+<td style="text-align:center">用户组</td>
+<td style="text-align:center">文件大小</td>
+<td>最后修改日期</td>
+<td>文件名</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="基本属性与权限"><a href="#基本属性与权限" class="headerlink" title="基本属性与权限"></a>基本属性与权限</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">-</th>
+<th style="text-align:right">rwx</th>
+<th style="text-align:center">r-x</th>
+<th>r-x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">文件类型</td>
+<td style="text-align:right">拥有者</td>
+<td style="text-align:center">所属用户组</td>
+<td>其他</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>第一个字符用于描述文件类型，可能的值：</p>
+<ul>
+<li>“-” 普通文件</li>
+<li>“d“ 目录文件</li>
+<li>“l” 软连接，硬连接没有特殊标记</li>
+<li>“b” 块设备，如磁盘等保存大块数据的设备</li>
+<li>“c” 字符设备，如鼠标、键盘等需要串行读写的设备</li>
+<li>“s” 套接字文件</li>
+<li>“p” 命名管道文件</li>
+</ul>
+<p>对于目录：</p>
+<ul>
+<li>“x”权限控制用户是否能打开它，只有具备“x”权限的用户才能打开这个目录</li>
+<li>如果想使用ls命令来查看这个目录下的文件列表，则必须有“r”权限，否则即使有“x”也不行</li>
+<li>要在目录中创建文件，则需要“w”权限</li>
+</ul>
+<p>对于其他类型的文件</p>
+<ul>
+<li>若想读取，则需要“r”权限</li>
+<li>若想使用编辑器编辑，就必须同时具备“r”和“w”这两个权限</li>
+<li>如果文件为shell脚本或其他可执行文件，具备“x”权限才能被执行</li>
+</ul>
+<h2 id="文件连接"><a href="#文件连接" class="headerlink" title="文件连接"></a>文件连接</h2><p>背景知识-Linux保存文件的方法：</p>
+<blockquote>
+<p>Linux所使用的文件系统是一种基于inode的文件系统。每一个新创建的文件都会被分配一个inode，而且每一个文件都有唯一的inode编号。可以简单理解inode为一个指向文件所在磁盘物理位置的指针。<br>“连接数”其实就是inode的引用计数。Linux允许一个文件有多个名字，文件名只是相当于对inode的一次引用。</p>
+</blockquote>
+<ol>
+<li>软连接<br>通过<code>ln -s</code>创建软连接<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ln -s /bin/bash sh</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>创建一个新的软连接sh指向/bin/bash，使用“ls -l”查看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lrwxr-xr-x.   1   shu  shu  9  Jue 23 15:01 sh -&gt; /bin/bash</div></pre></td></tr></table></figure></p>
+<p>软连接的文件属性和目标文件属性完全不同。软连接也要占据一个新的inode。</p>
+<ol>
+<li>硬连接<br>通过<code>ln</code>创建硬连接<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ln /bin/bash bash</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>创建一个名为bash的硬连接到/bin/bash，使用“ls -l”查看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lrwxr-xr-x.   1   shu  shu  938736  Jue 23 15:01 bash</div></pre></td></tr></table></figure></p>
+<p>硬连接的属性跟目标文件完全相同，因为引用的是同一个inode。<br><strong>硬连接要求必须与目标文件在同一分区</strong></p>
+<p>总结：</p>
+<ul>
+<li>删除文件连接的目标文件，软连接会失效，硬连接仅是“连接数”-1</li>
+<li>软连接可以创建在任何位置，包括网络。硬连接必须与目标文件在同一磁盘分区</li>
+<li>软连接与硬连接使用时区别不大，都相当于是一个文件具有不同的路径和文件名</li>
+</ul>
+<h2 id="修改文件属性和权限"><a href="#修改文件属性和权限" class="headerlink" title="修改文件属性和权限"></a>修改文件属性和权限</h2><ul>
+<li>修改文件名属性：<code>mv</code></li>
+<li>修改最后更新时间：<code>touch</code></li>
+<li>修改用户：<code>chown [-R] username filename</code><br>修改用户组：<code>chown [-R] username:group filename</code>或<code>chgrp</code></li>
+<li>修改权限<br>数字法：三位数字分表表示所有者、所属组、其他用户的权限，每位的值为<code>r(4或0) + w(2或0) + x(1或0)</code>，如<code>chmod 700 filename</code><br>文字法：由<code>[用户][行为][权限]</code>组成。用户为u、g、o、a中一个，分别代表所有者、所属组、其他用户、所有用户。行为为+、-、=中一个，分别代表增加、减去、设定。权限为r、w、x自由组合。</li>
+</ul>
+<h2 id="深入文件权限"><a href="#深入文件权限" class="headerlink" title="深入文件权限"></a>深入文件权限</h2><p>Linux文件权限除了r、w、x，还包括s和t两个特殊权限。<br>s标记可以出现在文件所有者的x权限位上，也可以出现在文件所属组的x权限位上。前者被称为Set UID，简称SUID，后者被称为Set GID，简称SGID。<br>t标记是其他用户专有，仅对目录有效。</p>
+<h3 id="SUID"><a href="#SUID" class="headerlink" title="SUID"></a>SUID</h3><ul>
+<li>SUID仅对二进制程序有效</li>
+<li>执行者对于改程序具有x的可执行权限</li>
+<li>执行权限仅在执行该程序的过程中有效</li>
+<li>执行者将具有该程序拥有者的权限</li>
+</ul>
+<p>如<code>/bin/su</code>的权限是<code>-rwsr-xr-x</code>，任何人执行它都会有root（它的所有者）权限，只是这个权限仅在执行的<code>su</code>命令中有效</p>
+<p>设置方法：<code>u+s</code>或<code>在普通的三位数字前加4，如“4755”</code></p>
+<h3 id="SGID"><a href="#SGID" class="headerlink" title="SGID"></a>SGID</h3><p>SGID用于文件时：</p>
+<ul>
+<li>SGID对二进制程序有效</li>
+<li>执行者对于该程序具有x的可执行权限</li>
+<li>执行者在执行的过程中将会获得该程序所属用户组的支持</li>
+</ul>
+<p><code>/usr/bin/locate</code>文件的权限为<code>-rws--s--x</code>，SGID的作用是任何用户执行该命令都能读取<code>mlocate.db</code>文件的内容，这个文件位于<code>/var/lib/mlocate/mlocate.db</code></p>
+<p>SGID用于目录时：</p>
+<ul>
+<li>用户若对于此目录拥有r与x权限时，该用户能够进入此目录</li>
+<li>该用户在此目录下的有效用户组将变成该目录的用户组</li>
+<li>若用于在此目录下具有w的权限，则用户所创建的新文件的用户组与此目录的用户组相同</li>
+</ul>
+<p>设置方法：<code>g+s</code>或<code>在普通的三位数字前加2，如“2755”</code></p>
+<h3 id="SBIT"><a href="#SBIT" class="headerlink" title="SBIT"></a>SBIT</h3><p>t权限只用户其他用户，名称是Sticky Bit，简称SBIT。仅对目录有效。</p>
+<ul>
+<li>用户若对此目录拥有w和x的权限，即拥有写的权限</li>
+<li>当用户在此目录下创建了文件或目录，仅自己与root才有权利删除文件</li>
+</ul>
+<p>典型例子是<code>/tmp</code>目录</p>
+<p>设置方法：<code>o+t</code>或<code>在普通的三位数字前加1，如“1755”</code></p>
+<h2 id="文件的基本操作"><a href="#文件的基本操作" class="headerlink" title="文件的基本操作"></a>文件的基本操作</h2><p><code>ls, cd, cp, rm, mv</code></p>
+<h2 id="搜索文件"><a href="#搜索文件" class="headerlink" title="搜索文件"></a>搜索文件</h2><h3 id="whereis"><a href="#whereis" class="headerlink" title="whereis"></a>whereis</h3><p>用于搜索可执行文件、联机帮助文件和源代码文件<br>如：<code>$ whereis ls</code><br>它不在磁盘中查找，而是在一个数据库中（/var/lib/mloate）查找。这个数据库是由Linux自动创建，包含本地所有文件的信息，并且每天通过执行updatedb命令更新一次。也可手动执行updatedb更新。</p>
+<h3 id="locate"><a href="#locate" class="headerlink" title="locate"></a>locate</h3><p>locate与whereis相似，使用了相同的数据库，但locate使用了十分复杂的匹配语法，如果只是：<br><code>$ locate ls</code><br>就会匹配所有包含了’ls’的文件名和路径，很多时候这样的结果是不能使用的。要精确搜索可以：<br><code>$ locate -b &quot;\ls&quot;</code><br>这会将所有文件名为“ls”的文件路径列出</p>
+<h3 id="which（常用）"><a href="#which（常用）" class="headerlink" title="which（常用）"></a>which（常用）</h3><p>它只是在$PATH 环境变量中指定的路径来搜索可执行文件的所在位置，一般用来确认系统中是否安装了指定的软件，比如要确认是否安装了gcc：<br><code>$ which gcc</code></p>
+<h3 id="type"><a href="#type" class="headerlink" title="type"></a>type</h3><p>type是用来判断一个命令是否属于shell内置的，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[shu@localhost ~]$ type ls</div><div class="line">ls is aliased to &apos;ls --color=auto&apos;</div><div class="line">[shu@localhost ~]$ type alias</div><div class="line">alias is a shell builtin</div><div class="line">[shu@localhost ~]$ type httpd</div><div class="line">httpd is /usr/sbin/httpd</div></pre></td></tr></table></figure></p>
+<p><code>type -p</code>用于不属于shell内置的命令时等同于which</p>
+<h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><p>find很强大，得另外专门学习</p>
+<h2 id="文件打包压缩"><a href="#文件打包压缩" class="headerlink" title="文件打包压缩"></a>文件打包压缩</h2><p>命令：<code>tar</code><br>常用3种压缩算法：<code>gz</code>、<code>bz2</code>、<code>xz</code>，压缩率：<code>gz&lt;bz2&lt;xz</code>，压缩速度：<code>gz&gt;bz2&gt;xz</code><br>解压tar包：<br><code>$ tar -vx -f filename</code>，或<br><code>$ tar -vxf filename</code><br>后一种形式中，f选项一定要放在最后，因为f选项后面接的是文件名。</p>
+<p>创建tar包：<br>gz算法：<code>$ tar -zcvf filename.tar.gz FILES</code><br>bz2算法：<code>$ tar -jcvf filename.tar.bz2 FILES</code><br>xz算法：<code>$ tar -Jcvf filename.tar.xz FILES</code><br>其中FILES代表要被打包、压缩的文件或目录的名称。</p>
+<p><code>dump</code>和<code>restore</code>是Linux中的备份和还原工具，也可以实现打包和解包。<br><code>cpio</code>用来备份任何东西，也可以实现打包解包。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag">#Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/11/11/php/php-file/" rel="next" title="PHP学习笔记--文件及有关函数">
+                <i class="fa fa-chevron-left"></i> PHP学习笔记--文件及有关函数
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/11/21/linux/linux-user-manage/" rel="prev" title="Linux中用户管理">
+                Linux中用户管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/11/17/linux/linux-file-and-authority/"
+           data-title="Linux中文件、目录和他们的权限" data-url="http://coder-ss.github.io/2014/11/17/linux/linux-file-and-authority/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/favicon.png"
+               alt="coder-ss" />
+          <p class="site-author-name" itemprop="name">coder-ss</p>
+          <p class="site-description motion-element" itemprop="description">do something interesting</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本属性与权限"><span class="nav-number">1.</span> <span class="nav-text">基本属性与权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件连接"><span class="nav-number">2.</span> <span class="nav-text">文件连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改文件属性和权限"><span class="nav-number">3.</span> <span class="nav-text">修改文件属性和权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深入文件权限"><span class="nav-number">4.</span> <span class="nav-text">深入文件权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SUID"><span class="nav-number">4.1.</span> <span class="nav-text">SUID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SGID"><span class="nav-number">4.2.</span> <span class="nav-text">SGID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SBIT"><span class="nav-number">4.3.</span> <span class="nav-text">SBIT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件的基本操作"><span class="nav-number">5.</span> <span class="nav-text">文件的基本操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索文件"><span class="nav-number">6.</span> <span class="nav-text">搜索文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#whereis"><span class="nav-number">6.1.</span> <span class="nav-text">whereis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#locate"><span class="nav-number">6.2.</span> <span class="nav-text">locate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#which（常用）"><span class="nav-number">6.3.</span> <span class="nav-text">which（常用）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type"><span class="nav-number">6.4.</span> <span class="nav-text">type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find"><span class="nav-number">6.5.</span> <span class="nav-text">find</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件打包压缩"><span class="nav-number">7.</span> <span class="nav-text">文件打包压缩</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coder-ss</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"totoo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

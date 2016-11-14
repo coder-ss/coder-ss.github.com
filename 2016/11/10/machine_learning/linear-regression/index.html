@@ -1,0 +1,788 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="机器学习," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="线性回归是机器学习中常用的回归方法，很多实际应用中会使用线性回归来构造基线版本。本文先对其概念进行了介绍，然后讨论了模型的求解方法，最后给出了线性回归在两个数据集上的Python实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习之线性回归">
+<meta property="og:url" content="http://coder-ss.github.io/2016/11/10/machine_learning/linear-regression/index.html">
+<meta property="og:site_name" content="coder-ss">
+<meta property="og:description" content="线性回归是机器学习中常用的回归方法，很多实际应用中会使用线性回归来构造基线版本。本文先对其概念进行了介绍，然后讨论了模型的求解方法，最后给出了线性回归在两个数据集上的Python实现。">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/gradien_desent01.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/gradien_desent02.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/gradien_desent03.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/gradien_desent04.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/lr-regularization.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/lr-output01.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/lr-output02.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/lr-output03.png">
+<meta property="og:updated_time" content="2016-11-14T14:50:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习之线性回归">
+<meta name="twitter:description" content="线性回归是机器学习中常用的回归方法，很多实际应用中会使用线性回归来构造基线版本。本文先对其概念进行了介绍，然后讨论了模型的求解方法，最后给出了线性回归在两个数据集上的Python实现。">
+<meta name="twitter:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/gradien_desent01.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://coder-ss.github.io/2016/11/10/machine_learning/linear-regression/"/>
+
+
+  <title> 机器学习之线性回归 | coder-ss </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?7d7157a5836d43e3ad7dbd42e82697f3";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">coder-ss</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">do something interesting</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                机器学习之线性回归
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-10T17:52:00+08:00" content="2016-11-10">
+              2016-11-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">machine_learning</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/10/machine_learning/linear-regression/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/10/machine_learning/linear-regression/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li>预测<strong>连续值变量</strong></li>
+<li>是<strong>有监督学习</strong>：样本是有输出值的。样本 $ D=\lbrace (x_i,y_i)\rbrace _{i=1}^{m} $</li>
+<li>学习得到一个映射关系 $f:\mathcal{X}\rightarrow\mathcal{Y}$</li>
+<li>假定输入x和输出y之间有线性相关关系</li>
+</ul>
+<blockquote>
+<p><strong>例</strong><br>假定房价只与面积有关</p>
+<script type="math/tex; mode=display">f(x) = \theta_1 x+\theta_0</script><p>假定房价只与面积和房间数量有关</p>
+<script type="math/tex; mode=display">f(x_1,x_2) = \theta_0+\theta_1x_1+\theta_2x_2</script></blockquote>
+<p>推广到n个变量（n个特征）：</p>
+<script type="math/tex; mode=display">\begin{align*}
+f(\boldsymbol{x}) = h_{\boldsymbol{\theta}}(\boldsymbol{x}) &= \theta_0+\theta_1x_1+\cdots+\theta_nx_n \\
+&= \left[ \theta_0, \theta_1,\theta_2,\cdots,\theta_n \right] \left[ \begin{matrix} x_0 \\ x_1 \\ x_2 \\ \vdots \\ x_n \end{matrix}\right] \\
+&= \boldsymbol{\theta}^T\boldsymbol{x}
+\end{align*}</script><p>其中 $ x_0 = 1 $，$\theta_0$ 称为截距，或者bias。</p>
+<h2 id="损失函数（loss-function）"><a href="#损失函数（loss-function）" class="headerlink" title="损失函数（loss function）"></a>损失函数（loss function）</h2><p>在线性回归的概念中已经知道了线性回归的模型，那么如何求解 $ \boldsymbol{\theta}$ 呢？关键在于如何衡量 $h_\boldsymbol{\theta}(\boldsymbol{x})$ 与 $y$ 之间的差别。均方误差 $\sum \limits_{i=1}^{m}(h_\boldsymbol{\theta} (x_{i})-y_{i})^2$ 是回归任务中最常用的性能度量，因此我们可以试图让均方误差最小化。</p>
+<script type="math/tex; mode=display">\boldsymbol{\theta}^* = \underset{\boldsymbol{\theta}}{\arg\min} \sum_{i=1}^{m}(h_\boldsymbol{\theta}(x_{i})-y_{i})^2</script><p>均方误差对应了常用的欧几里德距离（欧氏距离，Euclidean distance）。基于均方误差最小化进行模型求解的方法称为“最小二乘法”（least square method）。当向量$\boldsymbol{w}$为标量$w$时，最小二乘法就是试图找到一条直线，使所有样本到直线的欧式距离之和最小。</p>
+<h2 id="回归方程求解"><a href="#回归方程求解" class="headerlink" title="回归方程求解"></a>回归方程求解</h2><h3 id="求导（normal-equation）"><a href="#求导（normal-equation）" class="headerlink" title="求导（normal equation）"></a>求导（normal equation）</h3><ol>
+<li><p>只有一个特征<br>先讨论只有一个特征的情况。此时，</p>
+<script type="math/tex; mode=display">h_\boldsymbol{\theta}(x) = \theta_1 x + \theta_0</script><p>均方误差为：</p>
+<script type="math/tex; mode=display">\begin{align*}
+J(\theta_1, \theta_0) &= \sum_{i=1}^{m}(f(x_i) - y_i)^2 \\ 
+&= \sum_{i=1}^{m}(\theta_1 x_i + \theta_0 - y_i)^2 
+\end{align*}</script><p>将 $J(\theta_1, \theta_0)$ 分别对 $\theta_1$ 和 $\theta_0$ 求导，得</p>
+<script type="math/tex; mode=display">\begin{align*}
+\frac{\partial{J}}{\partial{\theta_1}} &= 2 \left( \theta_0\sum_{i=1}^{m}x_i^2 - \sum_{i=1}^{m} \left( y_i - \theta_0 \right) x_i \right) \\
+\frac{\partial{J}}{\partial{\theta_0}} &= 2 \left( m\theta_0 - \sum_{i=1}^{m} \left( y_i - \theta_1x_i \right) \right) 
+\end{align*}</script><p>令上式等于零可以得到 $\theta_1$ 和 $\theta_0$ 的闭式（closed-form）解：</p>
+<script type="math/tex; mode=display">\begin{align*}
+\theta_1 &= \frac{\sum \limits_{i=1}^{m}y_i \left( x_i - \overline{x} \right)}{\sum \limits_{i=1}^{m}x_i^2 - \frac{1}{m} \left( \sum \limits_{i=1}^{m}x_i \right)^2 } \\
+\theta_0 &= \frac{1}{m}\sum_{i=1}^{m} \left( y_i - \theta_1x_i \right)
+\end{align*}</script><p>其中 $\overline{x} = \frac{1}{m} \sum \limits_{i=1}^{m} x_i$ 是 $x$ 的均值。</p>
+</li>
+<li><p>有多个特征（n个）<br>更一般地，有n个特征（$ n &gt; 1 $）时，回归方程的形式为</p>
+<script type="math/tex; mode=display">h_\boldsymbol{\theta}(x) = \boldsymbol{\theta}^T\boldsymbol{x}</script><p>均方误差表示成矩阵的形式：</p>
+<script type="math/tex; mode=display">J(\boldsymbol{\theta}) = (\boldsymbol{y} - \boldsymbol{X}\boldsymbol{\theta})^T(\boldsymbol{y} - \boldsymbol{X}\boldsymbol{\theta})</script><p>其中</p>
+<script type="math/tex; mode=display">\begin{align*}
+\boldsymbol{X} = 
+\left[ \begin{matrix}
+1 & \boldsymbol{x}_1^T \\ 1 & \boldsymbol{x}_2^T \\ \vdots & \vdots \\ 1 & \boldsymbol{x}_m^T \\
+\end{matrix} \right]
+=\left[  \begin{matrix} 1 & x_{11} & x_{12} & \cdots & x_{1n} \\ 1 & x_{21} & x_{22} & \cdots & x_{2n} \\
+\vdots & \vdots & \ddots & \vdots & \vdots  \\ 1 & x_{m1} & x_{m2} & \cdots & x_{mn} \end{matrix} \right]
+\end{align*}</script><p>对 $\boldsymbol{\theta}$ 求导得</p>
+<script type="math/tex; mode=display">\frac{\partial J(\boldsymbol{\theta})}{\partial \boldsymbol{\theta}} = 2\boldsymbol{X}^T(\boldsymbol{X}\boldsymbol{\theta} - \boldsymbol{y})</script><p>令上式等于零，可以得到 $\boldsymbol{\theta}$ 最优的闭式解。当 $\boldsymbol{X}^T\boldsymbol{X}$ 为满秩矩阵或正定矩阵时，可解得</p>
+<script type="math/tex; mode=display">\boldsymbol{\theta}^* =  (\boldsymbol{X}^T\boldsymbol{X})^{-1}\boldsymbol{X}^T\boldsymbol{y}</script></li>
+</ol>
+<blockquote>
+<p>关于均方误差的矩阵形式求导：</p>
+<script type="math/tex; mode=display">\begin{align*} 
+\frac{\partial J(\boldsymbol{\theta})}{\partial \boldsymbol{\theta}}
+&= \frac{\partial \left( (\boldsymbol{y} - \boldsymbol{X}\boldsymbol{\theta})^T(\boldsymbol{y} - \boldsymbol{X}\boldsymbol{\theta}) \right)}{\partial \boldsymbol{\theta}} \\
+&= \frac{\partial \left( (\boldsymbol{y}^T - \boldsymbol{\theta}^T\boldsymbol{X}^T)(\boldsymbol{y} - \boldsymbol{X}\boldsymbol{\theta}) \right)}{\partial \boldsymbol{\theta}} \\
+&= \frac{\partial \left( \boldsymbol{y}^T\boldsymbol{y} - \boldsymbol{\theta}^T\boldsymbol{X}^T \boldsymbol{y} - \boldsymbol{y}^T\boldsymbol{X}\boldsymbol{\theta} + \boldsymbol{\theta}^T\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{\theta} \right)}{\partial \boldsymbol{\theta}} \\
+&= \frac{\partial (\boldsymbol{y}^T\boldsymbol{y}) }{\partial \boldsymbol{\theta}} - \frac{\partial (\boldsymbol{\theta}^T\boldsymbol{X}^T \boldsymbol{y}) }{\partial \boldsymbol{\theta}} - \frac{\partial (\boldsymbol{y}^T\boldsymbol{X}\boldsymbol{\theta}) }{\partial \boldsymbol{\theta}} + \frac{\partial (\boldsymbol{\theta}^T\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{\theta}) }{\partial \boldsymbol{\theta}} \\
+&=0 - \boldsymbol{X}^T \boldsymbol{y} - \boldsymbol{X}^T \boldsymbol{y} + 2\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{\theta} \\
+&= 2\boldsymbol{X}^T(\boldsymbol{X}\boldsymbol{\theta} - \boldsymbol{y})
+ \end{align*}</script><p>其中，$\boldsymbol{\theta}^T\boldsymbol{X}^T \boldsymbol{y}$、$\boldsymbol{y}^T\boldsymbol{X}\boldsymbol{\theta}$、$\boldsymbol{\theta}^T\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{\theta}$ 都是标量（1×1的矩阵），所以可以分解成三个【标量对向量求导】的问题。我们知道对于含n特征的m个样本，$\boldsymbol{\theta}$、$\boldsymbol{X}$、$\boldsymbol{y}$  的维度分别是(n+1)×1、 m×(n+1)、m×1，为方便讨论，我们这里认为它们的维度分别为n×1、 m×n、m×1。三个标量分别对向量求导如下：</p>
+<script type="math/tex; mode=display">\begin{align*}
+\frac{\partial (\boldsymbol{\theta}^T\boldsymbol{X}^T \boldsymbol{y}) }{\partial \boldsymbol{\theta}}
+\overset{\boldsymbol{X}^T \boldsymbol{y} = \boldsymbol{W}}{\Longrightarrow} \frac{\partial (\boldsymbol{\theta}^T\boldsymbol{W}) }{\partial \boldsymbol{\theta}}
+&= \frac{\partial}{\partial \boldsymbol{\theta}} \left[ \begin{matrix} \theta_1 & \theta_2 & \cdots & \theta_n \end{matrix} \right] \left[ \begin{matrix} w_1 \\ w_2 \\ \vdots \\ w_n \end{matrix} \right] \\
+&= \frac{\partial}{\partial \boldsymbol{\theta}} \sum_{i=1}^{n}\theta_i w_i 
+= \left[ \begin{matrix} \frac{\partial}{\partial \theta_1} \sum_{i=1}^{n}\theta_i w_i \\ \frac{\partial}{\partial \theta_2} \sum_{i=1}^{n}\theta_i w_i \\ \vdots \\ \frac{\partial}{\partial \theta_n} \sum_{i=1}^{n}\theta_i w_i \end{matrix} \right] 
+= \left[ \begin{matrix} w_1 \\ w_2 \\ \vdots \\ w_n \end{matrix} \right] = \boldsymbol{W} = \boldsymbol{X}^T \boldsymbol{y} \\
+\\ \frac{\partial (\boldsymbol{y}^T\boldsymbol{X}\boldsymbol{\theta}) }{\partial \boldsymbol{\theta}}
+\overset{\boldsymbol{y}^T\boldsymbol{X} = \boldsymbol{W}}{\Longrightarrow} \frac{\partial (\boldsymbol{W}\boldsymbol{\theta}) }{\partial \boldsymbol{\theta}}
+&= \frac{\partial}{\partial \boldsymbol{\theta}}  \left[ \begin{matrix} w_1 & w_2 & \cdots & w_n \end{matrix} \right] \left[ \begin{matrix} \theta_1 \\ \theta_2 \\ \vdots \\ \theta_n \end{matrix} \right] \\
+&= \frac{\partial}{\partial \boldsymbol{\theta}} \sum_{i=1}^{n}w_i \theta_i
+= \left[ \begin{matrix} \frac{\partial}{\partial \theta_1} \sum_{i=1}^{n}w_i \theta_i \\ \frac{\partial}{\partial \theta_2} \sum_{i=1}^{n}w_i \theta_i \\ \vdots \\ \frac{\partial}{\partial \theta_n} \sum_{i=1}^{n}w_i \theta_i \end{matrix} \right]
+= \left[ \begin{matrix} w_1 \\ w_2 \\ \vdots \\ w_n \end{matrix} \right] = \boldsymbol{W}^T = (\boldsymbol{y}^T\boldsymbol{X})^T =\boldsymbol{X}^T \boldsymbol{y} \\
+\\ \frac{\partial (\boldsymbol{\theta}^T\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{\theta}) }{\partial \boldsymbol{\theta}}
+\overset{\boldsymbol{X}^T\boldsymbol{X} = \boldsymbol{W}}{\Longrightarrow} \frac{\partial (\boldsymbol{\theta}^T\boldsymbol{W}\boldsymbol{\theta}) }{\partial \boldsymbol{\theta}}
+&= \frac{\partial}{\partial \boldsymbol{\theta}} \left[ \begin{matrix} \theta_1 & \theta_2 & \cdots & \theta_n \end{matrix} \right] \left[ \begin{matrix} w_{11} & w_{12} & \cdots & w_{1n} \\ w_{21} & w_{22} & \cdots & w_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ w_{n1} & w_{n2} & \cdots & w_{nn} \end{matrix} \right] \left[ \begin{matrix} \theta_1 \\ \theta_2 \\ \vdots \\ \theta_n \end{matrix} \right] \\
+&= \frac{\partial}{\partial \boldsymbol{\theta}} \sum_{i=1}^{n} \sum_{j=1}^{n}\theta_i w_{ij} \theta_j
+= \left[ \begin{matrix} \frac{\partial}{\partial \theta_1} \sum_{i=1}^{n} \sum_{j=1}^{n}\theta_i w_{ij} \theta_j \\ \frac{\partial}{\partial \theta_2} \sum_{i=1}^{n} \sum_{j=1}^{n}\theta_i w_{ij} \theta_j \\ \vdots \\ \frac{\partial}{\partial \theta_n} \sum_{i=1}^{n} \sum_{j=1}^{n}\theta_i w_{ij} \theta_j \end{matrix} \right] 
+= \left[ \begin{matrix} 2\sum_{i=1}^{n}w_{1i}\theta_i \\ 2\sum_{i=1}^{n}w_{2i}\theta_i \\ \vdots \\ 2\sum_{i=1}^{n}w_{ni}\theta_i \end{matrix} \right] \\
+&= 2 \left[ \begin{matrix} w_{11} & w_{12} & \cdots & w_{1n} \\ w_{21} & w_{22} & \cdots & w_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ w_{n1} & w_{n2} & \cdots & w_{nn} \end{matrix} \right] \left[ \begin{matrix} \theta_1 \\ \theta_2 \\ \vdots \\ \theta_n \end{matrix} \right]
+= 2\boldsymbol{W}\boldsymbol{\theta} = 2\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{\theta}
+ \end{align*}</script><p>其中，$\frac{\partial}{\partial \theta_k} \sum \limits_{i=1}^{n} \sum \limits_{j=1}^{n}\theta_i w_{ij} \theta_j$ 的求导需要详细叙述一下，注意到$w_{ik} = w_{ki}$，求导过程如下：</p>
+<script type="math/tex; mode=display">\begin{align*}
+\frac{\partial}{\partial \theta_k} \sum_{i=1}^{n} \sum_{j=1}^{n}\theta_i w_{ij} \theta_j
+&= \frac{\partial}{\partial \theta_k} \left( \sum_{i=k}^{k} \sum_{j=k}^{k}\theta_i w_{ij} \theta_j + \sum_{i=k}^{k} \sum_{j=1,j\neq k}^{n}\theta_i w_{ij} \theta_j + \sum_{i=1,i\neq k}^{n} \sum_{j=k}^{k}\theta_i w_{ij} \theta_j + \sum_{i=1,i\neq k}^{n} \sum_{j=1,j\neq k}^{n}\theta_i w_{ij} \theta_j \right) \\
+&= \frac{\partial}{\partial \theta_k} \left( w_{kk} \theta_k^2 + \sum_{j=1,j\neq k}^{n}\theta_k w_{kj} \theta_j + \sum_{i=1,i\neq k}^{n} \theta_i w_{ik} \theta_k + \sum_{i=1,i\neq k}^{n} \sum_{j=1,j\neq k}^{n}\theta_i w_{ij} \theta_j \right) \\
+&= 2w_{kk}\theta_k +  \sum_{j=1,j\neq k}^{n} w_{kj} \theta_j + \sum_{i=1,i\neq k}^{n} \theta_i w_{ik} + 0 \\
+&=  \sum_{i=1}^{n} w_{ki} \theta_i + \sum_{i=1}^{n} w_{ik}\theta_i \\
+&= 2\sum_{i=1}^{n} w_{ki}\theta_i
+\end{align*}</script></blockquote>
+<h3 id="梯度下降（gradient-descent）"><a href="#梯度下降（gradient-descent）" class="headerlink" title="梯度下降（gradient descent）"></a>梯度下降（gradient descent）</h3><p>很多时候直接通过求导求解闭式解并不容易，就需要使用梯度下降最优化方法来求最优解。</p>
+<p>一般定义损失函数如下：</p>
+<script type="math/tex; mode=display">J(\boldsymbol{\theta})=\frac{1}{2m}\sum_{i=1}^{m}\left( h_{\boldsymbol{\theta}}(\boldsymbol{x}_{i})-y_{i} \right)^2</script><p>考虑损失函数的变化趋势。以只有一个特征且截距为零的情况 $ h_\theta(x) = \theta_1x $ 为例，下左图中红色叉叉代表三个样本，直线代表学习到的映射关系，可以发现，当 $\theta_1$ 逐渐增大时，损失函数的值先会逐渐减小，达到一个最小值后又会慢慢增大。<br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/gradien_desent01.png" alt="Alt text"></p>
+<p>有两个变量时，损失函数也有类似的变化趋势：<br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/gradien_desent02.png" alt="Alt text"></p>
+<p>利用梯度下降来逐步最小化损失函数，从而寻找估计参数的过程如下：</p>
+<ol>
+<li>先选定一组估计参数（即选定损失函数上某一点）</li>
+<li>求解出损失函数在这组参数下的梯度（即损失函数在该点变化最快的方向，只有一个变量时就是损失函数在该点的导数值（斜率），有两个变量时就是损失函数在该点对两个变量的偏导组成的方向向量）</li>
+<li>然后沿着梯度方向走一小步（学习率$\alpha$），得到新的参数值</li>
+<li>重复2、3，直到逼近损失函数的最小值（可以通过连续多次重复2、3后，损失函数的变化值都很小来判断逼近了最小值）</li>
+</ol>
+<p><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/gradien_desent03.png" alt="Alt text"></p>
+<p><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/gradien_desent04.png" alt="Alt text"></p>
+<p>写成一个简单的伪代码的形式：</p>
+<blockquote>
+<p>repeat until convergence {<br>$\quad\quad \theta_j:=\theta_j-\alpha\frac{\partial}{\partial\theta_j}J(\theta_0,\theta_1,\cdots,\theta_n)$<br>}<br>其中，<br>$\theta_0:=\theta_0-\alpha\frac{1}{m}\sum_{i=1}^{m}(h_\boldsymbol{\theta}(\boldsymbol{x}_i)-y_i)$<br>$\theta_1:=\theta_1-\alpha\frac{1}{m}\sum_{i=1}^{m}(h_\boldsymbol{\theta}(\boldsymbol{x}_i)-y_i)x_{i1}$<br>$\theta_2:=\theta_2-\alpha\frac{1}{m}\sum_{i=1}^{m}(h_\boldsymbol{\theta}(\boldsymbol{x}_i)-y_i)x_{i2}$<br>$\cdots$</p>
+</blockquote>
+<p>这里偏导的计算比闭式解中偏导的计算要简单，详细推导就不展开了。</p>
+<h2 id="正则化（regularization）"><a href="#正则化（regularization）" class="headerlink" title="正则化（regularization）"></a>正则化（regularization）</h2><h3 id="欠拟合、过拟合"><a href="#欠拟合、过拟合" class="headerlink" title="欠拟合、过拟合"></a>欠拟合、过拟合</h3><p><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/lr-regularization.png" alt="Alt text"></p>
+<p><strong>过拟合：</strong>如果我们有特别多的特征，我们的假设函数曲线可以对原始数据拟合的非常好，但丧失了一般性，从而导致对新的待预测样本，预测效果差。如上右图。</p>
+<h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><p>防止过拟合的典型方法是正则化，在原损失函数的基础上加上一个正则化项（regularizer）或罚项（panalty term），下面是使用L2范数正则化项的损失函数：</p>
+<script type="math/tex; mode=display">J(\boldsymbol{\theta})=\frac{1}{2m}\left[\sum_{i=1}^{m} \left( h_\boldsymbol{\theta}(\boldsymbol{x}_i)-y_i \right)^2+\lambda\sum_{j=1}^{n}\theta_j^2\right]</script><h2 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h2><p>以斯坦福的Deep Learning公开课的习题为例，对线性回归进行了编码（Python）。</p>
+<p>完整的代码以ipython notebook的形式放在了<a href="https://github.com/coder-ss/ml-learn/blob/master/linear-regression/lr-boys-height.ipynb" target="_blank" rel="external">github上</a>。</p>
+<h3 id="单特征问题"><a href="#单特征问题" class="headerlink" title="单特征问题"></a>单特征问题</h3><p>数据来自于斯坦福Deep Learning公开课的习题<a href="http://openclassroom.stanford.edu/MainFolder/DocumentPage.php?course=DeepLearning&amp;doc=exercises/ex2/ex2.html" target="_blank" rel="external">Exercise: Linear Regression</a>，是一份2-8岁男孩身高的数据，用于寻找年龄与身高的关系。</p>
+<p>读取数据、求解参数的代码如下。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">from</span> mpl_toolkits.mplot3d <span class="keyword">import</span> Axes3D</div><div class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> cm</div><div class="line"></div><div class="line"><span class="comment"># 读取数据</span></div><div class="line">x_arr = np.loadtxt(<span class="string">'data/boys-height/x.dat'</span>)</div><div class="line">x_arr.resize(len(x_arr), <span class="number">1</span>)</div><div class="line">x_arr = np.append(np.ones((len(x_arr), <span class="number">1</span>)), x_arr, <span class="number">1</span>)</div><div class="line">        </div><div class="line">y_arr = np.loadtxt(<span class="string">'data/boys-height/y.dat'</span>)</div><div class="line">        </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">gradient_descent</span><span class="params">(_x_arr, _y_arr, _theta_0, _theta_1, _alpha=<span class="number">0.07</span>)</span>:</span></div><div class="line">    <span class="string">""" 梯度下降函数</span></div><div class="line">    </div><div class="line">    :param _x_arr: 各个特征的值，包含了截距，所以在单特征时_x_arr的维度是 m×2</div><div class="line">    :param _y_arr: 标签</div><div class="line">    :param _theta_0: </div><div class="line">    :param _theta_1: </div><div class="line">    :param _alpha: 步长</div><div class="line">    :return: </div><div class="line">    """</div><div class="line">    _y_arr_predict = _x_arr[:,<span class="number">0</span>] * _theta_0 + _x_arr[:,<span class="number">1</span>] * _theta_1</div><div class="line">    </div><div class="line">    _theta_0 -= _alpha * np.mean(_y_arr_predict - _y_arr)</div><div class="line">    _theta_1 -= _alpha * np.mean((_y_arr_predict - _y_arr) * _x_arr[:,<span class="number">1</span>])</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> _theta_0, _theta_1</div><div class="line"></div><div class="line"><span class="comment"># 直接求解（normal equation）</span></div><div class="line">x_mean = np.mean(x_arr[:,<span class="number">1</span>])</div><div class="line">theta_1 = np.sum(y_arr * (x_arr[:,<span class="number">1</span>] - x_mean)) / (np.sum(x_arr[:, <span class="number">1</span>]**<span class="number">2</span>) - np.sum(x_arr[:, <span class="number">1</span>])**<span class="number">2</span> / len(x_arr))</div><div class="line">theta_0 = np.mean(y_arr - theta_1 * x_arr[:, <span class="number">1</span>])</div><div class="line">print(<span class="string">'通过normal equation求解得到的参数：theta_0=%s，theta_1=%s'</span> % (theta_0, theta_1))</div><div class="line"></div><div class="line"><span class="comment"># 用梯度下降方法来求解</span></div><div class="line">theta_0 = <span class="number">0</span>; theta_1 = <span class="number">0</span>  <span class="comment"># 初始参数</span></div><div class="line">theta_0_new = <span class="number">0</span>; theta_1_new = <span class="number">0</span>  <span class="comment"># 迭代得到的参数</span></div><div class="line">count = <span class="number">1</span></div><div class="line"><span class="keyword">while</span> count &lt; <span class="number">2000</span>:  <span class="comment"># 迭代次数上限</span></div><div class="line">    count += <span class="number">1</span></div><div class="line">    theta_0_new, theta_1_new = gradient_descent(x_arr, y_arr, theta_0, theta_1)</div><div class="line">    <span class="comment"># 如果迭代后 参数更新很小，就可以停止迭代了</span></div><div class="line">    <span class="keyword">if</span> abs(theta_0_new - theta_0) &lt; <span class="number">0.1e-7</span> <span class="keyword">and</span> abs(theta_1_new - theta_1) &lt; <span class="number">0.1e-7</span>:</div><div class="line">        <span class="keyword">break</span></div><div class="line">    theta_0 = theta_0_new</div><div class="line">    theta_1 = theta_1_new</div><div class="line">print(<span class="string">'通过gradient descent迭代%s次后求解得到的参数：theta_0=%s，theta_1=%s'</span> % (count, theta_0, theta_1))</div><div class="line"></div><div class="line"><span class="comment"># 绘制拟合直线</span></div><div class="line">line_x = [<span class="number">2</span>, <span class="number">8</span>]</div><div class="line">line_y = [theta_0 + theta_1 * x <span class="keyword">for</span> x <span class="keyword">in</span> line_x]</div><div class="line">plt.plot(line_x, line_y)</div><div class="line"><span class="comment"># 绘制样本</span></div><div class="line">plt.scatter(x_arr[:, <span class="number">1</span>], y_arr)</div><div class="line">plt.xlabel(<span class="string">'Age in years'</span>); plt.ylabel(<span class="string">'Height in meters'</span>)</div><div class="line"></div><div class="line">plt.show()</div></pre></td></tr></table></figure></p>
+<p>上述代码的输出如下：<br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/lr-output01.png" alt="Alt text"></p>
+<p>可以看到梯度下降算法和求导的方法的结果是一致的。</p>
+<p>我们可以绘制出损失函数与参数的关系、损失函数的等高线，绘制代码和结果如下。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 计算各个参数下的损失函数的值</span></div><div class="line">theta_0_arr = np.arange(<span class="number">-3</span>, <span class="number">3</span>, <span class="number">0.06</span>)</div><div class="line">theta_1_arr = np.arange(<span class="number">-1</span>, <span class="number">1</span>, <span class="number">0.02</span>)</div><div class="line">z_vals = np.zeros((<span class="number">100</span>,<span class="number">100</span>))</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">100</span>):</div><div class="line">        z_vals[i][j] = np.mean((theta_0_arr[j] + theta_1_arr[i] * x_arr[:, <span class="number">1</span>] - y_arr)**<span class="number">2</span>) / <span class="number">2</span></div><div class="line"></div><div class="line"><span class="comment"># 绘制损失函数与参数的关系</span></div><div class="line">fig = plt.figure(<span class="number">1</span>, figsize=(<span class="number">7</span>, <span class="number">7</span>))</div><div class="line">ax1 = fig.gca(projection=<span class="string">'3d'</span>)</div><div class="line">ax1.set_xlim([<span class="number">1</span>, <span class="number">-1</span>])</div><div class="line">theta_1_arr, theta_0_arr = np.meshgrid(theta_1_arr, theta_0_arr)</div><div class="line">ax1.plot_surface(theta_1_arr, theta_0_arr, z_vals,  rstride=<span class="number">2</span>, cstride=<span class="number">1</span>, cmap=cm.jet, linewidth=<span class="number">0.1</span>, shade=<span class="keyword">True</span>)</div><div class="line">ax1.set_xlabel(<span class="string">'$\\theta_1$'</span>, fontsize=<span class="string">'x-large'</span>); ax1.set_ylabel(<span class="string">'$\\theta_0$'</span>, fontsize=<span class="string">'x-large'</span>)</div><div class="line">ax1.set_zlabel(<span class="string">'Cost J'</span>, fontsize=<span class="string">'x-large'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 绘制损失函数的等高线</span></div><div class="line">plt.figure(<span class="number">2</span>, figsize=(<span class="number">6</span>, <span class="number">6</span>))</div><div class="line">CS = plt.contour(theta_1_arr, theta_0_arr,  z_vals, levels=np.logspace(<span class="number">-2</span>, <span class="number">2</span>, <span class="number">15</span>))</div><div class="line">plt.clabel(CS, inline=<span class="number">1</span>, fontsize=<span class="number">8</span>)</div><div class="line">plt.xlabel(<span class="string">'$\\theta_1$'</span>, fontsize=<span class="string">'x-large'</span>); plt.ylabel(<span class="string">'$\\theta_0$'</span>, fontsize=<span class="string">'x-large'</span>)</div><div class="line"></div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/lr-output02.png" alt="Alt text"></p>
+<h3 id="多特征问题"><a href="#多特征问题" class="headerlink" title="多特征问题"></a>多特征问题</h3><p>数据来自于斯坦福Deep Learning公开课的习题<a href="http://openclassroom.stanford.edu/MainFolder/DocumentPage.php?course=DeepLearning&amp;doc=exercises/ex3/ex3.html" target="_blank" rel="external">Exercise: Multivariance Linear Regression</a>。该数据描述了房子面积、房间数量与房价的关系。</p>
+<p>先读取和处理数据：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 读取数据</span></div><div class="line">x_arr = np.loadtxt(<span class="string">'data/house-price/x.dat'</span>)</div><div class="line">y_arr = np.loadtxt(<span class="string">'data/house-price/y.dat'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 处理数据</span></div><div class="line"><span class="comment"># 标准化处理</span></div><div class="line">x_mean = np.mean(x_arr, <span class="number">0</span>)</div><div class="line">x_std = np.std(x_arr, <span class="number">0</span>)</div><div class="line">x_arr_scale = (x_arr - x_mean) / x_std</div><div class="line"><span class="comment"># 组装截距</span></div><div class="line">x_arr_scale = np.append(np.ones((len(x_arr_scale), <span class="number">1</span>)), x_arr_scale, <span class="number">1</span>)</div><div class="line">x_arr = np.append(np.ones((len(x_arr), <span class="number">1</span>)), x_arr, <span class="number">1</span>)</div><div class="line">x_mat_scale = np.matrix(x_arr_scale)</div><div class="line">x_mat = np.matrix(x_arr)</div><div class="line"><span class="comment"># 将标签表示成 m×1 的矩阵</span></div><div class="line">y_mat = np.matrix(y_arr)</div><div class="line">y_mat.resize((len(x_mat), <span class="number">1</span>))</div></pre></td></tr></table></figure></p>
+<p>然后寻找合适的学习率（alpha）。通过遍历几个不同的学习率，绘制学习率与均方误差的曲线图，可以发现学习率为1时收敛较快，而学习率过大（如2.1）时，均方误差不会收敛。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">def mse(_x_mat, _y_mat, _thetas_mat):</div><div class="line">    &quot;&quot;&quot; 求均方误差</div><div class="line">    </div><div class="line">    :param _x_mat: 各样本的特征值。m×(n+1) 的矩阵，这里例子是47×3</div><div class="line">    :param _y_mat: 各样本的标签。m×1 的矩阵</div><div class="line">    :param _thetas_mat: 模型参数。(n+1)×1 的矩阵。这里是3×1</div><div class="line">    :return: </div><div class="line">    &quot;&quot;&quot;</div><div class="line">    _err = _x_mat * _thetas_mat - _y_mat</div><div class="line">    rs = _err.T * _err / 2 / _y_mat.shape[0]</div><div class="line">    </div><div class="line">    return rs.flat[0]</div><div class="line">    </div><div class="line">def gradient_descent(_x_arr, _y_arr, _thetas, _alpha=2):</div><div class="line">    &quot;&quot;&quot; 梯度下降函数</div><div class="line">    </div><div class="line">    :param _x_arr: 各样本的特征值。ndarray类型 </div><div class="line">    :param _y_arr: 各样本的标签。ndarray类型 </div><div class="line">    :param _thetas: 模型参数。ndarray类型 </div><div class="line">    :param _alpha: 学习率</div><div class="line">    :return: 更新后的模型参数</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    for j in range(_x_arr.shape[1]):</div><div class="line">        err_list = [0.0] * _x_arr.shape[0]</div><div class="line">        </div><div class="line">        for i in range(_x_arr.shape[0]):</div><div class="line">            err_list[i] = (np.sum(_x_arr[i, :] * _thetas) - _y_arr[i]) * _x_arr[i, j]</div><div class="line"></div><div class="line">        _thetas[j] = _thetas[j] - _alpha * np.mean(err_list, 0)</div><div class="line">    return _thetas</div><div class="line"></div><div class="line"># 寻找学习率alpha</div><div class="line">alphas = [0.01, 0.03, 0.1, 0.3, 1, 1.8]</div><div class="line">plt.figure(1, figsize=(8, 6))</div><div class="line">for alpha in alphas:</div><div class="line">    count = 0</div><div class="line">    mse_list = [0.0] * 200</div><div class="line">    thetas = np.array([0.0, 0.0, 0.0])</div><div class="line">    </div><div class="line">    while count &lt; 200:</div><div class="line">        mse_list[count] = mse(x_mat_scale, y_mat, np.matrix(thetas).T)</div><div class="line">        count += 1</div><div class="line">        thetas = gradient_descent(x_arr_scale, y_arr, thetas.copy(), alpha)</div><div class="line">    plt.plot(range(200), mse_list, label=alpha)</div><div class="line">plt.legend()</div><div class="line">plt.xlabel(&apos;Number of iterations&apos;, fontsize=&apos;medium&apos;); plt.ylabel(&apos;Cost J&apos;, fontsize=&apos;medium&apos;)</div><div class="line"></div><div class="line"># 学习率过大会发散</div><div class="line">plt.figure(2, figsize=(8, 6))</div><div class="line">count = 0</div><div class="line">mse_list = [0.0] * 200</div><div class="line">thetas = np.array([0.0, 0.0, 0.0])</div><div class="line"></div><div class="line">while count &lt; 200:</div><div class="line">    mse_list[count] = mse(np.matrix(x_arr_scale), y_mat, np.matrix(thetas).T)</div><div class="line">    count += 1</div><div class="line">    thetas = gradient_descent(x_arr_scale, y_arr, thetas.copy(), 2.1)</div><div class="line">plt.plot(range(200), mse_list, label=2.1)</div><div class="line">plt.legend()</div><div class="line">plt.xlabel(&apos;Number of iterations&apos;, fontsize=&apos;medium&apos;); plt.ylabel(&apos;Cost J&apos;, fontsize=&apos;medium&apos;)</div><div class="line">plt.show()</div></pre></td></tr></table></figure></p>
+<p>上述代码的输出：<br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/lr/lr-output03.png" alt="Alt text"></p>
+<p>最后用选好的学习率（alpha=1）和迭代次数（50）来求解。这里对比了梯度下降的方法和求导的方法，由于梯度下降时对特征作了标准化处理，得到的参数与求导的方法并不一致，但对于给定的测试用例，其计算结果是一样的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"># 选择学习步长 alpha=1，迭代 50 次</div><div class="line">count = 0</div><div class="line">thetas = np.array([0.0, 0.0, 0.0])</div><div class="line">while count &lt; 50:</div><div class="line">    count += 1</div><div class="line">    thetas = gradient_descent(x_arr_scale, y_arr, thetas.copy(), 1)</div><div class="line">print(&apos;通过gradient descent得到的参数为：%s&apos; % thetas, end=&apos;&apos;)</div><div class="line"></div><div class="line"># 预测数据</div><div class="line">x_predict = np.array([1650, 3])</div><div class="line">x_predict_scale = (x_predict - x_mean) / x_std</div><div class="line">x_predict_scale = np.append(np.ones(1), x_predict_scale, 0)</div><div class="line">x_predict = np.append(np.ones(1), x_predict, 0)</div><div class="line"></div><div class="line"># </div><div class="line">print(&apos;。预测值为：%s&apos; % np.sum(thetas * x_predict_scale))</div><div class="line"></div><div class="line"># 通过求导得到闭式解（normal equation）</div><div class="line">thetas2 = np.array((x_mat.T*x_mat).I * x_mat.T * y_mat).ravel()</div><div class="line">print(&apos;通过normal equation得到的参数为：%s&apos; % thetas2, end=&apos;&apos;)</div><div class="line">print(&apos;。预测值为：%s&apos; % np.sum(thetas2 * x_predict))</div></pre></td></tr></table></figure></p>
+<p>上述代码的输出为：<br><code>通过gradient descent得到的参数为：[ 340412.65957447  109447.79646964   -6578.35485416]。预测值为：293081.464335</code><br><code>通过normal equation得到的参数为：[ 89597.9095428     139.21067402  -8738.01911233]。预测值为：293081.464335</code></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>julyedu机器学习班</li>
+<li>机器学习 周志华</li>
+<li>吴恩达老师的机器学习公开课</li>
+<li>斯坦福Deep Learning公开课</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag">#机器学习</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/07/machine_learning/lagrange/" rel="next" title="机器学习之拉格朗日乘数法">
+                <i class="fa fa-chevron-left"></i> 机器学习之拉格朗日乘数法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/10/machine_learning/linear-regression/"
+           data-title="机器学习之线性回归" data-url="http://coder-ss.github.io/2016/11/10/machine_learning/linear-regression/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/favicon.png"
+               alt="coder-ss" />
+          <p class="site-author-name" itemprop="name">coder-ss</p>
+          <p class="site-description motion-element" itemprop="description">do something interesting</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失函数（loss-function）"><span class="nav-number">2.</span> <span class="nav-text">损失函数（loss function）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回归方程求解"><span class="nav-number">3.</span> <span class="nav-text">回归方程求解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#求导（normal-equation）"><span class="nav-number">3.1.</span> <span class="nav-text">求导（normal equation）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度下降（gradient-descent）"><span class="nav-number">3.2.</span> <span class="nav-text">梯度下降（gradient descent）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正则化（regularization）"><span class="nav-number">4.</span> <span class="nav-text">正则化（regularization）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#欠拟合、过拟合"><span class="nav-number">4.1.</span> <span class="nav-text">欠拟合、过拟合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则化"><span class="nav-number">4.2.</span> <span class="nav-text">正则化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实践"><span class="nav-number">5.</span> <span class="nav-text">实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#单特征问题"><span class="nav-number">5.1.</span> <span class="nav-text">单特征问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多特征问题"><span class="nav-number">5.2.</span> <span class="nav-text">多特征问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coder-ss</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"totoo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

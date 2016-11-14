@@ -1,0 +1,698 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="php,php基本函数," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="最近尝试着参加了3场面试，发现面试官对php基础知识的掌握还是很看中的。那么，php有关的一些基本函数都要做到心中有数。
+今天要总结的是操作和测试变量的函数。知识内容来自php圣经
+测试和设置变量类型12string gettype(mixed var); //返回 PHP 变量的类型bool settype(mixed var, string type); //将变量 var 的类型设置成 ty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP学习笔记--变量类型及有关函数">
+<meta property="og:url" content="http://coder-ss.github.io/2014/11/03/php/php-variable/index.html">
+<meta property="og:site_name" content="coder-ss">
+<meta property="og:description" content="最近尝试着参加了3场面试，发现面试官对php基础知识的掌握还是很看中的。那么，php有关的一些基本函数都要做到心中有数。
+今天要总结的是操作和测试变量的函数。知识内容来自php圣经
+测试和设置变量类型12string gettype(mixed var); //返回 PHP 变量的类型bool settype(mixed var, string type); //将变量 var 的类型设置成 ty">
+<meta property="og:updated_time" content="2016-11-14T14:35:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP学习笔记--变量类型及有关函数">
+<meta name="twitter:description" content="最近尝试着参加了3场面试，发现面试官对php基础知识的掌握还是很看中的。那么，php有关的一些基本函数都要做到心中有数。
+今天要总结的是操作和测试变量的函数。知识内容来自php圣经
+测试和设置变量类型12string gettype(mixed var); //返回 PHP 变量的类型bool settype(mixed var, string type); //将变量 var 的类型设置成 ty">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://coder-ss.github.io/2014/11/03/php/php-variable/"/>
+
+
+  <title> PHP学习笔记--变量类型及有关函数 | coder-ss </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?7d7157a5836d43e3ad7dbd42e82697f3";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">coder-ss</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">do something interesting</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                PHP学习笔记--变量类型及有关函数
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-11-03T21:29:24+08:00" content="2014-11-03">
+              2014-11-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/php/" itemprop="url" rel="index">
+                    <span itemprop="name">php</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/11/03/php/php-variable/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/11/03/php/php-variable/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近尝试着参加了3场面试，发现面试官对php基础知识的掌握还是很看中的。那么，php有关的一些基本函数都要做到心中有数。</p>
+<p>今天要总结的是操作和测试变量的函数。知识内容来自<a href="http://book.douban.com/subject/3549421/" target="_blank" rel="external">php圣经</a></p>
+<h2 id="测试和设置变量类型"><a href="#测试和设置变量类型" class="headerlink" title="测试和设置变量类型"></a>测试和设置变量类型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">string gettype(mixed var); //返回 PHP 变量的类型</div><div class="line">bool settype(mixed var, string type); //将变量 var 的类型设置成 type</div></pre></td></tr></table></figure>
+<p><strong>gettype</strong>可能的返回值有：”boolean”、”integer”、 “double”、 “string”、 “array” 、”object”、 “resource”、”NULL”、”unknown type” 等。</p>
+<blockquote>
+<p>不要使用 gettype() 来测试某种类型，因为其返回的字符串在未来的版本中可能需要改变。此外，由于包含了字符串的比较，它的运行也是较慢的。 </p>
+<p>使用 is_* 函数代替</p>
+</blockquote>
+<p><strong>settype</strong>中type 的可能值为： “boolean”（或为”bool”，从 PHP 4.2.0 起）、”integer”（或为”int”，从 PHP 4.2.0 起、”float” （只在 PHP 4.2.0 之后可以使用，对于旧版本中使用的”double”现已停用）、”string”、”array”、”object”、”null” （从 PHP 4.2.0 起） </p>
+<p>PHP推荐使用一些<strong>特定类型的测试函数</strong>：</p>
+<ul>
+<li>is_array()：检查变量是否是数组</li>
+<li>is_double()、is_float()、is_real()（所有都是相同的函数）：检查变量是否是浮点数</li>
+<li>is_long()、is_int()、is_integer()（所有都是相同的函数）：检查变量是否是整数</li>
+<li>is_string()：检查变量是否是字符串</li>
+<li>is_bool()：检查变量是否是布尔值</li>
+<li>is_object()：检查变量是否是一个对象</li>
+<li>is_resource()：检查变量是否是一个资源</li>
+<li>is_null()：检查变量是否是为null</li>
+<li>is_scalar()：检查该变量是否是标量，即，一个整数、布尔值、字符串或浮点数</li>
+<li>is_numeric()：检查该变量是否是任何类型的数字或数字字符串</li>
+<li>is_callable()：检查该变量是否是有效的函数名称</li>
+</ul>
+<h2 id="测试变量状态"><a href="#测试变量状态" class="headerlink" title="测试变量状态"></a>测试变量状态</h2><p><strong>isset — 检测变量是否设置</strong><br><code>bool isset ( mixed $var [, mixed $... ] )</code></p>
+<p><strong>unset — 释放给定的变量</strong><br><code>void unset ( mixed $var [, mixed $... ] )</code><br>unset() 在函数中的行为会依赖于想要销毁的变量的类型而有所不同。 </p>
+<ul>
+<li>如果在函数中 unset() 一个全局变量，则只是局部变量被销毁，而在调用环境中的变量将保持调用 unset() 之前一样的值</li>
+<li>如果您想在函数中 unset() 一个全局变量，可使用 $GLOBALS 数组来实现。</li>
+<li>如果在函数中 unset() 一个通过引用传递的变量，则只是局部变量被销毁，而在调用环境中的变量将保持调用 unset() 之前一样的值。 </li>
+<li>如果在函数中 unset() 一个静态变量，那么在函数内部此静态变量将被销毁。但是，当再次调用此函数时，此静态变量将被复原为上次被销毁之前的值。 </li>
+</ul>
+<p><strong>empty — 检查一个变量是否为空</strong><br><code>bool empty ( mixed $var )</code><br>如果 var 是非空或非零的值，则 empty() 返回 FALSE。换句话说，””、0、”0”、NULL、FALSE、array()、var $var; 以及没有任何属性的对象都将被认为是空的，如果 var 为空，则返回 TRUE。 </p>
+<blockquote>
+<p>empty() 与 isset() 的一个简单比较。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">$var = 0;</div><div class="line">&gt; </div><div class="line">// 结果为 true，因为 $var 为空</div><div class="line">if (empty($var)) &#123;  </div><div class="line">    echo &apos;$var is either 0 or not set at all&apos;;</div><div class="line">&#125;</div><div class="line">&gt; </div><div class="line">// 结果为 false，因为 $var 已设置</div><div class="line">if (!isset($var)) &#123; </div><div class="line">    echo &apos;$var is not set at all&apos;;</div><div class="line">&#125;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="变量的重解释"><a href="#变量的重解释" class="headerlink" title="变量的重解释"></a>变量的重解释</h2><p><strong>intval — 获取变量的整数值</strong><br><code>int intval ( mixed $var [, int $base = 10 ] )</code></p>
+<p><strong>floatval — 获取变量的浮点值</strong><br><code>float floatval ( mixed $var )</code></p>
+<p><strong>strval — 获取变量的字符串值</strong><br><code>string strval ( mixed $var )</code></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag">#php</a>
+          
+            <a href="/tags/php基本函数/" rel="tag">#php基本函数</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/10/31/php/mvc-and-mini-framework-php/" rel="next" title="php学习笔记--MVC和微框架">
+                <i class="fa fa-chevron-left"></i> php学习笔记--MVC和微框架
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/11/06/php/php-array/" rel="prev" title="PHP学习笔记--数组及有关函数">
+                PHP学习笔记--数组及有关函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/11/03/php/php-variable/"
+           data-title="PHP学习笔记--变量类型及有关函数" data-url="http://coder-ss.github.io/2014/11/03/php/php-variable/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/favicon.png"
+               alt="coder-ss" />
+          <p class="site-author-name" itemprop="name">coder-ss</p>
+          <p class="site-description motion-element" itemprop="description">do something interesting</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试和设置变量类型"><span class="nav-number">1.</span> <span class="nav-text">测试和设置变量类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试变量状态"><span class="nav-number">2.</span> <span class="nav-text">测试变量状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量的重解释"><span class="nav-number">3.</span> <span class="nav-text">变量的重解释</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coder-ss</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"totoo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

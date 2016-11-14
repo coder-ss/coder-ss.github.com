@@ -1,0 +1,972 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="php,正则表达式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="完整的介绍了正则表达式中的基本知识。，包括字符组、量词、分组、断言、匹配模式等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式概述（php）">
+<meta property="og:url" content="http://coder-ss.github.io/2015/09/12/regular/regular-php/index.html">
+<meta property="og:site_name" content="coder-ss">
+<meta property="og:description" content="完整的介绍了正则表达式中的基本知识。，包括字符组、量词、分组、断言、匹配模式等。">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/1440605886745.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/1440606061831.png">
+<meta property="og:updated_time" content="2016-11-14T14:35:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="正则表达式概述（php）">
+<meta name="twitter:description" content="完整的介绍了正则表达式中的基本知识。，包括字符组、量词、分组、断言、匹配模式等。">
+<meta name="twitter:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/1440605886745.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://coder-ss.github.io/2015/09/12/regular/regular-php/"/>
+
+
+  <title> 正则表达式概述（php） | coder-ss </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?7d7157a5836d43e3ad7dbd42e82697f3";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">coder-ss</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">do something interesting</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                正则表达式概述（php）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-09-12T16:54:38+08:00" content="2015-09-12">
+              2015-09-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/正则表达式/" itemprop="url" rel="index">
+                    <span itemprop="name">正则表达式</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/09/12/regular/regular-php/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/12/regular/regular-php/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这里的知识点基本上是《正则指引》的读书笔记，只是每个知识点的示例代码用php来实现。</p>
+<h2 id="字符组"><a href="#字符组" class="headerlink" title="字符组"></a>字符组</h2><blockquote>
+<p>字符组（Character Class）就是一组字符，在正则表达式中，它表示“在同一个位置可能出现的各种字符”。<br>写法：[ab]、[314]、[#.?]</p>
+</blockquote>
+<h3 id="字符组的基本用法"><a href="#字符组的基本用法" class="headerlink" title="字符组的基本用法"></a>字符组的基本用法</h3><p><code>[...]</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/[0123456]/'</span>, <span class="string">'5'</span>); <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/[abc123]/'</span>, <span class="string">'5'</span>);  <span class="comment">// =&gt; 0</span></div></pre></td></tr></table></figure>
+<h3 id="范围表示法（range）"><a href="#范围表示法（range）" class="headerlink" title="范围表示法（range）"></a>范围表示法（range）</h3><p><code>[x-y]</code>表示<code>x</code>到<code>y</code>整个范围内的字符。如，<code>[0123456789]</code>表示为<code>[0-9]</code>，<code>[abcdefghijk]</code>表示为<code>[a-k]</code>。</p>
+<p>为什么是<code>[0-9]</code>，而不是<code>[9-0]</code>？<br>因为<code>-</code>表示的范围一般是根据字符对应的码值（Code Point）来确定的。典型地有ACSⅡ编码。在ACSⅡ编码中，0~9的码值是48~57，a~z的码值是97~122，A~Z的码值是65~90。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/[0-9]/'</span>, <span class="string">'5'</span>); <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/[a-z]/'</span>, <span class="string">'5'</span>); <span class="comment">// =&gt; 0</span></div><div class="line">preg_match(<span class="string">'/[0-9a-fA-F]/'</span>, <span class="string">'0'</span>);   <span class="comment">// 16进制</span></div></pre></td></tr></table></figure>
+<h3 id="字符组简记法（shorthands）"><a href="#字符组简记法（shorthands）" class="headerlink" title="字符组简记法（shorthands）"></a>字符组简记法（shorthands）</h3><p>提供比范围表示法更简洁的表示方法，如<code>\d</code>表示<code>[0-9]</code>，<code>\w</code>表示<code>[0-9a-zA-z_]</code>。</p>
+<p>php中支持的字符组简记：</p>
+<ul>
+<li><code>\d</code> 所有的数字，即<code>[0-9]</code></li>
+<li><code>\D</code> 所有的非数字，与<code>\d</code>互斥</li>
+<li><code>\w</code> 所有的单词字符（字符、数字、下划线），即<code>[0-9a-zA-Z_]</code></li>
+<li><code>\W</code> 所有的非单词字符，与<code>\W</code>互斥</li>
+<li><code>\s</code> 所有的空白字符，包括空格、制表符、回车符、换行符等空白字符</li>
+<li><code>\S</code> 所有的非空白字符，与<code>\s</code>互斥</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/\d/'</span>, <span class="string">'8'</span>);    <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/\d/'</span>, <span class="string">'a'</span>);    <span class="comment">// =&gt; 0</span></div><div class="line">preg_match(<span class="string">'/\d[a-z]/'</span>, <span class="string">'a'</span>);   <span class="comment">// =&gt; 1</span></div><div class="line"></div><div class="line">preg_match(<span class="string">'/\w/'</span>, <span class="string">'a'</span>);    <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/\w/'</span>, <span class="string">'6'</span>);    <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/\w/'</span>, <span class="string">'_'</span>);    <span class="comment">// =&gt; 1</span></div><div class="line"></div><div class="line">preg_match(<span class="string">'/\s/'</span>, <span class="string">' '</span>);    <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/\s/'</span>, <span class="string">"\t"</span>);   <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/\s/'</span>, <span class="string">"\r"</span>);   <span class="comment">// =&gt; 1</span></div></pre></td></tr></table></figure>
+<h3 id="元字符与转义"><a href="#元字符与转义" class="headerlink" title="元字符与转义"></a>元字符与转义</h3><p>在范围表示法中，字符组中的横线<code>-</code>不能匹配横线字符，而是用来表示范围，这类字符叫做<strong>元字符</strong>（meta-character）。元字符除了<code>-</code>还有开方括号<code>[</code>、闭刚括号<code>]</code>、<code>^</code>、<code>$</code>等，它们都有特殊的意义。<br>当元字符想要表示普通字符的含义时（如<code>-</code>就只想表示横线字符），就需要转义处理（在元字符前加反斜线字符<code>\</code>）。对于<code>-</code>，有一个例外情况，就是当它紧跟着字符组中的开括号<code>[</code>时，它就表示普通横线字符，此时不用转义。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/[0\-9]/'</span>, <span class="string">"-"</span>);    <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/[0\-9]/'</span>, <span class="string">"8"</span>);    <span class="comment">// =&gt; 0</span></div><div class="line">preg_match(<span class="string">'/[0\-9]/'</span>, <span class="string">"0"</span>);    <span class="comment">// =&gt; 1</span></div><div class="line"></div><div class="line">preg_match(<span class="string">'/[-09]/'</span>, <span class="string">"-"</span>); <span class="comment">// =&gt; 1</span></div><div class="line"></div><div class="line">preg_match(<span class="string">"/[0\\-9]/"</span>, <span class="string">"-"</span>);   <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">"/[0\-9]/"</span>, <span class="string">"-"</span>);    <span class="comment">// =&gt; 1</span></div></pre></td></tr></table></figure></p>
+<p>仔细看上面第一个表达式和最后两个表示式。这里要注意：</p>
+<ul>
+<li>在php中，字符串既可以用单引号标注也可以用双引号标注。两者的主要区别在于，双引号字符串可以插值，二单引号字符串不能；另外，双引号字符串会处理字符串转义，二单引号字符串不会</li>
+<li>正则表达式是以字符串的方式提供的。在php中，双引号字符串本身也有关于转义的规定（如<code>&quot;\\&quot;</code>、<code>&#39;\r&#39;</code>、<code>&quot;\t&quot;</code>等），因此<code>&quot;0\\-9&quot;</code>与<code>&#39;0\-9&#39;</code>是等价的。</li>
+<li>那么最后一个表达式为什么也可以匹配呢？这是因为，尽管php的正则表达式用字符串文字给出，但它与常见的字符串不完全一样——如果某个转义序列可以有字符串识别，则对其进行转义处理；否则，将整个转义序列“原封不动”地保存下来。</li>
+</ul>
+<p>因此，在正则表达式中转义要小心，在php中，使用单引号字符串来构建正则表达式会比双引号字符串更简单明了。</p>
+<h3 id="排除型字符组（Negated-Character-Class）"><a href="#排除型字符组（Negated-Character-Class）" class="headerlink" title="排除型字符组（Negated Character Class）"></a>排除型字符组（Negated Character Class）</h3><p>在方括号<code>[…]</code>中列出希望匹配的所有字符叫做“普通字符组”。在开方括号<code>[</code>之后紧跟一个脱字符<code>^</code>，写作<code>[^…]</code>，表示“在当前位置，匹配一个没有列出的字符”。例如，<code>[^0-9]</code>匹配非数字字符。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/[^0-9][0-9]/'</span>, <span class="string">"A8"</span>);  <span class="comment">// =&gt; 1</span></div></pre></td></tr></table></figure></p>
+<p>排除型字符组中的紧跟着开方括号<code>[</code>的脱字符<code>^</code>也是元字符，如果要匹配尖括号字符，需要进行转义处理。但是，不紧跟着开方括号<code>[</code>的<code>^</code>就是普通字符，不需要转义。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/[^0-9]/'</span>, <span class="string">'0'</span>);    <span class="comment">// =&gt; 0</span></div><div class="line">preg_match(<span class="string">'/[\^0-9]/'</span>, <span class="string">'0'</span>);   <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/[\^0-9]/'</span>, <span class="string">'^'</span>);   <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/[0-9^]/'</span>, <span class="string">'^'</span>);    <span class="comment">// =&gt; 1</span></div></pre></td></tr></table></figure></p>
+<h3 id="POSIX字符组"><a href="#POSIX字符组" class="headerlink" title="POSIX字符组"></a>POSIX字符组</h3><p>之前介绍的字符组，都属于Perl衍生出来的正则表达式流派（Flavor），这个流派叫做PCRE（Per Compatible Regular Expression）。正则表达式还有其他流派，比如POSIX（Portable Operating System Interface for unix），它是一系列规范，定义了UNIX操作系统应当支持的功能，其中也包括了正则表达式的规范。</p>
+<p>常见的<code>[a-z]</code>形式的字符组，在POSIX规范中仍然获得支持，称作<strong>POSIX方括号表达式</strong>。POSIX方括号表达式中的<code>\</code>不是用来转义的，如<code>[\d]</code>就只能匹配<code>\</code>和<code>d</code>两个字符。这里涉及到<code>]</code>、<code>-</code>这两个特殊字符，在POSIX规范中，紧接在开方括号<code>[</code>之后的<code>]</code>才表示闭方括号字符，紧挨在闭方括号<code>]</code>之前的<code>-</code>才表示横线字符。</p>
+<p>对于PCRE规范中的<code>\d</code>、<code>\w</code>、<code>\s</code>等字符组简记法，POSIX中有类似的东西，叫做<strong>POSIX字符组</strong>。在ASCⅡ语言环境（locale）中，常见的POSIX字符组及其含义如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">POSIX字符组</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">ACSⅡ字符组</th>
+<th style="text-align:left">等价的PCRE简记法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">[:alnum:]</td>
+<td style="text-align:left">字母和数字</td>
+<td style="text-align:left">[0-9a-zA-Z]</td>
+</tr>
+<tr>
+<td style="text-align:left">[:alpha:]</td>
+<td style="text-align:left">字母</td>
+<td style="text-align:left">[a-zA-Z]</td>
+</tr>
+<tr>
+<td style="text-align:left">[:ASCⅡ]</td>
+<td style="text-align:left">ASCⅡ字符</td>
+<td style="text-align:left">[\x00-\x7F]</td>
+</tr>
+<tr>
+<td style="text-align:left">[:blank:]</td>
+<td style="text-align:left">空格字符和制表字符</td>
+<td style="text-align:left">[ \t]</td>
+</tr>
+<tr>
+<td style="text-align:left">[:cntrl:]</td>
+<td style="text-align:left">控制字符</td>
+<td style="text-align:left">[\x00-\x1F\x7F]</td>
+</tr>
+<tr>
+<td style="text-align:left">[:digit:]</td>
+<td style="text-align:left">数字字符</td>
+<td style="text-align:left">[0-9]</td>
+<td style="text-align:left">\d</td>
+</tr>
+<tr>
+<td style="text-align:left">[:graph:]</td>
+<td style="text-align:left">空白字符之外的字符</td>
+<td style="text-align:left">[\x21-\x7E]</td>
+</tr>
+<tr>
+<td style="text-align:left">[:lower:]</td>
+<td style="text-align:left">小写字母字符</td>
+<td style="text-align:left">[a-z]</td>
+</tr>
+<tr>
+<td style="text-align:left">[:print:]</td>
+<td style="text-align:left">类似[:graph:]，但包括空白字符</td>
+<td style="text-align:left">[\x20-\x7E]</td>
+</tr>
+<tr>
+<td style="text-align:left">[:punct:]</td>
+<td style="text-align:left">标点符号</td>
+<td style="text-align:left">[][!”#$%&amp;’()*+,./:;&lt;=&gt;?@\^_`{\</td>
+<td style="text-align:left">}~-]</td>
+</tr>
+<tr>
+<td style="text-align:left">[:space:]</td>
+<td style="text-align:left">空白字符</td>
+<td style="text-align:left">[ \t\r\n\v\f]</td>
+<td style="text-align:left">\s</td>
+</tr>
+<tr>
+<td style="text-align:left">[:upper:]</td>
+<td style="text-align:left">大写字母</td>
+<td style="text-align:left">[A-Z]</td>
+</tr>
+<tr>
+<td style="text-align:left">[:word:]</td>
+<td style="text-align:left">字母字符</td>
+<td style="text-align:left">[A-Za-z0-9_]</td>
+<td style="text-align:left">\w</td>
+</tr>
+<tr>
+<td style="text-align:left">[:xdigit:]</td>
+<td style="text-align:left">十六进制字符</td>
+<td style="text-align:left">[A-Fa-f0-9]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>php中有专门处理POSIX正则的函数，但从5.3.0开始已经废弃了。这里只是了解一下相关知识。</p>
+<h2 id="量词"><a href="#量词" class="headerlink" title="量词"></a>量词</h2><p>这里首先介绍一下<code>^</code>和<code>$</code>两个特殊字符，在上一章的<strong>元字符与转义</strong>一节提到过这两个特殊字符。<br><code>^</code>放在正则表达式的开头，表示“定位到字符串的起始位置”；<code>$</code>用在正则表达式的末尾，表示“定位到字符串的结束位置”。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/\w\d/'</span>, <span class="string">'1a2b'</span>);   <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^\w\d/'</span>, <span class="string">'1a2b'</span>);  <span class="comment">// =&gt; 0 必须以字母开头</span></div><div class="line">preg_match(<span class="string">'/\w\d$/'</span>, <span class="string">'1a2b'</span>);  <span class="comment">// =&gt; 0 必须以数字结尾</span></div><div class="line">preg_match(<span class="string">'/^\w\d/'</span>, <span class="string">'a2b'</span>);   <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/\w\d$/'</span>, <span class="string">'1a2'</span>);   <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^\w\d$/'</span>, <span class="string">'1a2'</span>);  <span class="comment">// =&gt; 0 开头必须是字母，结尾必须是数字</span></div><div class="line">preg_match(<span class="string">'/^\w\d$/'</span>, <span class="string">'a2'</span>);   <span class="comment">// =&gt; 1</span></div></pre></td></tr></table></figure></p>
+<h3 id="量词的一般形式"><a href="#量词的一般形式" class="headerlink" title="量词的一般形式"></a>量词的一般形式</h3><p>如果要匹配一个邮政编码（6位数字），目前能写出来的正则表达式是<code>^\d\d\d\d\d\d$</code>：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/^\d\d\d\d\d\d$/'</span>, <span class="string">'100010'</span>);   <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^\d\d\d\d\d\d$/'</span>, <span class="string">'10001035'</span>); <span class="comment">// =&gt; 0</span></div><div class="line">preg_match(<span class="string">'/^\d\d\d\d\d\d$/'</span>, <span class="string">'10a010'</span>);   <span class="comment">// =&gt; 0</span></div></pre></td></tr></table></figure></p>
+<p><code>\d</code>重复6次的写法很不科学，正则表达式肯定会有更方便的写法，也就是量词（quantifier）。量词的通用形式是<code>{m,n}</code>（注意，<code>,</code>后面不能有空格），它限定之前的元素能够出现的次数，m是下限，n是上限。其他常见的量词形式有：<br>| 量词 | 说明 |<br>| —— | —— |<br>| {n} | 之前的元素必须出现n次 |<br>| {m,n} | 之前的元素最少出现m次，最多出现n次 |<br>| {m,} | 之前的元素最少出现m次，出现次数无上限 |<br>| {0,n} | 之前的元素可以不出现，也可以出现，最多出现n次 |</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/^\d&#123;6&#125;$/'</span>, <span class="string">'100010'</span>);      <span class="comment">// =&gt; 1</span></div><div class="line"></div><div class="line">preg_match(<span class="string">'/^\d&#123;4,6&#125;$/'</span>, <span class="string">'123'</span>);       <span class="comment">// =&gt; 0</span></div><div class="line">preg_match(<span class="string">'/^\d&#123;4,6&#125;$/'</span>, <span class="string">'1234'</span>);      <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^\d&#123;4,6&#125;$/'</span>, <span class="string">'123456'</span>);    <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^\d&#123;4,6&#125;$/'</span>, <span class="string">'1234567'</span>);   <span class="comment">// =&gt; 0</span></div></pre></td></tr></table></figure>
+<h3 id="常用量词"><a href="#常用量词" class="headerlink" title="常用量词"></a>常用量词</h3><p>正则表达式还有三个常用的量词，分别是<code>+</code>、<code>?</code>、<code>*</code>：<br>| 常用量词 | {m,n}等价形式 | 说明 |<br>| ——- | —— | ——- |<br>| * | {0,} | 可能出现，也可能不出现，出现次数没有上限 |<br>| + | {1，} | 至少出现1次，出现次数没有上限 |<br>| ? | {0,1} | 出现0次或1次 |</p>
+<p>这三种量词在实际中使用的非常多。</p>
+<p>例如，匹配url的时候，有可能是<code>http</code>，也有可能是<code>https</code>，这个时候用<code>?</code>就很方便：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/^https?:\/\/www\.baidu\.com/'</span>, <span class="string">'http://www.baidu.com'</span>);    <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^https?:\/\/www\.baidu\.com/'</span>, <span class="string">'https://www.baidu.com'</span>);   <span class="comment">// =&gt; 1</span></div></pre></td></tr></table></figure></p>
+<p>在匹配html的tag（如<code>&lt;head&gt;</code>、<code>&lt;div&gt;</code>、<code>&lt;img&gt;</code>等）的时候，在<code>&lt;</code>和<code>&gt;</code>中间会有字符，但是字符长度不确定。这种情况下就需要使用<code>+</code>了：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/^&lt;[^&gt;]+&gt;$/'</span>, <span class="string">'&lt;html&gt;'</span>);    <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^&lt;[^&gt;]+&gt;$/'</span>, <span class="string">'&lt;a&gt;'</span>);       <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^&lt;[^&gt;]+&gt;$/'</span>, <span class="string">'&lt;&gt;'</span>);        <span class="comment">// =&gt; 0</span></div></pre></td></tr></table></figure></p>
+<p>如果说匹配一个双引号字符串，在双引号内，既可以出现字符也可以不出现字符。这种情况下就应该使用量词<code>*</code>。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/^\"[^\"]*\"$/'</span>, <span class="string">'""'</span>);     <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^\"[^\"]*\"$/'</span>, <span class="string">'"abcd"'</span>); <span class="comment">// =&gt; 1</span></div></pre></td></tr></table></figure></p>
+<h3 id="点号"><a href="#点号" class="headerlink" title="点号"></a>点号</h3><p>点号<code>.</code>是与量词搭配比较多得一个字符。一般情况下，点号<code>.</code>可以匹配除了换行符<code>\n</code>以外的任意字符。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/^.$/'</span>, <span class="string">'z'</span>);   <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^.$/'</span>, <span class="string">'8'</span>);   <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^.$/'</span>, <span class="string">"\n"</span>);  <span class="comment">// =&gt; 0</span></div></pre></td></tr></table></figure></p>
+<p>如果要使<code>.</code>能匹配的字符包含换行符<code>\n</code>，可以使用自制通配符<code>\s\S</code>或<code>\w\W</code>、<code>\d\D</code>。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/^[\s\S]$/'</span>, <span class="string">"\n"</span>); <span class="comment">// =&gt; 1</span></div></pre></td></tr></table></figure></p>
+<p>使<code>.</code>能匹配的字符包含换行符<code>\n</code>的另外一种方法是指定正则匹配时使用单行模式。在php中，可以使用模式修饰符和预定义常量两种方法来指定单行模式。关于正则匹配的模式，后面会详细介绍。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/(?s)^.$/'</span>, <span class="string">"\n"</span>);  <span class="comment">// =&gt; 1 模式修饰符</span></div><div class="line">preg_match(<span class="string">'/^.$/s'</span>, <span class="string">"\n"</span>); <span class="comment">// =&gt; 1 预定义常量</span></div></pre></td></tr></table></figure></p>
+<h3 id="匹配优先量词、忽略优先量词"><a href="#匹配优先量词、忽略优先量词" class="headerlink" title="匹配优先量词、忽略优先量词"></a>匹配优先量词、忽略优先量词</h3><p>很多语言中，都可以使用<code>/*...*/</code>来注释代码，如果是一个支持语法高亮的文本编辑器就要能够提取<code>/*...*/</code>注释块。很easy的，我们可以写出如下正则表达式：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$str = <span class="string">'/*this is a comment*/ /*this is another comment*/'</span>;</div><div class="line">preg_match(<span class="string">'/\/\*.*\*\//'</span>, $str, $arr);</div><div class="line"><span class="keyword">echo</span> $arr[<span class="number">0</span>];</div><div class="line"><span class="comment">/*this is a comment*/</span> <span class="comment">/*this is another comment*/</span></div></pre></td></tr></table></figure>
+<p>可以看到，这个正则表达式出了点小问题，它把两个注释块匹配出来了，如果两个注释块中间有代码，那么代码也会匹配出来。<br>这是因为，我们介绍的<code>*</code>、<code>+</code>、<code>?</code>都是<strong>匹配优先量词</strong>（greedy quantifier，也称贪婪量词）。匹配优先量词是指在拿不准是否要匹配的时候，优先尝试匹配。因此，<code>$str</code>中间的<code>*/ /*</code>都被<code>.*</code>匹配了。</p>
+<p>正则表达式中利用<strong>忽略优先量词</strong>来解决上述问题。与<code>*</code>、<code>+</code>、<code>?</code>对应的忽略优先量词的形式是<code>*?</code>、<code>+?</code>、<code>??</code>。忽略优先量词在不确定是否要匹配时选择“不匹配”的状态。还是以提取注释块的代码为例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/\/\*.*?\*\//'</span>, $str, $arr);</div><div class="line"><span class="keyword">echo</span> $arr[<span class="number">0</span>];</div><div class="line"><span class="comment">/*this is a comment*/</span></div></pre></td></tr></table></figure>
+<p>这样就达到了提取注释块的效果。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">匹配优先量词</th>
+<th>忽略优先量词</th>
+<th style="text-align:left">限定次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">*</td>
+<td>*？</td>
+<td style="text-align:left">可能出现，可能不出现，出现次数没有上限</td>
+</tr>
+<tr>
+<td style="text-align:left">+</td>
+<td>+？</td>
+<td style="text-align:left">至少出现1次，没有上限</td>
+</tr>
+<tr>
+<td style="text-align:left">?</td>
+<td>??</td>
+<td style="text-align:left">出现0次或1次</td>
+</tr>
+<tr>
+<td style="text-align:left">{m,n}</td>
+<td>{m,n}?</td>
+<td style="text-align:left">出现次数大于等于m，小于等于n</td>
+</tr>
+<tr>
+<td style="text-align:left">{m,}</td>
+<td>{m,}?</td>
+<td style="text-align:left">至少出现m次，没有上限</td>
+</tr>
+<tr>
+<td style="text-align:left">{0,n}</td>
+<td>{0,n}?</td>
+<td style="text-align:left">出现0次-n次</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>php中有指定非贪婪匹配模式的<strong>模式修饰符</strong>和<strong>预定义常量</strong>，与<strong>忽略优先量词</strong>是一样的效果：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 默认贪婪匹配</span></div><div class="line">preg_match(<span class="string">'/\/\*.*\*\//'</span>, $str, $arr); <span class="comment">// =&gt; /*this is a comment*/ /*this is another comment*/ </span></div><div class="line"><span class="comment">// 预定义常量 指定非贪婪匹配</span></div><div class="line">preg_match(<span class="string">'/\/\*.*\*\//U'</span>, $str, $arr);    <span class="comment">// =&gt; /*this is a comment*/ </span></div><div class="line"><span class="comment">// 模式修饰符 指定非贪婪匹配</span></div><div class="line">preg_match(<span class="string">'/(?U)\/\*.*\*\//'</span>, $str, $arr); <span class="comment">// =&gt; /*this is a comment*/ </span></div><div class="line"><span class="comment">// 同时使用 忽略优先量词 和 预定义常量</span></div><div class="line">preg_match(<span class="string">'/\/\*.*?\*\//U'</span>, $str, $arr);   <span class="comment">// =&gt; /*this is a comment*/ /*this is another comment*/</span></div><div class="line"><span class="comment">// 同时使用 忽略优先量词 和 模式修饰符</span></div><div class="line">preg_match(<span class="string">'/(?U)\/\*.*?\*\//'</span>, $str, $arr);    <span class="comment">// =&gt; /*this is a comment*/ /*this is another comment*/</span></div></pre></td></tr></table></figure></p>
+<h3 id="量词的转义"><a href="#量词的转义" class="headerlink" title="量词的转义"></a>量词的转义</h3><p><code>*</code>、<code>+</code>、<code>?</code>的转义比较简单，就是<code>\*</code>、<code>\+</code>、<code>\?</code>。主要是<code>{m,n}</code>形式的转义需要注意。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>量词</th>
+<th>转义</th>
+<th>量词</th>
+<th>转义</th>
+<th>量词</th>
+<th>转义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>{n}</td>
+<td>\{n}</td>
+<td>*</td>
+<td>\*</td>
+<td>*?</td>
+<td>\*\?</td>
+</tr>
+<tr>
+<td>{m,n}</td>
+<td>\{m,n}</td>
+<td>+</td>
+<td>\+</td>
+<td>+?</td>
+<td>\+\?</td>
+</tr>
+<tr>
+<td>{m,}</td>
+<td>\{m,}</td>
+<td>?</td>
+<td>\?</td>
+<td>??</td>
+<td>\?\?</td>
+</tr>
+<tr>
+<td>{0,n}</td>
+<td>\{0,n}</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="括号"><a href="#括号" class="headerlink" title="括号"></a>括号</h2><h3 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h3><p>上一章介绍了量词，上一章的例子中量词都只能控制它前面的字符或字符组。那么量词能否控制连续的字符或字符组呢，如控制一个单词<code>hello</code>出现或者不出现。这就要用到正则表达式的<strong>分组</strong>功能（子表达式），使用圆括号<code>(...)</code>实现分组（子表达式）。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 量词限定前面一个字符</span></div><div class="line">preg_match(<span class="string">'/^hello?, world$/'</span>, <span class="string">'hello, world'</span>);    <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^hello?, world$/'</span>, <span class="string">'hell, world'</span>); <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^hello?, world$/'</span>, <span class="string">', world'</span>); <span class="comment">// =&gt; 0</span></div><div class="line"></div><div class="line"><span class="comment">// 量词限定一个单词</span></div><div class="line">preg_match(<span class="string">'/^(hello)?, world$/'</span>, <span class="string">'hello, world'</span>);  <span class="comment">// =&gt; 1</span></div><div class="line">preg_match(<span class="string">'/^(hello)?, world$/'</span>, <span class="string">'hell, world'</span>);   <span class="comment">// =&gt; 0</span></div><div class="line">preg_match(<span class="string">'/^(hello)?, world$/'</span>, <span class="string">', world'</span>);   <span class="comment">// =&gt; 1</span></div></pre></td></tr></table></figure>
+<h3 id="多选结构"><a href="#多选结构" class="headerlink" title="多选结构"></a>多选结构</h3><p>多选结构（alternative）的形式是<code>(...|...)</code>，在括号内以竖线<code>|</code>分开多个子表达式，这些子表达式也叫多选分支（option）。</p>
+<p>例如，匹配常见的11位手机号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 匹配常见11位手机号</div><div class="line">preg_match(&apos;/(13[0-9]|15[0-356]|18[025-9])\d&#123;8&#125;/&apos;, &apos;18521510001&apos;, $arr);    // =&gt; 1</div></pre></td></tr></table></figure></p>
+<h3 id="引用分组"><a href="#引用分组" class="headerlink" title="引用分组"></a>引用分组</h3><p>正则表达式会保存每个<code>(...)</code>分组匹配的文本，这种功能叫捕获分组（capturing group）。在需要直接使用子表达式的时候非常有用</p>
+<p>例如，提取<code>&lt;a&gt;</code>标签中的地址和描述文本<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 提取&lt;a&gt;标签中的地址和描述文本</span></div><div class="line">preg_match(<span class="string">'/&lt;a\s+href="([^\'"\s]*)"&gt;(.*?)&lt;\/a&gt;/'</span>, <span class="string">'&lt;a href="github.com"&gt;visit github&lt;/a&gt;'</span>, $arr);</div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; &lt;a href="github.com"&gt;github&lt;/a&gt;</div><div class="line">    [1] =&gt; github.com</div><div class="line">    [2] =&gt; visit github</div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure></p>
+<p>正则表达式替换时也支持捕获分组。php中支持<code>\num</code>和<code>$num</code>的形式替换，但是num不能大于10；另一种形式<code>${num}</code>可以大于10。</p>
+<p>例如，日期的替换<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 正则表达式替换</span></div><div class="line">preg_replace(<span class="string">'/(\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;2&#125;)/'</span>, <span class="string">'$1年$2月$3日'</span>, <span class="string">'2015-08-25'</span>);   <span class="comment">// =&gt; 2015年08月25日</span></div><div class="line">preg_replace(<span class="string">'/(\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;2&#125;)/'</span>, <span class="string">'\1年\2月\3日'</span>, <span class="string">'2015-08-25'</span>);   <span class="comment">// =&gt; 2015年08月25日</span></div></pre></td></tr></table></figure></p>
+<h3 id="反向引用"><a href="#反向引用" class="headerlink" title="反向引用"></a>反向引用</h3><p>在正则表达式内部引用之前的捕获分组匹配的文本叫反向引用（back-reference）。实测php支持<code>\num</code>形式的反向引用，不支持<code>$num</code>形式的反向引用</p>
+<p>例如，利用反向引用匹配id相同的不同标签<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 匹配id为main的标签</span></div><div class="line">preg_match(<span class="string">'/&lt;([\w]+)\s+id="main"&gt;.*?&lt;\/\1&gt;/'</span>, <span class="string">'&lt;div id="main"&gt;&lt;span&gt;hello, world&lt;/span&gt;&lt;/div&gt;'</span>, $arr); <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; &lt;div id="main"&gt;&lt;span&gt;hello, world&lt;/span&gt;&lt;/div&gt;</div><div class="line">    [1] =&gt; div</div><div class="line">)</div><div class="line">*/</div><div class="line"><span class="comment">// 匹配id为main的标签</span></div><div class="line">preg_match(<span class="string">'/&lt;([\w]+)\s+id="main"&gt;.*?&lt;\/\1&gt;/'</span>, <span class="string">'&lt;p id="main"&gt;Hello, World&lt;/p&gt;'</span>, $arr);  <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);                                                            </div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; &lt;p id="main"&gt;Hello, World&lt;/p&gt;</div><div class="line">    [1] =&gt; p</div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure></p>
+<h3 id="命名分组"><a href="#命名分组" class="headerlink" title="命名分组"></a>命名分组</h3><p>数字编号的分组有时候不够直观，因此有些语言和工具的正则表达式提供了命名分组（named grouping）。<br>正则字符中<code>(?P&lt;name&gt;)</code>来命名，<code>(?P=name)</code>来使用。<code>preg_replace</code>替换时不支持</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 捕获命名分组</span></div><div class="line">preg_match(<span class="string">'/&lt;a\s+href="(?P&lt;link&gt;[^\'"\s]*)"&gt;(?P&lt;description&gt;.*?)&lt;\/a&gt;/'</span>, <span class="string">'&lt;a href="github.com"&gt;visit github&lt;/a&gt;'</span>, $arr);</div><div class="line">print_r($arr);                                                            </div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; &lt;a href="github.com"&gt;visit github&lt;/a&gt;</div><div class="line">    [link] =&gt; github.com</div><div class="line">    [1] =&gt; github.com</div><div class="line">    [description] =&gt; visit github</div><div class="line">    [2] =&gt; visit github</div><div class="line">)</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">// 反向引用命名分组</span></div><div class="line">preg_match(<span class="string">'/&lt;(?P&lt;tag&gt;[\w]+)\s+id="main"&gt;.*?&lt;\/(?P=tag)&gt;/'</span>, <span class="string">'&lt;div id="main"&gt;&lt;span&gt;hello, world&lt;/span&gt;&lt;/div&gt;'</span>, $arr);</div><div class="line">print_r($arr);                                                            </div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; &lt;div id="main"&gt;&lt;span&gt;hello, world&lt;/span&gt;&lt;/div&gt;</div><div class="line">    [tag] =&gt; div</div><div class="line">    [1] =&gt; div</div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure>
+<h3 id="非捕获分组"><a href="#非捕获分组" class="headerlink" title="非捕获分组"></a>非捕获分组</h3><p>正则表达式默认会保存每个<code>(...)</code>匹配的文本，前面利用这个特性可以实现一些有用的功能。但是，有时候正则表达式比较复杂，<code>(...)</code>会出现的比较多，而此时仅仅是想实现<strong>分组</strong>或者<strong>多选</strong>的功能，而不需要<strong>捕获分组</strong>；同时，大量不需要的捕获分组可能会影响性能。<br>为了解决这种问题，正则表达式提供了<strong>非捕获分组</strong>（non-capturing group），它的形式是<code>(?:...)</code>。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 捕获分组</span></div><div class="line">preg_match(<span class="string">'/(13[0-9]|15[0-356]|18[025-9])\d&#123;8&#125;/'</span>, <span class="string">'18521510001'</span>, $arr);    <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);                                                            </div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; 18521510001</div><div class="line">    [1] =&gt; 185</div><div class="line">)</div><div class="line">*/</div><div class="line"><span class="comment">// 非捕获分组</span></div><div class="line"><span class="keyword">echo</span> preg_match(<span class="string">'/(?:13[0-9]|15[0-356]|18[025-9])\d&#123;8&#125;/'</span>, <span class="string">'18521510001'</span>, $arr); <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);                                                            </div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; 18521510001</div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure>
+<h2 id="断言"><a href="#断言" class="headerlink" title="断言"></a>断言</h2><p>正则表达式中的有些结构不匹配真正的文本，只负责判断在某个位置左/右侧的文本是否符合要求，这种结构称为<strong>断言</strong>（assertion）。常见的断言有三类：单词边界、行起始/结束位置、环视。</p>
+<h3 id="单词边界"><a href="#单词边界" class="headerlink" title="单词边界"></a>单词边界</h3><p>单词边界（word boundary)，记为<code>\b</code>。它匹配的是单词边界（一边是单词字符，另一边不是单词字符）的位置，而不是字符。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 单词边界</span></div><div class="line">preg_match(<span class="string">'/\b\w+\b/'</span>, <span class="string">'word'</span>, $arr);  <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; word</div><div class="line">)</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">// 匹配所有单词边界</span></div><div class="line">preg_match_all(<span class="string">'/\b\w+\b/'</span>, <span class="string">'hello, world'</span>, $arr);  <span class="comment">// =&gt; 2</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; Array</div><div class="line">        (</div><div class="line">            [0] =&gt; hello</div><div class="line">            [1] =&gt; world</div><div class="line">        )</div><div class="line"></div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>这类匹配位置而不匹配字符的元素叫做<strong>锚点</strong>（anchor），下一节要介绍的<code>^</code>、<code>$</code>等也是锚点。</p>
+<h3 id="行起始-结束位置"><a href="#行起始-结束位置" class="headerlink" title="行起始/结束位置"></a>行起始/结束位置</h3><p><code>^</code>：字符串的开始位置<br><code>$</code>：字符串的结束位置</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">$str = <span class="string">'first line</span></div><div class="line">second line</div><div class="line">last line';</div><div class="line"></div><div class="line"><span class="comment">// 字符串起始位置</span></div><div class="line">preg_match_all(<span class="string">'/^\w+\b/'</span>, $str, $arr); <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; Array</div><div class="line">        (</div><div class="line">            [0] =&gt; first</div><div class="line">        )</div><div class="line"></div><div class="line">)</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">// 字符串结束位置</span></div><div class="line">preg_match_all(<span class="string">'/\b\w+$/'</span>, $str, $arr); <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; Array</div><div class="line">        (</div><div class="line">            [0] =&gt; line</div><div class="line">        )</div><div class="line"></div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>如果指定了多行模式（Multiline Mode），<code>^</code>、<code>$</code>分别可以匹配行起始位置、行结束位置。关于模式，将在下一章详细介绍。指定多行模式的方式是使用模式修饰符<code>(?m)</code>：在正则表达式之前加上<code>(?m)</code>；或者是预定义常量的方式：<code>/.../m</code> 。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 多行模式  行起始位置</span></div><div class="line"><span class="comment">// preg_match_all('/^\w+\b/m', $str, $arr); 是一样的效果</span></div><div class="line">preg_match_all(<span class="string">'/(?m)^\w+\b/'</span>, $str, $arr);    <span class="comment">// =&gt; 3</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; Array</div><div class="line">        (</div><div class="line">            [0] =&gt; first</div><div class="line">            [1] =&gt; second</div><div class="line">            [2] =&gt; last</div><div class="line">        )</div><div class="line"></div><div class="line">)</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">//多行模式  行结束位置</span></div><div class="line"><span class="comment">// preg_match_all('/\b\w+$/m', $str, $arr); 是一样的效果</span></div><div class="line">preg_match_all(<span class="string">'/(?m)\b\w+$/'</span>, $str, $arr); <span class="comment">// =&gt; 3</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; Array</div><div class="line">        (</div><div class="line">            [0] =&gt; line</div><div class="line">            [1] =&gt; line</div><div class="line">            [2] =&gt; line</div><div class="line">        )</div><div class="line"></div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p><code>\A</code>不论是普通模式还是多行模式，都匹配字符串起始位置<br><code>\Z</code>、<code>\z</code>不论是普通模式还是多行模式，都匹配字符串结束位置</p>
+<p><code>\Z</code>与<code>\z</code>的区别在于最后字符串的末尾是<strong>行终止符</strong>的时候，<code>\Z</code>匹配行终止符之前的位置，<code>\z</code>则不管行终止符，只匹配“整个字符串的结束位置”。<br>这里用<strong>行终止符</strong>，而不用<strong>换行符</strong>的原因是不同操作系统的行终止符不同（windows<code>\r\n</code>，linux<code>\n</code>，mac<code>\n</code>）。</p>
+<p><img src="http://7qn7rt.com1.z0.glb.clouddn.com/1440605886745.png" alt=""><br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/1440606061831.png" alt=""></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// \A 始终匹配字符串起始位置</span></div><div class="line">preg_match_all(<span class="string">'/\A\w+\b/'</span>, $str, $arr);    <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; Array</div><div class="line">        (</div><div class="line">            [0] =&gt; first</div><div class="line">        )</div><div class="line"></div><div class="line">)</div><div class="line">*/</div><div class="line">preg_match_all(<span class="string">'/(?m)\A\w+\b/'</span>, $str, $arr);    <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; Array</div><div class="line">        (</div><div class="line">            [0] =&gt; first</div><div class="line">        )</div><div class="line"></div><div class="line">)</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">// \Z始终匹配行结束位置</span></div><div class="line">preg_match_all(<span class="string">'/\b\w+\Z/'</span>, $str, $arr);    <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; Array</div><div class="line">        (</div><div class="line">            [0] =&gt; line</div><div class="line">        )</div><div class="line"></div><div class="line">)</div><div class="line">*/</div><div class="line">preg_match_all(<span class="string">'/(?m)\b\w+\Z/'</span>, $str, $arr);    <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; Array</div><div class="line">        (</div><div class="line">            [0] =&gt; line</div><div class="line">        )</div><div class="line"></div><div class="line">)</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">// \Z \z的区别</span></div><div class="line">$str = <span class="string">'first line</span></div><div class="line">second line</div><div class="line">last line</div><div class="line">';</div><div class="line"></div><div class="line">preg_match_all(<span class="string">'/(?m)\b\w+\z/'</span>, $str, $arr); <span class="comment">// =&gt; 0</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; Array</div><div class="line">        (</div><div class="line">        )</div><div class="line"></div><div class="line">)</div><div class="line">*/</div><div class="line">preg_match_all(<span class="string">'/(?m)\b\w+\Z/'</span>, $str, $arr);    <span class="comment">// =&gt; 1</span></div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; Array</div><div class="line">        (</div><div class="line">            [0] =&gt; line</div><div class="line">        )</div><div class="line"></div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure>
+<h3 id="环视"><a href="#环视" class="headerlink" title="环视"></a>环视</h3><p>环视（look-around）用来“停在原地，四处张望”，它本身也不匹配任何字符，用来限定它旁边的文本满足某种条件。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名字</th>
+<th>记法</th>
+<th style="text-align:left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">肯定顺序环视</td>
+<td><code>(?=...)</code></td>
+<td style="text-align:left">向右看看，右边出现了环视中的内容才匹配</td>
+</tr>
+<tr>
+<td style="text-align:left">否定顺序环视</td>
+<td><code>(?!...)</code></td>
+<td style="text-align:left">向右看看，右边不出现环视中的内容才匹配</td>
+</tr>
+<tr>
+<td style="text-align:left">肯定逆序环视</td>
+<td><code>(?&lt;=...)</code></td>
+<td style="text-align:left">向左看看，左边出现了环视中的内容才匹配</td>
+</tr>
+<tr>
+<td style="text-align:left">否定逆序环视</td>
+<td><code>(?&lt;!...)</code></td>
+<td style="text-align:left">向左看看，左边不出现环视中的内容才匹配</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>例如，要匹配html标签中的开标签（<code>&lt;a&gt;</code>、<code>&lt;div&gt;</code>、<code>&lt;body&gt;</code>等），而不能匹配闭标签（<code>&lt;/a&gt;</code>、<code>&lt;/div&gt;</code>、<code>&lt;/body&gt;</code>等）和自闭和标签（<code>&lt;br/&gt;</code>等），同时，也不能匹配一个空的标签<code>&lt;&gt;</code>。<br>直接使用<code>&lt;[^\/]+&gt;</code>将<code>/</code>字符排除是不对的，因为有些标签的属性中可能会含有<code>/</code>字符。例如<code>&lt;a href=&quot;github.com/nrk/predis&quot;&gt;</code>。这里只是在开尖括号<code>&lt;</code>之后的第一个字符和闭尖括号<code>&gt;</code>之前的第一个字符不能为<code>/</code>。<br>然而<code>&lt;[^\/][^&gt;]*[^\/]&gt;</code>也是不行的，因为在<code>&lt;</code>与<code>&gt;</code>之间会至少匹配两个字符，像<code>&lt;a&gt;</code>这样的标签是无法匹配到的。这里就要用到<strong>环视</strong>了。</p>
+<p><code>&lt;(?!\/).*+(?&lt;!\/)&gt;</code></p>
+<p>上面的正则表达式中有两个环视结构，一个在开尖括号<code>&lt;</code>之后，表示在尖括号<code>&lt;</code>后向右看看，右边的第一个字符不能为<code>/</code>（正则表达式中进行了转义）；另外一个在闭尖括号<code>&gt;</code>之前，表示在闭尖括号<code>&gt;</code>之前向左看看，左边挨着的字符不能为<code>/</code>。</p>
+<p>上面的正则表达式已经解决了匹配html中开标签的主要问题，只是其中的<code>.*?</code>还需要优化一下。需要解决的问题是：</p>
+<ul>
+<li>有可能会有单引号<code>&#39;</code>或双引号<code>&quot;</code>，它们都得成对出现</li>
+<li>单引号对或双引号对之内可以有<code>&gt;</code>字符，但是它们的外面不能有<code>&gt;</code>字符</li>
+</ul>
+<p>利用正则表达式的选择结构，可以写出下面的表达式，用于完善上面的问题。</p>
+<p><code>&lt;(?!\/)(?:\&#39;[^\&#39;]*\&#39;|&quot;[^&quot;]*&quot;|[^\&#39;&quot;&gt;])+(?&lt;!\/)&gt;</code></p>
+<h2 id="匹配模式"><a href="#匹配模式" class="headerlink" title="匹配模式"></a>匹配模式</h2><p>前面的内容中已经出现介过了<strong>单行模式</strong>、<strong>多行模式</strong>、<strong>非贪婪模式</strong>。<strong>匹配模式</strong>是指匹配时使用的规则。常用的匹配模式还有<strong>不区分大小写模式</strong>、<strong>注释模式</strong>。</p>
+<p>在开始介绍具体的模式之前，先介绍php中模式的两种具体实现<code>/.../{modifier}</code>和<code>...(?{modifier})...</code>：<br>|   模式修饰符    |    <code>/.../{modifier}</code> |   <code>...(?{modifier})...</code>   |<br>| :———— | ————| ——— |<br>| 示例    |   <code>/&lt;tr&gt;.*&lt;\/tr&gt;/s</code> |  <code>&lt;tr&gt;(?s).*&lt;\/tr&gt;</code>  |<br>| 名称（php手册）    |   模式修饰符 |  模式内修饰符  |<br>| 名称（《正则指引》）|   预定义常量 |  模式修饰符  |<br>| 作用范围    |   整个正则表达式 |  不在分组（子表达式）中时，对它后面的全部正则表达式起作用；如果在分组（子表达式）中，则对它分组中的剩余部分起作用。在没有分组，且放在整个正则表达式最前面的时候相当于<code>/.../{modifier}</code>  |<br>| 支持程度   |  支持所有模式修饰符 | 支持部分模式修饰符 |<br>| 其他编程语言 | 可能不支持 | 一般都支持 |</p>
+<h3 id="不区分大小写模式"><a href="#不区分大小写模式" class="headerlink" title="不区分大小写模式"></a>不区分大小写模式</h3><p>在html中是不区分大小写的，例如<code>&lt;td&gt;</code>和<code>&lt;tD&gt;</code>、<code>&lt;Td&gt;</code>、<code>&lt;TD&gt;</code>的作用是一样的。如果要从网页中提取<code>&lt;td&gt;</code>，不使用匹配模式的表达式应该是这样：</p>
+<p><code>&lt;[tT][dD]&gt;</code></p>
+<p>由于<code>&lt;td&gt;</code>标签只有两个字符，所以上面的写法还可以接受。但是如果标签是<code>&lt;script&gt;</code>呢？这里，就需要使用<strong>不区分大小写模式</strong>：<code>/.../i</code>或<code>...(?i)...</code>。上面的正则表达式可以进一步写为：</p>
+<p><code>/&lt;td&gt;/i</code>或<code>(?i)&lt;td&gt;</code><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">preg_match(<span class="string">'/(?i)&lt;td&gt;/'</span>, <span class="string">'&lt;tD&gt;'</span>, $arr);</div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; &lt;tD&gt;</div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure></p>
+<h3 id="单行模式"><a href="#单行模式" class="headerlink" title="单行模式"></a>单行模式</h3><p>形式：<code>/.../s</code>或<code>...(?s)...</code><br>作用：点号可以匹配换行符</p>
+<h3 id="多行模式"><a href="#多行模式" class="headerlink" title="多行模式"></a>多行模式</h3><p>与<strong>单行模式</strong>没有关系。影响<code>^</code>和<code>$</code>的匹配<br>形式：<code>/.../x</code>或<code>...(?m)...</code></p>
+<h3 id="注释模式"><a href="#注释模式" class="headerlink" title="注释模式"></a>注释模式</h3><p><code>(?#...)</code>的方法可以在正则表达式中添加注释<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// (?#...)注释</span></div><div class="line">preg_match(<span class="string">'/(?#this is comment)(?i)&lt;td&gt;/'</span>, <span class="string">'&lt;tD&gt;'</span>, $arr);</div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; &lt;tD&gt;</div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure></p>
+<p>更彻底地，可是使用<code>/.../x</code>表示注释模式<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// /.../x注释模式</span></div><div class="line">$str = <span class="string">'/</span></div><div class="line">(\d&#123;4&#125;) # year</div><div class="line">-       # dash</div><div class="line">(\d&#123;2&#125;) # month</div><div class="line">-       # dash</div><div class="line">(\d&#123;2&#125;) # day</div><div class="line">/x';</div><div class="line"></div><div class="line">preg_match($str, <span class="string">'2015-10-01'</span>, $arr);</div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; 2015-10-01</div><div class="line">    [1] =&gt; 2015</div><div class="line">    [2] =&gt; 10</div><div class="line">    [3] =&gt; 01</div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure></p>
+<h3 id="非贪婪"><a href="#非贪婪" class="headerlink" title="非贪婪"></a>非贪婪</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 默认贪婪匹配</span></div><div class="line">$str = <span class="string">'&lt;tr&gt;&lt;td&gt;hello&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;world&lt;/td&gt;&lt;/tr&gt;'</span>;</div><div class="line">preg_match(<span class="string">'/&lt;tr&gt;.*&lt;\/tr&gt;/'</span>, $str, $arr);</div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; &lt;tr&gt;&lt;td&gt;hello&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;world&lt;/td&gt;&lt;/tr&gt;</div><div class="line">)</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">// 非贪婪匹配模式</span></div><div class="line">$str = <span class="string">'&lt;tr&gt;&lt;td&gt;hello&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;world&lt;/td&gt;&lt;/tr&gt;'</span>;</div><div class="line">preg_match(<span class="string">'/&lt;tr&gt;.*&lt;\/tr&gt;/U'</span>, $str, $arr);</div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; &lt;tr&gt;&lt;td&gt;hello&lt;/td&gt;&lt;/tr&gt;</div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure>
+<h3 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h3><p>要匹配中文等Unicode字符，最好是指定Unicode模式修饰符<code>/.../u</code>。如果不指定会有两个问题</p>
+<ul>
+<li>GBK编码环境下，中文不能匹配</li>
+<li>无法利用<code>[\x{4e00}-\x{9fff}]</code>匹配中文<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 指定unicode模式</span></div><div class="line">preg_match(<span class="string">'/&lt;td&gt;[\x&#123;4e00&#125;-\x&#123;9fff&#125;]*&lt;\/td&gt;/u'</span>, <span class="string">'&lt;td&gt;姚明&lt;/td&gt;'</span>, $arr);</div><div class="line">print_r($arr);</div><div class="line"><span class="comment">/*</span></div><div class="line">Array</div><div class="line">(</div><div class="line">    [0] =&gt; &lt;td&gt;姚明&lt;/td&gt;</div><div class="line">)</div><div class="line">*/</div></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag">#php</a>
+          
+            <a href="/tags/正则表达式/" rel="tag">#正则表达式</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/30/linux/Installing-Python-2-7-on-CentOS-6-5/" rel="next" title="CentOS 6.5升级Python到2.7">
+                <i class="fa fa-chevron-left"></i> CentOS 6.5升级Python到2.7
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/07/regular/regular-php-practice-1/" rel="prev" title="php实战正则表达式（一）：验证手机号">
+                php实战正则表达式（一）：验证手机号 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/09/12/regular/regular-php/"
+           data-title="正则表达式概述（php）" data-url="http://coder-ss.github.io/2015/09/12/regular/regular-php/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/favicon.png"
+               alt="coder-ss" />
+          <p class="site-author-name" itemprop="name">coder-ss</p>
+          <p class="site-description motion-element" itemprop="description">do something interesting</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#字符组"><span class="nav-number">1.</span> <span class="nav-text">字符组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符组的基本用法"><span class="nav-number">1.1.</span> <span class="nav-text">字符组的基本用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#范围表示法（range）"><span class="nav-number">1.2.</span> <span class="nav-text">范围表示法（range）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符组简记法（shorthands）"><span class="nav-number">1.3.</span> <span class="nav-text">字符组简记法（shorthands）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元字符与转义"><span class="nav-number">1.4.</span> <span class="nav-text">元字符与转义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排除型字符组（Negated-Character-Class）"><span class="nav-number">1.5.</span> <span class="nav-text">排除型字符组（Negated Character Class）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POSIX字符组"><span class="nav-number">1.6.</span> <span class="nav-text">POSIX字符组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#量词"><span class="nav-number">2.</span> <span class="nav-text">量词</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#量词的一般形式"><span class="nav-number">2.1.</span> <span class="nav-text">量词的一般形式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用量词"><span class="nav-number">2.2.</span> <span class="nav-text">常用量词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#点号"><span class="nav-number">2.3.</span> <span class="nav-text">点号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匹配优先量词、忽略优先量词"><span class="nav-number">2.4.</span> <span class="nav-text">匹配优先量词、忽略优先量词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#量词的转义"><span class="nav-number">2.5.</span> <span class="nav-text">量词的转义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#括号"><span class="nav-number">3.</span> <span class="nav-text">括号</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分组"><span class="nav-number">3.1.</span> <span class="nav-text">分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多选结构"><span class="nav-number">3.2.</span> <span class="nav-text">多选结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用分组"><span class="nav-number">3.3.</span> <span class="nav-text">引用分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反向引用"><span class="nav-number">3.4.</span> <span class="nav-text">反向引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命名分组"><span class="nav-number">3.5.</span> <span class="nav-text">命名分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非捕获分组"><span class="nav-number">3.6.</span> <span class="nav-text">非捕获分组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#断言"><span class="nav-number">4.</span> <span class="nav-text">断言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#单词边界"><span class="nav-number">4.1.</span> <span class="nav-text">单词边界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行起始-结束位置"><span class="nav-number">4.2.</span> <span class="nav-text">行起始/结束位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环视"><span class="nav-number">4.3.</span> <span class="nav-text">环视</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配模式"><span class="nav-number">5.</span> <span class="nav-text">匹配模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不区分大小写模式"><span class="nav-number">5.1.</span> <span class="nav-text">不区分大小写模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单行模式"><span class="nav-number">5.2.</span> <span class="nav-text">单行模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多行模式"><span class="nav-number">5.3.</span> <span class="nav-text">多行模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注释模式"><span class="nav-number">5.4.</span> <span class="nav-text">注释模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非贪婪"><span class="nav-number">5.5.</span> <span class="nav-text">非贪婪</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Unicode"><span class="nav-number">5.6.</span> <span class="nav-text">Unicode</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coder-ss</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"totoo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

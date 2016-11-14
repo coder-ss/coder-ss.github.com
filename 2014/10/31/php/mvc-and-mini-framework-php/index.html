@@ -1,0 +1,737 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="php,mvc," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="这篇文章是根据慕课网上的一个视频教程MVC架构模式分析与设计总结出来。原视频中讲的非常详细，但学习时间比较长，因此在看视频的时候进行了总结，方便日后温故而知新。
+基本MVC
+
+Model模型：模型的工作是按要求从数据库、接口取出数据（不全面的一个解释）
+View视图：能只管看到的Web界面
+Controller控制器：向系统发出指令的工具和帮手
+
+
+MVC工作流程：
+
+浏览者 -&amp;gt; 调用控制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php学习笔记--MVC和微框架">
+<meta property="og:url" content="http://coder-ss.github.io/2014/10/31/php/mvc-and-mini-framework-php/index.html">
+<meta property="og:site_name" content="coder-ss">
+<meta property="og:description" content="这篇文章是根据慕课网上的一个视频教程MVC架构模式分析与设计总结出来。原视频中讲的非常详细，但学习时间比较长，因此在看视频的时候进行了总结，方便日后温故而知新。
+基本MVC
+
+Model模型：模型的工作是按要求从数据库、接口取出数据（不全面的一个解释）
+View视图：能只管看到的Web界面
+Controller控制器：向系统发出指令的工具和帮手
+
+
+MVC工作流程：
+
+浏览者 -&amp;gt; 调用控制">
+<meta property="og:image" content="http://coder-ss.github.io/img/mvc_base.png">
+<meta property="og:image" content="http://coder-ss.github.io/img/mini_framework.png">
+<meta property="og:updated_time" content="2016-11-14T14:35:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="php学习笔记--MVC和微框架">
+<meta name="twitter:description" content="这篇文章是根据慕课网上的一个视频教程MVC架构模式分析与设计总结出来。原视频中讲的非常详细，但学习时间比较长，因此在看视频的时候进行了总结，方便日后温故而知新。
+基本MVC
+
+Model模型：模型的工作是按要求从数据库、接口取出数据（不全面的一个解释）
+View视图：能只管看到的Web界面
+Controller控制器：向系统发出指令的工具和帮手
+
+
+MVC工作流程：
+
+浏览者 -&amp;gt; 调用控制">
+<meta name="twitter:image" content="http://coder-ss.github.io/img/mvc_base.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://coder-ss.github.io/2014/10/31/php/mvc-and-mini-framework-php/"/>
+
+
+  <title> php学习笔记--MVC和微框架 | coder-ss </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?7d7157a5836d43e3ad7dbd42e82697f3";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">coder-ss</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">do something interesting</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                php学习笔记--MVC和微框架
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-10-31T22:43:55+08:00" content="2014-10-31">
+              2014-10-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/php/" itemprop="url" rel="index">
+                    <span itemprop="name">php</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/10/31/php/mvc-and-mini-framework-php/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/10/31/php/mvc-and-mini-framework-php/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇文章是根据<a href="http://www.imooc.com/" target="_blank" rel="external">慕课网</a>上的一个视频教程<a href="http://www.imooc.com/learn/69" target="_blank" rel="external">MVC架构模式分析与设计</a>总结出来。原视频中讲的非常详细，但学习时间比较长，因此在看视频的时候进行了总结，方便日后温故而知新。</p>
+<h2 id="基本MVC"><a href="#基本MVC" class="headerlink" title="基本MVC"></a>基本MVC</h2><blockquote>
+<ul>
+<li><strong>Model模型：</strong>模型的工作是按要求从数据库、接口取出数据（不全面的一个解释）</li>
+<li><strong>View视图：</strong>能只管看到的Web界面</li>
+<li><strong>Controller控制器：</strong>向系统发出指令的工具和帮手</li>
+</ul>
+</blockquote>
+<p><strong>MVC工作流程：</strong></p>
+<ol>
+<li>浏览者 -&gt; 调用控制器，对他发出指令</li>
+<li>控制器 -&gt; 按指令选取一个合适的模型</li>
+<li>模型 -&gt; 按控制器指令取相应数据</li>
+<li>控制器 -&gt; 按指令选取相应视图</li>
+<li>视图 -&gt; 把第三步取到的数据按用户想要的样子显示处理</li>
+</ol>
+<p><strong>简单MVC实例：</strong></p>
+<p>控制器<code>testController.class.php</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    class testController &#123;</div><div class="line">        function show() &#123;</div><div class="line">            $testModel = new testModel();</div><div class="line">            $testModel-&gt;get();</div><div class="line">            </div><div class="line">            $testView = new testView();</div><div class="line">            $testView-&gt;display();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>模型<code>testModel.class.php</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    class testModel &#123;</div><div class="line">        function get() &#123;</div><div class="line">            //获取数据</div><div class="line">            //...</div><div class="line">            return &quot;hello world&quot;;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>视图<code>testView.class.php</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    class testView &#123;</div><div class="line">        function display($data) &#123;</div><div class="line">            //组织美化数据</div><div class="line">            echo $data;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p><code>test.php</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    require_once(&apos;testController.class.php);</div><div class="line">    require_once(&apos;testModel.class.php);</div><div class="line">    require_once(&apos;testView.class.php);</div><div class="line">    </div><div class="line">    $testController = new testController();</div><div class="line">    $testController-&gt;show();</div><div class="line">    </div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="系统目录规范"><a href="#系统目录规范" class="headerlink" title="系统目录规范"></a>系统目录规范</h2><p>对上面的文件规范化，按如下目录组织：<br><img src="/img/mvc_base.png" alt=""></p>
+<p>对控制器、模型、视图的操作进行封装<code>function.php</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    //控制器简易调用函数</div><div class="line">    function C($name, $method) &#123;</div><div class="line">        require_once(&apos;libs/Controller/&apos;.$name.&apos;Controller.class.php&apos;);</div><div class="line">        </div><div class="line">        $controller = $name.&apos;Controler&apos;;</div><div class="line">        $obj = new $controller();</div><div class="line">        $obj-&gt;method();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //模型简易调用函数</div><div class="line">    function M($name) &#123;</div><div class="line">        require_once(&apos;libs/Model/&apos;$name.&apos;Model.class.php&apos;);</div><div class="line">        $model = $name.&apos;Model&apos;;</div><div class="line">        $obj = new $model();</div><div class="line">        return $obj;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //视图简易调用函数</div><div class="line">    function V($name) &#123;</div><div class="line">        require_once(&apos;libs/View/&apos;.$name.&apos;View.class.php&apos;);</div><div class="line">        $view = $naem.&apos;View&apos;;</div><div class="line">        $obj = new $view();</div><div class="line">        return $obj;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //返回安全的字符串（不安全字符进行转义）</div><div class="line">    function daddslashes($str) &#123;</div><div class="line">        return (!get_magic_quotes_gpc()) ? addslashes($str) : $str;</div><div class="line">    &#125;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>按照这种方式组织的入口文件<code>index.php</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    //url形式 index.php?controller=控制器名&amp;method=方法名</div><div class="line">    require_once(&apos;function.php&apos;);</div><div class="line">    $controllerAllow = array(&apos;test&apos;, &apos;index&apos;);</div><div class="line">    $methodAllow = array(&apos;test&apos;, &apos;index&apos;, &apos;show&apos;);</div><div class="line">    </div><div class="line">    $controller = in_array($_GET[&apos;controller&apos;], $controllerAllow) ? daddslashes(_GET[&apos;controller&apos;]) ： &apos;index&apos;;</div><div class="line">    $method = in_array($_GET[&apos;method&apos;], $methodAllow) ? daddslashes($_GET[&apos;method&apos;]) : &apos;index&apos;;</div><div class="line">    C($controller, $method);</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>按照这种方式组织的控制器<code>testController.class.php</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    class testController &#123;</div><div class="line">        function show() &#123;</div><div class="line">            $testModel = M(&apos;test&apos;);</div><div class="line">            $data = $testModel-&gt;get();</div><div class="line">            $testView = V(&apos;test&apos;);</div><div class="line">            $testView-&gt;display($data);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="PHP操作Mysql类的封装"><a href="#PHP操作Mysql类的封装" class="headerlink" title="PHP操作Mysql类的封装"></a>PHP操作Mysql类的封装</h2><p><strong>封装目的：</strong></p>
+<ol>
+<li>减少代码冗余，提高开发速度</li>
+<li>降低编程错误</li>
+<li>便于维护升级</li>
+</ol>
+<p><strong>实例：<code>mysql.class.php</code></strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    class mysql &#123;</div><div class="line">        /**</div><div class="line">        * 错误输出</div><div class="line">        **/</div><div class="line">        function err($error) &#123;</div><div class="line">            die(&quot;对不起，您的操作有误，错误原因为：$error&quot;);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        /**</div><div class="line">        * 连接数据库</div><div class="line">        *</div><div class="line">        * @param string $config 配置数组 array($dbhost $dbuser $dbpsw $dbname $dbcharset)</div><div class="line">        * @return bool 连接成功或不成功</div><div class="line">        **/</div><div class="line">        function connect($config) &#123;</div><div class="line">            extract($config);</div><div class="line">            if(!($con = mysql_connect($dbhost, $dbuser, $dbpsw))) &#123;//mysql_connect连接数据库函数</div><div class="line">                $this-&gt;err(mysql_error());</div><div class="line">            &#125;</div><div class="line">            if(!(mysql_select_db($dbname, $con)) &#123;//mysql_select_db选择库的函数</div><div class="line">                $this-&gt;err(mysql_error());</div><div class="line">            &#125;</div><div class="line">            mysql_query(&quot;set names &quot;.$dbcharset);//使用mysql_query设置编码  格式:mysql_query(&quot;set names utf8&quot;)</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        /**</div><div class="line">        *执行sql语句</div><div class="line">        *</div><div class="line">        * @param string $sql</div><div class="line">        * @return bool 返回执行成功、资源或执行失败</div><div class="line">        **/</div><div class="line">        function query($sql) &#123;</div><div class="line">            if(!(query = mysql_query($sql))) &#123;//使用mysql_query函数执行sql语句</div><div class="line">                $this-&gt;err($sql.&quot;&lt;br/&gt;&quot;.mysql_error()); //mysql_error 报错</div><div class="line">            &#125; else &#123;</div><div class="line">                return $query;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        /**</div><div class="line">        * 列表</div><div class="line">        *</div><div class="line">        * @param source $query sql语句通过mysql_query执行出来的资源</div><div class="line">        * @return array 返回列表数组</div><div class="line">        **/</div><div class="line">        function findAll($query) &#123;</div><div class="line">            while($rs=mysql_fetch_array($query, MYSQL_ASSOC)) &#123;//mysql_fetch_array函数把资源转换为数组，一次转换出一行出来</div><div class="line">                $list[] = $rs;        </div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            return isset($list) ? $list : &quot;&quot;;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        /**</div><div class="line">        * 单条</div><div class="line">        *</div><div class="line">        * @param source $query sql语句通过mysql_query执行出来的资源</div><div class="line">        * @return array 返回单条信息数组</div><div class="line">        **/</div><div class="line">        function findOne($query) &#123;</div><div class="line">            $rs = mysql_fetch_array($query, MYSQL_ASSOC);</div><div class="line">            return $rs;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        /**</div><div class="line">        * 指定行的指定字段的值</div><div class="line">        *</div><div class="line">        * @param source $query sql语句通过mysql_query执行出来的资源</div><div class="line">        * @return array 返回指定行的指定字段的值</div><div class="line">        **/</div><div class="line">        function findResult($query, $row = 0, $field = 0) &#123;</div><div class="line">            $rs = mysql_result($query, $row, $field);</div><div class="line">            return $rs;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        /**</div><div class="line">        * 添加函数</div><div class="line">        *</div><div class="line">        * @param string $table 表名</div><div class="line">        * @param array $arr 添加数组（包含字段和值的一维数组）</div><div class="line">        **/</div><div class="line">        function insert($table, $arr) &#123;</div><div class="line">            //$sql = &quot;insert into 表名(多个字段) values(多个值)&quot;;</div><div class="line">            foreach($arr as $key =&gt; $value) &#123;//foreach循环数组</div><div class="line">                $value = mysql_real_escape_string($value);</div><div class="line">                $keyArr[] = &quot;`&quot;.$key.&quot;`&quot;;//把$arr数组中的键名保存到$keyArr数组当中</div><div class="line">                $valueArr[] = &quot;&apos;&quot;.$value.&quot;&apos;&quot;;//把$arr数组当中的键值保存到$valueArr当中，因为值多为字符串，而sql语句里面insert当中如果值是字符串的话需要加单引号</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            $keys = implode(&quot;,&quot;, $keyArr);//implode函数是把数组组合成字符串 implode(分隔符, 数组)</div><div class="line">            $values = implode(&quot;,&quot;, $valueArr);</div><div class="line">            $sql = &quot;insert into &quot;.$table.&quot;(&quot;.$keys.&quot;) values(&quot;.$values.&quot;)&quot;;</div><div class="line">            $this-&gt;query($sql); //调用类自身的query(执行)方法执行这条sql语句</div><div class="line">            return mysql_insert_id();</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        /**</div><div class="line">        * 修改函数</div><div class="line">        *</div><div class="line">        * @param string $table 表名</div><div class="line">        * @param array $arr 修改数组（包含字段和值的一维数组）</div><div class="line">        * @param string $where  条件</div><div class="line">        **/</div><div class="line">        function update($table, $arr, $where) &#123;</div><div class="line">            //update 表名 set 字段=字段值 where...</div><div class="line">            foreach($arr as $key =&gt; $value) &#123;</div><div class="line">                $value = mysql_real_escape_string($value);</div><div class="line">                $keyAndvalueArr[] = &quot;`&quot;.$key.&quot;`&quot;=&quot;&apos;&quot;.$value.&quot;&apos;&quot;;</div><div class="line">            &#125;</div><div class="line">            $keyAndvalues = implode(&quot;,&quot;, $keyAndvalueArr);</div><div class="line">            $sql = &quot;update &quot;.$table.&quot; set &quot;.$keyAndvalues.&quot; where &quot;.$where;</div><div class="line">            $this-&gt;query($sql);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        /**</div><div class="line">        * 删除函数</div><div class="line">        *</div><div class="line">        * @param string $table 表名</div><div class="line">        * @param string $where  条件</div><div class="line">        **/</div><div class="line">        function del($table, $where) &#123;</div><div class="line">            $sql = &quot;delete form &quot;.$table.&quot; where &quot;.$where;</div><div class="line">            $this-&gt;query($sql);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><p><strong>工厂模式是做什么的：</strong><br>例如现在有mysql操作类和mssql操作类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">class factory &#123;</div><div class="line">    static function creat($type) &#123;</div><div class="line">        return new $type;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">$obj = factory::creat(&apos;mysql&apos;);</div></pre></td></tr></table></figure></p>
+<p><strong>好处：</strong>统一管理对象的实例化，便于扩展维护</p>
+<h2 id="DB工厂类"><a href="#DB工厂类" class="headerlink" title="DB工厂类"></a>DB工厂类</h2><p><strong>实例：<code>DB.class.php</code></strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">class DB &#123; //类名在php里面是一个全局变量</div><div class="line">    public static $db;</div><div class="line">    </div><div class="line">    public static function init($dbtype, $config) &#123;</div><div class="line">        self::$db = new $dbtype;</div><div class="line">        self::$db-&gt;connect($config);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public static function query($sql) &#123;</div><div class="line">        return self::$db-&gt;query($sql);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public static function findALL($sql) &#123;</div><div class="line">        $query = self::$db-&gt;query($sql);</div><div class="line">        return self::$db-&gt;findAll($query);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public static function findOne($sql) &#123;</div><div class="line">        $query = self::$db-&gt;query($sql);</div><div class="line">        return self::$db-&gt;findOne($query);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public static function findResult($sql, $row=0, $field=0) &#123;</div><div class="line">        $query = self::$db-&gt;query($sql);</div><div class="line">        return self::$db-&gt;findResult($query, $row, $field);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public static function insert($table, $arr) &#123;</div><div class="line">        return self::$db-&gt;insert($table, $arr);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public static function update($table, $arr, $where) &#123;</div><div class="line">        return self::$db-&gt;update($table, $arr, $where);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    publict static function del($table, $where) &#123;</div><div class="line">        return self::$db-&gt;del($table, $where);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="视图引擎工厂类"><a href="#视图引擎工厂类" class="headerlink" title="视图引擎工厂类"></a>视图引擎工厂类</h2><p><strong>实例：<code>VIEW.class.php</code></strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">class VIEW &#123;</div><div class="line">    public static $view;</div><div class="line">    </div><div class="line">    public static function init($viewtype, $config) &#123;</div><div class="line">        self::$view = new $viewtype;</div><div class="line">        </div><div class="line">        /*例如Smarty模板引擎进行一下配置：</div><div class="line">        $smarty = new Smarty();</div><div class="line">        $smarty-&gt;left_delimiter = $config[&quot;left_delimiter&quot;];//左定界符</div><div class="line">        $smarty-&gt;right_delimiter = $config[&quot;right_delimiter&quot;];//右定界符</div><div class="line">        $smarty-&gt;template_dir = $config[&quot;template_dir&quot;];//html模板的地址</div><div class="line">        $smarty-&gt;compile_dir = $config[&quot;compile_dir&quot;];//模板编译生成的文件</div><div class="line">        $smarty-&gt;cache_dir = $config[&quot;cache_dir&quot;];//缓存</div><div class="line">        */</div><div class="line">        foreach($config as $key =&gt; $value)&#123;</div><div class="line">            self::$view-&gt;$key = $value;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public static function assign($data) &#123;</div><div class="line">        foreach($data as $key =&gt; $value) &#123;</div><div class="line">            self::$view-&gt;assign($key, $value);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public static function display($template) &#123;</div><div class="line">        self::$view-&gt;display($template)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="微型框架编写"><a href="#微型框架编写" class="headerlink" title="微型框架编写"></a>微型框架编写</h2><p><strong>框架组织结构：</strong></p>
+<ol>
+<li>函数库：一些零散的函数，放在一个文件里面（如：<code>function.php</code>）</li>
+<li>类库<ul>
+<li>视图引擎库（如：Smarty类库）</li>
+<li>DB引擎库（如：mysql.class.php）</li>
+<li>核心库，如上面两个工厂类</li>
+</ul>
+</li>
+<li>require清单文件</li>
+<li>启动引擎程序：完成一些列的初始化，调用控制器</li>
+</ol>
+<p><strong>目录实例：</strong><br><img src="/img/mini_framework.png" alt=""></p>
+<p><strong>require清单文件<code>include.list.php</code>：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    $paths = array(</div><div class="line">        &apos;function/function.php&apos;,</div><div class="line">        &apos;libs/core/DB.class.php&apos;,</div><div class="line">        &apos;libs/core/VIEW.class.php&apos;,</div><div class="line">        &apos;libs/db/mysql.class.php&apos;,</div><div class="line">        &apos;libs/views/Smarty/Smarty.class.php&apos;</div><div class="line">    );</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>启动引擎<code>GSS.php</code>：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    $currentdir = dirname(__FILE__);</div><div class="line">    include_once($currentdir.&apos;inlude.list.php&apos;);</div><div class="line">    foreach($paths as $path) &#123;</div><div class="line">        include_once($currentdir.&apos;/&apos;.$path);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    class GSS &#123;</div><div class="line">        public static $controller;</div><div class="line">        public static $method;</div><div class="line">        public static $config;</div><div class="line">        </div><div class="line">        private static function init_db() &#123;</div><div class="line">            DB::init(&apos;mysql&apos;, self::$config[&apos;dbconfig&apos;]);</div><div class="line">        &#125;</div><div class="line">        private static function init_view() &#123;</div><div class="line">            VIEW::init(&apos;Smarty&apos;, self::$confi[&apos;viewconfig&apos;]);</div><div class="line">        &#125;</div><div class="line">        private static init_controller() &#123;</div><div class="line">            self::$controller = isset($_GET[&apos;controller&apos;]) ? daddslashes($_GET[&apos;controller&apos;]) : &apos;index&apos;;</div><div class="line">        &#125;</div><div class="line">        private static init_method() &#123;</div><div class="line">            self::$method = isset($_GET[&apos;method&apos;]) ? daddslashes($_GET[&apos;method&apos;]) : &apos;index&apos;; </div><div class="line">        &#125;</div><div class="line">        public static function run($config) &#123;</div><div class="line">            self::$config = $config;</div><div class="line">            self::init_db();</div><div class="line">            self::init_view();</div><div class="line">            self::init_controller();</div><div class="line">            self::init_method();</div><div class="line">            C(self::$controller, self::$method);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="入口文件和配置文件"><a href="#入口文件和配置文件" class="headerlink" title="入口文件和配置文件"></a>入口文件和配置文件</h2><p><strong>入口文件：<code>index.php</code></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    header(&quot;Content-type; text/html; charset=utd-8&quot;);</div><div class="line">    session_start();</div><div class="line">    require_once(&apos;config.php&apos;);</div><div class="line">    require_once(&apos;framework/GSS.php&apos;);</div><div class="line">    PC::run($config);</div><div class="line">?&gt;</div></pre></td></tr></table></figure>
+<p><strong>配置文件：<code>config.php</code></strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">    $config = array(</div><div class="line">        &apos;viewconfig&apos; =&gt; array(</div><div class="line">            &apos;left_delimiter&apos; =&gt; &apos;&#123;&apos;,</div><div class="line">            &apos;right_delimiter&apos; =&gt; &apos;&#125;&apos;,</div><div class="line">            &apos;template_dir&apos; =&gt; &apos;tpl&apos;,</div><div class="line">            &apos;compile_dir&apos; =&gt; &apos;data/template_C&apos;</div><div class="line">        ),</div><div class="line">        &apos;dbconfig&apos; =&gt; array(</div><div class="line">            &apos;dbhost&apos; =&gt; &apos;localhsot&apos;,</div><div class="line">            &apos;dbuser&apos; =&gt; &apos;root&apos;,</div><div class="line">            &apos;dbpsw&apos; =&gt; &apos;123&apos;,</div><div class="line">            &apos;dbname&apos; =&gt; &apos;newsreport&apos;,</div><div class="line">            &apos;dbcharset&apos; =&gt; &apos;utf8&apos;</div><div class="line">        )</div><div class="line">    );</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag">#php</a>
+          
+            <a href="/tags/mvc/" rel="tag">#mvc</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/11/03/php/php-variable/" rel="prev" title="PHP学习笔记--变量类型及有关函数">
+                PHP学习笔记--变量类型及有关函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/10/31/php/mvc-and-mini-framework-php/"
+           data-title="php学习笔记--MVC和微框架" data-url="http://coder-ss.github.io/2014/10/31/php/mvc-and-mini-framework-php/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/favicon.png"
+               alt="coder-ss" />
+          <p class="site-author-name" itemprop="name">coder-ss</p>
+          <p class="site-description motion-element" itemprop="description">do something interesting</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本MVC"><span class="nav-number">1.</span> <span class="nav-text">基本MVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统目录规范"><span class="nav-number">2.</span> <span class="nav-text">系统目录规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP操作Mysql类的封装"><span class="nav-number">3.</span> <span class="nav-text">PHP操作Mysql类的封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单工厂模式"><span class="nav-number">4.</span> <span class="nav-text">简单工厂模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DB工厂类"><span class="nav-number">5.</span> <span class="nav-text">DB工厂类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视图引擎工厂类"><span class="nav-number">6.</span> <span class="nav-text">视图引擎工厂类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微型框架编写"><span class="nav-number">7.</span> <span class="nav-text">微型框架编写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#入口文件和配置文件"><span class="nav-number">8.</span> <span class="nav-text">入口文件和配置文件</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coder-ss</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"totoo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

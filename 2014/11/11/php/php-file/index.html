@@ -1,0 +1,667 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="php,php基本函数," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="记录了php文件有关操作。包括文件读取、写入、打开、关闭，判断文件是否存在，返回文件大小，删除文件等操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP学习笔记--文件及有关函数">
+<meta property="og:url" content="http://coder-ss.github.io/2014/11/11/php/php-file/index.html">
+<meta property="og:site_name" content="coder-ss">
+<meta property="og:description" content="记录了php文件有关操作。包括文件读取、写入、打开、关闭，判断文件是否存在，返回文件大小，删除文件等操作">
+<meta property="og:updated_time" content="2016-11-14T14:35:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP学习笔记--文件及有关函数">
+<meta name="twitter:description" content="记录了php文件有关操作。包括文件读取、写入、打开、关闭，判断文件是否存在，返回文件大小，删除文件等操作">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://coder-ss.github.io/2014/11/11/php/php-file/"/>
+
+
+  <title> PHP学习笔记--文件及有关函数 | coder-ss </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?7d7157a5836d43e3ad7dbd42e82697f3";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">coder-ss</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">do something interesting</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                PHP学习笔记--文件及有关函数
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-11-11T13:18:09+08:00" content="2014-11-11">
+              2014-11-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/php/" itemprop="url" rel="index">
+                    <span itemprop="name">php</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/11/11/php/php-file/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/11/11/php/php-file/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>文章内容总结于<a href="http://book.douban.com/subject/3549421/" target="_blank" rel="external">php圣经</a>和<a href="http://php.net/manual/zh/" target="_blank" rel="external">php官方文档</a>。</p>
+<h2 id="打开、关闭文件"><a href="#打开、关闭文件" class="headerlink" title="打开、关闭文件"></a>打开、关闭文件</h2><p><code>fopen()</code>、<code>fclose()</code><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">* 打开文件或者 URL</div><div class="line">* <span class="doctag">@param</span> string $filename 文件路径或URL</div><div class="line">* <span class="doctag">@param</span> string $mode r、r+、w、w+、a、a+、x、x+、c、c+，组合使用：t、b</div><div class="line">* <span class="doctag">@param</span> bool $use_include_path 是否在 include_path 中搜寻文件</div><div class="line">* <span class="doctag">@param</span> resource $context</div><div class="line">* <span class="doctag">@return</span> resource 成功返回文件指针资源，失败返回false</div><div class="line">*/</div><div class="line">resource fopen ( string $filename , string $mode [, bool $use_include_path = <span class="keyword">false</span> [, resource $context ]] )</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/* 关闭一个已打开的文件指针</span></div><div class="line">* <span class="doctag">@param</span> resource $handle</div><div class="line">* <span class="doctag">@return</span> bool 成功返回TRUE，失败返回FALSE</div><div class="line">*/</div><div class="line">bool fclose ( resource $handle )</div></pre></td></tr></table></figure></p>
+<h2 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h2><p><strong>每次读一行<code>fgets()</code>、<code>fgetss()</code>、<code>fgetcsv()</code></strong><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">* 从文件指针中读取一行</div><div class="line">* <span class="doctag">@param</span> resource $handle 文件指针</div><div class="line">* <span class="doctag">@param</span> int $length 从 handle 指向的文件中读取一行并返回长度最多为 length - 1 字节的字符串</div><div class="line">* <span class="doctag">@return</span> string 返回读取的字符串。没有更多的数据则返回 FALSE</div><div class="line">*/</div><div class="line">string fgets ( resource $handle [, int $length ] )</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">* 从文件指针中读取一行并过滤掉 HTML 标记</div><div class="line">* <span class="doctag">@param</span> resource $handle 文件指针</div><div class="line">* <span class="doctag">@param</span> int $length 从 handle 指向的文件中读取一行并返回长度最多为 length - 1 字节的字符串</div><div class="line">* <span class="doctag">@param</span> string $allowable_tags 可选，指定哪些标记不被去掉</div><div class="line">* <span class="doctag">@return</span> string 返回读取的字符串。没有更多的数据则返回 FALSE</div><div class="line">*/</div><div class="line">string fgetss ( resource $handle [, int $length [, string $allowable_tags ]] )</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">* 从文件指针中读取一行并过滤掉 HTML 标记</div><div class="line">* <span class="doctag">@param</span> resource $handle 文件指针</div><div class="line">* <span class="doctag">@param</span> int $length 必须大于 CVS 文件内最长的一行</div><div class="line">* <span class="doctag">@param</span> string $delimiter 设置字段分界符（只允许一个字符）</div><div class="line">* <span class="doctag">@param</span> string $enclosure 设置字段环绕符（只允许一个字符）</div><div class="line">* <span class="doctag">@param</span> string $escape 设置转义字符（只允许一个字符），默认是一个反斜杠</div><div class="line">* <span class="doctag">@return</span> array 返回包含读取字段的索引数组</div><div class="line">*/</div><div class="line"><span class="keyword">array</span> fgetcsv ( resource $handle [, int $length = <span class="number">0</span> [, string $delimiter = <span class="string">','</span> [, string $enclosure = <span class="string">'"'</span> [, string $escape = <span class="string">'\\'</span> ]]]] )</div></pre></td></tr></table></figure></p>
+<p><strong>读取整个文件<code>readfile()</code>、<code>fpassthru()</code>、<code>file()</code></strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">* 读入一个文件并写入到输出缓冲，该函数不需要使用fopen打开文件</div><div class="line">* <span class="doctag">@param</span> string $filename 要读取的文件名</div><div class="line">* <span class="doctag">@param</span>  bool $use_include_path 是否在 include_path 中搜索文件</div><div class="line">* <span class="doctag">@param</span> resource $context</div><div class="line">* <span class="doctag">@return</span> int 返回从文件中读入的字节数，或者错误信息</div><div class="line">*/</div><div class="line">int readfile ( string $filename [, bool $use_include_path = <span class="keyword">false</span> [, resource $context ]] )</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">* 输出文件指针处的所有剩余数据</div><div class="line">* <span class="doctag">@param</span> resource $handle 文件指针</div><div class="line">* <span class="doctag">@return</span> int 返回从文件中读入的字节数，或者FALSE</div><div class="line">*/</div><div class="line">int fpassthru ( resource $handle )</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">* 把整个文件读入一个数组中</div><div class="line">* <span class="doctag">@param</span> string $filename 文件的路径</div><div class="line">* <span class="doctag">@param</span> int $flags</div><div class="line">* <span class="doctag">@param</span> resource $context</div><div class="line">* <span class="doctag">@return</span> array </div><div class="line">*/</div><div class="line"><span class="keyword">array</span> file ( string $filename [, int $flags = <span class="number">0</span> [, resource $context ]] )</div></pre></td></tr></table></figure>
+<p><strong>读取一个字符：<code>fgetc()</code></strong><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">* 把整个文件读入一个数组中</div><div class="line">* <span class="doctag">@param</span> resource $handle 文件指针</div><div class="line">* <span class="doctag">@return</span> string 返回一个包含有一个字符的字符串，碰到EOF返回FALSE</div><div class="line">*/</div><div class="line">string fgetc ( resource $handle )</div></pre></td></tr></table></figure></p>
+<p><strong>读取任意长度：<code>fread()</code></strong><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">* 从文件指针 handle 读取最多 length 个字节</div><div class="line">* <span class="doctag">@param</span> resource $handle 文件指针</div><div class="line">* <span class="doctag">@param</span> int $length 最多读取 length 个字节</div><div class="line">* <span class="doctag">@return</span> string 返回所读取的字符串，失败时返回 FALSE</div><div class="line">*/</div><div class="line">string fread ( resource $handle , int $length )</div></pre></td></tr></table></figure></p>
+<h2 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h2><p><code>fwrite()</code>、<code>fputs()</code><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">* 从文件指针 handle 读取最多 length 个字节</div><div class="line">* <span class="doctag">@param</span> resource $handle 文件指针</div><div class="line">* <span class="doctag">@param</span> string $string 要写入的字符串</div><div class="line">* <span class="doctag">@param</span> int $length 最多读取 length 个字节</div><div class="line">* <span class="doctag">@return</span> int 返回写入的字符数，错误则返回 FALSE </div><div class="line">*/</div><div class="line">int fwrite ( resource $handle , string $string [, int $length ] )</div><div class="line"></div><div class="line"></div><div class="line">fputs — fwrite() 的别名</div></pre></td></tr></table></figure></p>
+<h2 id="其他函数"><a href="#其他函数" class="headerlink" title="其他函数"></a>其他函数</h2><p><strong>查看文件是否存在<code>file_exists()</code></strong><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">* 检查文件或目录是否存在</div><div class="line">* <span class="doctag">@param</span> string $filename </div><div class="line">* <span class="doctag">@return</span> bool </div><div class="line">*/</div><div class="line">bool file_exists ( string $filename )</div></pre></td></tr></table></figure></p>
+<p><strong>确定文件大小<code>filesize()</code></strong><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">* 取得文件大小</div><div class="line">* <span class="doctag">@param</span> string $filename </div><div class="line">* <span class="doctag">@return</span> int 返回文件大小字节数</div><div class="line">*/</div><div class="line">int filesize ( string $filename )</div></pre></td></tr></table></figure></p>
+<p><strong>删除一个文件<code>unlink()</code></strong><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">* 删除文件</div><div class="line">* <span class="doctag">@param</span> string $filename 文件的路径</div><div class="line">* <span class="doctag">@param</span> resource $context</div><div class="line">* <span class="doctag">@return</span> bool 成功TRUE，失败FALSE</div><div class="line">*/</div><div class="line">bool unlink ( string $filename [, resource $context ] )</div></pre></td></tr></table></figure></p>
+<p><strong>在文件中定位<code>rewind()</code>、<code>fseek()</code>、<code>ftell()</code></strong><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">* 将 handle 的文件位置指针设为文件流的开头</div><div class="line">* <span class="doctag">@param</span> resource $handle 文件指针</div><div class="line">* <span class="doctag">@return</span> bool 成功TRUE，失败FALSE</div><div class="line">*/</div><div class="line">bool rewind ( resource $handle )</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">* 返回由 handle 指定的文件指针的位置，也就是文件流中的偏移量</div><div class="line">* <span class="doctag">@param</span> resource $handle 文件指针</div><div class="line">* <span class="doctag">@return</span> int 成功指针位置，失败FALSE</div><div class="line">*/</div><div class="line">int ftell ( resource $handle )</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">* 设定文件指针位置</div><div class="line">* <span class="doctag">@param</span> resource $handle 文件指针</div><div class="line">* <span class="doctag">@param</span> int $offset 偏移量。$whence为SEEK_END时，$offset为负，表示从文件尾往前</div><div class="line">* <span class="doctag">@param</span> int $whence 为 SEEK_SET - 设定位置等于 offset 字节。</div><div class="line">*                       SEEK_CUR - 设定位置为当前位置加上 offset。</div><div class="line">*                       SEEK_END - 设定位置为文件尾加上 offset。</div><div class="line">* <span class="doctag">@return</span> int 成功则返回 0；否则返回 -1。注意移动到 EOF 之后的位置不算错误</div><div class="line">*/</div><div class="line">int fseek ( resource $handle , int $offset [, int $whence = SEEK_SET ] )</div></pre></td></tr></table></figure></p>
+<p><strong>文件锁定<code>flock()</code></strong><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">* 返回由 handle 指定的文件指针的位置，也就是文件流中的偏移量</div><div class="line">* <span class="doctag">@param</span> resource $handle 文件指针</div><div class="line">* <span class="doctag">@param</span> int $operation 为LOCK_SH取得共享锁定（读取的程序）。  </div><div class="line">*                         LOCK_EX 取得独占锁定（写入的程序。  </div><div class="line">*                         LOCK_UN 释放锁定（无论共享或独占）。</div><div class="line">* <span class="doctag">@param</span> int &amp;$wouldblock</div><div class="line">* <span class="doctag">@return</span> int 成功返回 TRUE，失败返回 FALSE</div><div class="line">*/</div><div class="line">bool flock ( resource $handle , int $operation [, int &amp;$wouldblock ] )</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag">#php</a>
+          
+            <a href="/tags/php基本函数/" rel="tag">#php基本函数</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/11/08/php/php-string/" rel="next" title="PHP学习笔记--字符串及有关函数">
+                <i class="fa fa-chevron-left"></i> PHP学习笔记--字符串及有关函数
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/11/17/linux/linux-file-and-authority/" rel="prev" title="Linux中文件、目录和他们的权限">
+                Linux中文件、目录和他们的权限 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/11/11/php/php-file/"
+           data-title="PHP学习笔记--文件及有关函数" data-url="http://coder-ss.github.io/2014/11/11/php/php-file/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/favicon.png"
+               alt="coder-ss" />
+          <p class="site-author-name" itemprop="name">coder-ss</p>
+          <p class="site-description motion-element" itemprop="description">do something interesting</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#打开、关闭文件"><span class="nav-number">1.</span> <span class="nav-text">打开、关闭文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读文件"><span class="nav-number">2.</span> <span class="nav-text">读文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写文件"><span class="nav-number">3.</span> <span class="nav-text">写文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他函数"><span class="nav-number">4.</span> <span class="nav-text">其他函数</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coder-ss</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"totoo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
