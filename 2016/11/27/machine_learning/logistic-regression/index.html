@@ -1,0 +1,743 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="机器学习,逻辑回归,牛顿法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="逻辑回归是常用的分类算法，本文先介绍了sigmoid函数，然后从损失函数和最大似然估计两个角度来理解模型的求解过程，然后介绍了牛顿法最优化方法，最后给出了逻辑回归在一个数据集上的Python实现（分别用梯度下降和牛顿法来求解）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习之逻辑回归">
+<meta property="og:url" content="http://coder-ss.github.io/2016/11/27/machine_learning/logistic-regression/index.html">
+<meta property="og:site_name" content="coder-ss">
+<meta property="og:description" content="逻辑回归是常用的分类算法，本文先介绍了sigmoid函数，然后从损失函数和最大似然估计两个角度来理解模型的求解过程，然后介绍了牛顿法最优化方法，最后给出了逻辑回归在一个数据集上的Python实现（分别用梯度下降和牛顿法来求解）。">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-sigmoid.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-non-convex.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-newton.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistis-college-scatter.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-college-alpha.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-college-newton.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-college-result.png">
+<meta property="og:updated_time" content="2016-11-27T03:20:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习之逻辑回归">
+<meta name="twitter:description" content="逻辑回归是常用的分类算法，本文先介绍了sigmoid函数，然后从损失函数和最大似然估计两个角度来理解模型的求解过程，然后介绍了牛顿法最优化方法，最后给出了逻辑回归在一个数据集上的Python实现（分别用梯度下降和牛顿法来求解）。">
+<meta name="twitter:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-sigmoid.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://coder-ss.github.io/2016/11/27/machine_learning/logistic-regression/"/>
+
+
+  <title> 机器学习之逻辑回归 | coder-ss </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?7d7157a5836d43e3ad7dbd42e82697f3";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">coder-ss</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">do something interesting</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                机器学习之逻辑回归
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-27T11:06:00+08:00" content="2016-11-27">
+              2016-11-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">machine_learning</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/27/machine_learning/logistic-regression/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/27/machine_learning/logistic-regression/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li>虽然叫回归，但解决的问题是分类问题</li>
+<li>但给出的结论是一个概率（0-1之间的值）</li>
+</ul>
+<h2 id="符号约定"><a href="#符号约定" class="headerlink" title="符号约定"></a>符号约定</h2><p>$ \boldsymbol{x}_i = \left[ \begin{matrix} x_{i0} &amp; x_{i1} &amp; \cdots &amp; x_{in} \end{matrix} \right]^{\text{T}} $ 表示第i个样本的特征值，显然我们有n个特征，$x_{i0}$ 表示截距<br>$y_i$ 表示第i个样本的标签<br>$m$ 是样本数量<br>$\boldsymbol{\theta} = \left[ \begin{matrix} \theta_0 &amp; \theta_1 &amp; \cdots &amp; \theta_n \end{matrix} \right]^{\text{T}}$ 表示模型参数，是我们要求解的对象<br>$ h_\boldsymbol{\theta}(\boldsymbol{x}) $ 表示我们的模型对样本的估计， $ h_\boldsymbol{\theta}(\boldsymbol{x}_i) $ 表示我们的模型对第i个样本的估计<br>$:=$ 表示赋值</p>
+<h2 id="sigmoid函数"><a href="#sigmoid函数" class="headerlink" title="sigmoid函数"></a>sigmoid函数</h2><p>考虑二分类问题，我们希望得到的估计值应该是0或者1，线性回归 $h_{\boldsymbol{\theta}}(\boldsymbol{x}) = \boldsymbol{\theta}^{\text{T}}\boldsymbol{x} $ 显然不再合适（参考机器学习之线性回归）。</p>
+<p>为了解决分类问题，将回归函数表示成如下形式</p>
+<script type="math/tex; mode=display">h_{\boldsymbol{\theta}}(x) = g(\boldsymbol{\theta}^{\text{T}}\boldsymbol{x}) = \frac{1}{1 + e^{-\boldsymbol{\theta}^{\text{T}}\boldsymbol{x}}}  \tag{1}</script><p>其中</p>
+<script type="math/tex; mode=display">g(z) = \frac{1}{1+e^{-z}}</script><p>被称作sigmoid函数或者logistic函数。它的函数曲线如下图。</p>
+<p><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-sigmoid.png" alt="Alt text"></p>
+<blockquote>
+<p>关于logistic函数<br>logistic函数也称为对数几率函数。</p>
+<script type="math/tex; mode=display">\begin{align*} &g(z) = \frac{1}{1+e^{-z}} \\ \Rightarrow\quad & 1+e^{-z} = \frac{1}{g(z)} \\ \Rightarrow\quad & e^{-z} = \frac{1-g(z)}{g(z)} \\ \Rightarrow\quad & z = \ln \frac{g(z)}{1-g(z)} \end{align*}</script><p>若将 $g(z)$ 视为样本是正例的可能性，则 $1-g(z)$ 是其反例的可能性。$\frac{g(z)}{1-g(z)}$ 称为“几率”（odds），反映了样本作为正例的相对可能性，$\ln \frac{g(z)}{1-g(z)}$ 称为“对数几率”（log odds，亦称logit）。<br>所以式(1)也可理解为用线性回归模型的预测结果去逼近真实标记的对数几率。</p>
+</blockquote>
+<h2 id="参数求解"><a href="#参数求解" class="headerlink" title="参数求解"></a>参数求解</h2><p>我们从损失函数和最大似然估计两个角度来理解参数求解的过程。</p>
+<h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p>依旧使用线性回归的损失函数 $J(\theta)=\frac{1}{2m}\sum \limits_{i=1}^{m} \left( h_\theta(x_{i})-y_{i} \right)^2$ 的话，$J(\theta)$ 将是一个非凸的，无法利用梯度下降方法来最小化损失函数。</p>
+<p><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-non-convex.png" alt="Alt text"></p>
+<p>所以，我们重新定义一个损失：</p>
+<script type="math/tex; mode=display">Cost\left( h_\boldsymbol{\theta}(\boldsymbol{x}), y \right) = \left\{ \begin{align*} - \log \left( h_\boldsymbol{\theta}(\boldsymbol{x}) \right), \quad y=1 \\ 
+- \log \left( 1-h_\boldsymbol{\theta}(\boldsymbol{x}) \right),\quad y=0
+\end{align*}\right.</script><p>当样本为正例（$y=1$）时，如果我们判断为负例，则 $h_\boldsymbol{\theta}(\boldsymbol{x})$ 接近于0而远离1（如0.1），此时损失会很大；如果我们判断为正例，则 $h_\boldsymbol{\theta}(\boldsymbol{x})$ 接近于1而远离0（如0.9），此时损失会很小。<br>当样本为负例（$y=0$）时，如果我们判断为正例，则 $h_\boldsymbol{\theta}(\boldsymbol{x})$ 接近于1而远离0（如0.9），此时损失会很大；如果我们判断为负例，则 $h_\boldsymbol{\theta}(\boldsymbol{x})$ 接近于0而远离1（如0.1），此时损失会很小。<br>所以上面的损失能够较好的评价回归模型的好坏。</p>
+<p>基于上面的定义，定义逻辑回归的损失函数：</p>
+<script type="math/tex; mode=display">\begin{align*}J(\boldsymbol{\theta})&=\frac{1}{m} \sum_{i=1}^{m} Cost(h_\theta(x_{i}), y_{i}) \\
+&=-\frac{1}{m}\left[\sum_{i=1}^{m}y_{i} \log h_\theta(x_{i})+(1-y_{i}) \log (1-h_\theta(x_{i}))\right]
+\end{align*}</script><p>利用梯度下降来最小化损失函数，从而求解 $\boldsymbol{\theta}$：</p>
+<script type="math/tex; mode=display">\begin{align*}
+\theta_j &:= \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\boldsymbol{\theta}) \\
+&:= \theta_j - \alpha \frac{1}{m} \sum_{i=1}^{m} \left( h_\boldsymbol{\theta}(\boldsymbol{x_i}) - y_i \right) x_{ij}
+\end{align*}</script><p>其中，关于 $J(\boldsymbol{\theta})$ 的求导：</p>
+<script type="math/tex; mode=display">\begin{align*}
+\frac{\partial}{\partial \theta_j} J(\boldsymbol{\theta}) &= \frac{\partial}{\partial \theta_j} \left\{-\frac{1}{m} \left[ \sum_{i=1}^{m} y_i \log h_\boldsymbol{\theta}(\boldsymbol{x}_i) + (1-y_i) \log \left( 1-h_\boldsymbol{\theta}(\boldsymbol{x}_i) \right) \right] \right\} \\
+&= -\frac{1}{m} \sum_{i=1}^{m} \left( y_i \frac{1}{h_\boldsymbol{\theta}(\boldsymbol{x}_i)} + (1-y_i)\frac{1}{1-h_\boldsymbol{\theta}(\boldsymbol{x}_i)} (-1) \right) \frac{\partial}{\partial \theta_j} h_\boldsymbol{\theta}(\boldsymbol{x}_i) \\
+&= -\frac{1}{m} \sum_{i=1}^{m} \left( y_i \frac{1}{h_\boldsymbol{\theta}(\boldsymbol{x}_i)} - (1-y_i)\frac{1}{1-h_\boldsymbol{\theta}(\boldsymbol{x}_i)} \right) \frac{\partial}{\partial \theta_j} \frac{1}{1+e^{\boldsymbol{\theta}^{\text{T}}\boldsymbol{x}_i}} \\
+&= -\frac{1}{m} \sum_{i=1}^{m} \left( y_i \frac{1}{h_\boldsymbol{\theta}(\boldsymbol{x}_i)} - (1-y_i)\frac{1}{1-h_\boldsymbol{\theta}(\boldsymbol{x}_i)} \right) (-1) \frac{1}{\left( 1 + e^{-\boldsymbol{\theta}^{\text{T}} \boldsymbol{x}_i} \right)^2} \exp \left({-\boldsymbol{\theta}^{\text{T}} \boldsymbol{x}_i} \right) (-1) x_{ij} \\
+&= -\frac{1}{m} \sum_{i=1}^{m} \left( y_i \frac{1}{h_\boldsymbol{\theta}(\boldsymbol{x}_i)} - (1-y_i)\frac{1}{1-h_\boldsymbol{\theta}(\boldsymbol{x}_i)} \right) \frac{1}{1+e^{\boldsymbol{\theta}^{\text{T}} \boldsymbol{x}_i}} \left( 1-\frac{1}{1+e^{\boldsymbol{\theta}^{\text{T}} \boldsymbol{x}_i}} \right) x_{ij} \\
+&= -\frac{1}{m} \sum_{i=1}^{m} \left( y_i \frac{1}{h_\boldsymbol{\theta}(\boldsymbol{x}_i)} - (1-y_i)\frac{1}{1-h_\boldsymbol{\theta}(\boldsymbol{x}_i)} \right) h_\boldsymbol{\theta}(\boldsymbol{x}_i) \left( 1 - h_\boldsymbol{\theta}(\boldsymbol{x}_i) \right) x_{ij} \\
+&= \frac{1}{m} \sum_{i=1}^{m} \left( h_\boldsymbol{\theta}(\boldsymbol{x}_i) - y_i \right) x_{ij}
+\end{align*}</script><p>考虑正则化项的损失函数（这里是L2正则化项）：</p>
+<script type="math/tex; mode=display">\begin{align*}J(\theta) = -\frac{1}{m}\left[\sum_{i=1}^{m}y_{i} \log h_\theta(x_{i}) + (1-y_{i}) \log (1-h_\theta(x_{i}))\right]+ \frac{\lambda}{m}\sum_{j=1}^{n}\theta_j^2
+\end{align*}</script><h3 id="最大似然估计"><a href="#最大似然估计" class="headerlink" title="最大似然估计"></a>最大似然估计</h3><p>有如下概率表示：</p>
+<script type="math/tex; mode=display">\begin{align*}
+P\left(y=1\ |\ \boldsymbol{x};\boldsymbol{\theta}\right) &= h_\boldsymbol{\theta}(\boldsymbol{x}) \\
+P\left(y=0\ |\ \boldsymbol{x};\boldsymbol{\theta}\right) &= 1 - h_\boldsymbol{\theta}(\boldsymbol{x})
+\end{align*}</script><p>更简洁地表述为</p>
+<script type="math/tex; mode=display">p\left(y\ |\ \boldsymbol{x}; \boldsymbol{\theta}\right) = \left( h_\boldsymbol{\theta}(\boldsymbol{x}) \right) ^{y}\left( 1 - h_\boldsymbol{\theta}(\boldsymbol{x}) \right)^{1-y}</script><p>对m个样本，有似然函数</p>
+<script type="math/tex; mode=display">\begin{align*}
+L(\boldsymbol{\theta}) &= \prod_{i=1}^{m} p\left(y_i\ |\ \boldsymbol{x}_i;\boldsymbol{\theta}\right) \\
+&= \prod_{i=1}^{m} \left( h_\boldsymbol{\theta}(\boldsymbol{x}_i) \right) ^{y_i}\left( 1 - h_\boldsymbol{\theta}(\boldsymbol{x}_i) \right)^{1-y_i}
+\end{align*}</script><p>进而有对数似然</p>
+<script type="math/tex; mode=display">\begin{align*}
+l(\boldsymbol{\theta}) &= \log L(\boldsymbol{\theta}) \\
+&= \sum_{i=1}^{m}y_i\log h_\boldsymbol{\theta}(\boldsymbol{x}_i) + (1-y_i)\log \left( 1-h_\boldsymbol{\theta}(\boldsymbol{x}_i) \right)
+\end{align*}</script><p>我们的目的就是找出对数似然取极值（极大值）时的 $\boldsymbol{\theta}$ 取值。显然上式与损失函数的形式是一致的。</p>
+<h2 id="牛顿法"><a href="#牛顿法" class="headerlink" title="牛顿法"></a>牛顿法</h2><p>除了用梯度下降算法进行参数的求解，还可以用牛顿法，它是一个二阶的方法，收敛速度比梯度下降法更快。</p>
+<p>有函数 $f: \mathbb{R} \mapsto \mathbb{R}$，我们希望找出 $\theta$ 使 $f(\theta) = 0$，牛顿法进行如下迭代</p>
+<script type="math/tex; mode=display">\theta := \theta - \frac{f(\theta)}{f^{\prime}(\theta)}</script><p>我们可以认为在当前的 $\theta$ 点，用函数的斜率来逼近函数，以斜率等于0的点作为下一次迭代的 $\theta$，反复迭代，很快就会使 $f(\theta)$ 接近于0。</p>
+<p><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-newton.png" alt="Alt text"></p>
+<p>对于 $J(\theta)$ 的最小化问题，我们希望找到 $\theta$ 使 $ J^{\prime}(\theta) = 0 $，那么应该按照如下公式迭代：</p>
+<script type="math/tex; mode=display">\theta := \theta - \frac{J^{\prime}(\theta)}{J^{\prime\prime}(\theta)}</script><p>当 $\boldsymbol{\theta}$ 是一个向量的时候，牛顿法的一般形式如下</p>
+<script type="math/tex; mode=display">\boldsymbol{\theta} := \boldsymbol{\theta} - \boldsymbol{H}^{-1}\nabla_{\boldsymbol{\theta}} J(\boldsymbol{\theta})</script><p>其中，$\nabla_{\boldsymbol{\theta}} J(\boldsymbol{\theta})$ 是梯度，由 $J(\boldsymbol{\theta})$ 分别对 $\theta_i$ 求偏导得到；$\boldsymbol{H} \in \mathbb{R}^{(n+1) \times (n+1)}$ 是海森（Hessian）矩阵，其中</p>
+<script type="math/tex; mode=display">H_{ij}  = \frac{\partial^2 J(\boldsymbol{\theta})}{\partial \theta_i \partial \theta_j}</script><p>在逻辑回归的问题中，梯度和Hessian矩阵可以求解如下：</p>
+<script type="math/tex; mode=display">\nabla_{\boldsymbol{\theta}} J(\boldsymbol{\theta})= \frac{1}{m} \sum_{i=1}^{m}\left( h_\boldsymbol{\theta}(\boldsymbol{x}_i) - y_i \right)\boldsymbol{x}_i</script><script type="math/tex; mode=display">\boldsymbol{H}  = \frac{1}{m} \sum_{i=1}^{m}\left[ h_\boldsymbol{\theta}(\boldsymbol{x}_i) \left( 1 - h_\boldsymbol{\theta}(\boldsymbol{x}_i) \right) \boldsymbol{x}_i \boldsymbol{x}_i^{\text{T}} \right]</script><p>其中，$\boldsymbol{x}_i \in \mathbb{R}^{n+1}$，$\boldsymbol{x}_i \boldsymbol{x}_i^T \in \mathbb{R} ^{(n+1) \times (n+1)}$ ，$h_\boldsymbol{\theta}(\boldsymbol{x}_i)$ 和 $y_i$ 是标量。</p>
+<h2 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h2><p>以斯坦福的Deep Learning公开课的习题为例，对逻辑回归进行了编码（Python）。</p>
+<p>完整的代码以ipython notebook的形式放在了<a href="https://github.com/coder-ss/ml-learn/blob/master/logistic-regression/logistic-college-admit.ipynb" target="_blank" rel="external">github</a>上。</p>
+<p>数据来自于斯坦福Deep Learning公开课的习题<a href="http://openclassroom.stanford.edu/MainFolder/DocumentPage.php?course=DeepLearning&amp;doc=exercises/ex4/ex4.html" target="_blank" rel="external">Exercise: Logistic Regression and Newton’s Method</a>，数据记录了两门课的考试成绩与最终是否被录取的关系。</p>
+<p>读取数据、显示数据的代码如下。注意，最终有两份样本数据，一份是原始数据，一份是归一化以后的数据，因为梯度下降需要对输入进行归一化处理。两份数据中都会加上 $x_0 = 1$。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> math</div><div class="line"></div><div class="line">%matplotlib inline</div><div class="line"></div><div class="line"><span class="comment"># 读取数据</span></div><div class="line">x_arr = np.loadtxt(<span class="string">'data/college-admit/x.dat'</span>)</div><div class="line">y_arr = np.loadtxt(<span class="string">'data/college-admit/y.dat'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 标准化处理（利用梯度下降时需要标准化处理数据）</span></div><div class="line">x_mean = np.mean(x_arr, <span class="number">0</span>)</div><div class="line">x_std = np.std(x_arr, <span class="number">0</span>)</div><div class="line">x_arr_scale = (x_arr - x_mean) / x_std</div><div class="line"><span class="comment"># 组装截距</span></div><div class="line">x_arr_scale = np.append(np.ones((len(x_arr_scale), <span class="number">1</span>)), x_arr_scale, <span class="number">1</span>)</div><div class="line">x_arr = np.append(np.ones((len(x_arr), <span class="number">1</span>)), x_arr, <span class="number">1</span>)</div><div class="line"></div><div class="line"><span class="comment"># 绘制数据</span></div><div class="line">plt.figure(<span class="number">1</span>, figsize=(<span class="number">8</span>, <span class="number">6</span>))</div><div class="line"><span class="keyword">for</span> k <span class="keyword">in</span> range(len(x_arr)):</div><div class="line">    <span class="keyword">if</span> y_arr[k] &gt; <span class="number">0</span>:</div><div class="line">        plt.scatter(x_arr[k][<span class="number">1</span>], x_arr[k][<span class="number">2</span>])</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        plt.scatter(x_arr[k][<span class="number">1</span>], x_arr[k][<span class="number">2</span>], marker=<span class="string">'x'</span>)</div><div class="line">plt.xlabel(<span class="string">'Exam 1 score'</span>, fontsize=<span class="string">'medium'</span>); plt.ylabel(<span class="string">'Exam 2 score'</span>, fontsize=<span class="string">'medium'</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure></p>
+<p>上述代码会绘制如下散点图<br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistis-college-scatter.png" alt="Alt text"></p>
+<p>利用梯度下降求解参数的代码如下。注意，这里对比了不同学习率的情况，最终的参数是在学习率为12的时候迭代20次后得到的。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigmoid</span><span class="params">(z)</span>:</span></div><div class="line">    <span class="string">""" sigmoid函数</span></div><div class="line">    </div><div class="line">    :param z: </div><div class="line">    :return: </div><div class="line">    """</div><div class="line">    <span class="keyword">return</span> <span class="number">1.0</span> / (<span class="number">1.0</span> + np.exp(<span class="number">-1.0</span> * z))</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">gradient_descent</span><span class="params">(_x_arr, _y_arr, _thetas, _alpha=<span class="number">12</span>)</span>:</span></div><div class="line">    <span class="string">""" 梯度下降函数</span></div><div class="line">    </div><div class="line">    :param _x_arr: 各样本的特征值。ndarray类型 </div><div class="line">    :param _y_arr: 各样本的标签。ndarray类型 </div><div class="line">    :param _thetas: 模型参数。ndarray类型 </div><div class="line">    :param _alpha: 学习率</div><div class="line">    :return: 更新后的模型参数</div><div class="line">    """</div><div class="line">    _thetas_new = _thetas.copy()</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(_x_arr.shape[<span class="number">1</span>]):</div><div class="line">        sum_err = <span class="number">0.0</span></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(_x_arr.shape[<span class="number">0</span>]):</div><div class="line">            sum_err += (sigmoid((np.matrix(_thetas) * np.matrix(_x_arr[i]).T).item(<span class="number">0</span>, <span class="number">0</span>)) - _y_arr[i]) * _x_arr[i,j]</div><div class="line">        _thetas_new[j] = _thetas[j] - _alpha * sum_err / _x_arr.shape[<span class="number">0</span>]</div><div class="line">    <span class="keyword">return</span> _thetas_new</div><div class="line"></div><div class="line">plt.figure(<span class="number">1</span>, figsize=(<span class="number">8</span>, <span class="number">6</span>))</div><div class="line"></div><div class="line"><span class="comment"># 对比不同学习率的收敛速度。最后是一次学习率为12，迭代了12次，已经收敛</span></div><div class="line"><span class="keyword">for</span> alpha <span class="keyword">in</span> [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">12</span>]:</div><div class="line">    thetas_gd = np.array([<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>])  <span class="comment"># 初始参数</span></div><div class="line">    err_gd_list = [<span class="number">0.0</span>] * <span class="number">20</span>  <span class="comment"># 统计误差</span></div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">20</span>):</div><div class="line">        err_gd = <span class="number">0</span></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(x_arr.shape[<span class="number">0</span>]):</div><div class="line">            err_gd += np.log(sigmoid((np.matrix(thetas_gd) * np.matrix(x_arr_scale[i]).T).item(<span class="number">0</span>, <span class="number">0</span>))) * y_arr[i] +\</div><div class="line">                      np.log(<span class="number">1</span> - sigmoid((np.matrix(thetas_gd) * np.matrix(x_arr_scale[i]).T).item(<span class="number">0</span>, <span class="number">0</span>))) * (<span class="number">1</span> - y_arr[i])</div><div class="line">        err_gd = -err_gd / x_arr.shape[<span class="number">0</span>]</div><div class="line">        err_gd_list[j] = err_gd</div><div class="line">    </div><div class="line">        <span class="comment"># 梯度下降迭代求解参数</span></div><div class="line">        thetas_gd = gradient_descent(x_arr_scale, y_arr, thetas_gd, alpha)</div><div class="line">        </div><div class="line">    <span class="comment"># 绘制当前学习率下，每次迭代后的收敛情况</span></div><div class="line">    plt.plot(range(<span class="number">20</span>), err_gd_list, label=alpha)</div><div class="line">    </div><div class="line">plt.xlabel(<span class="string">'Iteration'</span>, fontsize=<span class="string">'medium'</span>); plt.ylabel(<span class="string">'Cost J'</span>, fontsize=<span class="string">'medium'</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure></p>
+<p>下图显示了不同学习率下的收敛情况。<br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-college-alpha.png" alt="Alt text"></p>
+<p>利用牛顿法求解参数的代码如下。这里迭代次数为10次。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">newton</span><span class="params">(_x_arr, _y_arr, _thetas)</span>:</span></div><div class="line">    <span class="string">""" 牛顿法</span></div><div class="line"></div><div class="line">    :param _x_arr: 各样本的特征值。ndarray类型</div><div class="line">    :param _y_arr: 各样本的标签。ndarray类型</div><div class="line">    :param _thetas: 模型参数。ndarray类型</div><div class="line">    :return: 更新后的模型参数</div><div class="line">    """</div><div class="line">    sum_gd = np.matrix([<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>]).T</div><div class="line">    sum_hs = np.matrix(np.zeros((_x_arr.shape[<span class="number">1</span>], _x_arr.shape[<span class="number">1</span>])))</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(_x_arr.shape[<span class="number">0</span>]):</div><div class="line">        _x_i_mat = np.matrix(_x_arr[i]).T</div><div class="line">        g = sigmoid((np.matrix(_thetas) * _x_i_mat).item(<span class="number">0</span>, <span class="number">0</span>))</div><div class="line">        sum_gd += (g - _y_arr[i]) * _x_i_mat</div><div class="line">        sum_hs += (g * (<span class="number">1</span> - g)) * _x_i_mat * _x_i_mat.T</div><div class="line">        </div><div class="line">    gd = sum_gd / _x_arr.shape[<span class="number">0</span>]  <span class="comment"># 梯度</span></div><div class="line">    hs = sum_hs / _x_arr.shape[<span class="number">0</span>]  <span class="comment"># hession矩阵</span></div><div class="line">    </div><div class="line">    _thetas -= np.array(hs.I * gd).ravel()</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> _thetas</div><div class="line"></div><div class="line">plt.figure(<span class="number">1</span>, figsize=(<span class="number">8</span>, <span class="number">6</span>))</div><div class="line"></div><div class="line">thetas_nt = np.array([<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>])  <span class="comment"># 初始参数</span></div><div class="line">err_nt_list = [<span class="number">0.0</span>] * <span class="number">10</span>  <span class="comment"># 统计误差</span></div><div class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">10</span>):</div><div class="line">    err_nt = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(x_arr.shape[<span class="number">0</span>]):</div><div class="line">        err_nt += np.log(sigmoid((np.matrix(thetas_nt) * np.matrix(x_arr[i]).T).item(<span class="number">0</span>, <span class="number">0</span>))) * y_arr[i] +\</div><div class="line">        np.log(<span class="number">1</span> - sigmoid((np.matrix(thetas_nt) * np.matrix(x_arr[i]).T).item(<span class="number">0</span>, <span class="number">0</span>))) * (<span class="number">1</span> - y_arr[i])</div><div class="line">    err_nt = -err_nt / x_arr.shape[<span class="number">0</span>]</div><div class="line">    err_nt_list[j] = err_nt</div><div class="line"></div><div class="line">    <span class="comment"># 牛顿法迭代求解参数</span></div><div class="line">    thetas_nt = newton(x_arr, y_arr, thetas_nt.copy())</div><div class="line"></div><div class="line"><span class="comment"># 绘制每次迭代后的收敛情况，可以发现牛顿法比梯度下降法收敛的快</span></div><div class="line">plt.plot(range(<span class="number">10</span>), err_nt_list, label=alpha)  </div><div class="line">plt.xlabel(<span class="string">'Iteration'</span>, fontsize=<span class="string">'medium'</span>); plt.ylabel(<span class="string">'Cost J'</span>, fontsize=<span class="string">'medium'</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure></p>
+<p>下图显示了牛顿法的收敛情况，可以发现牛顿法比梯度下降法收敛的更快。<br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-college-newton.png" alt="Alt text"></p>
+<p>下面的代码打印了通过梯度下降算法、牛顿法得到的参数，然后对考试1、考试2成绩分别为20、80的测试用例进行了预测，其不被录取的概率为0.668。代码最后绘制了分割线。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 打印参数。牛顿法和梯度下降法的参数不同，因为梯度下降法对特征进行了归一化处理</span></div><div class="line">print(<span class="string">'thetas of gradient descnet:'</span>, thetas_gd)</div><div class="line">print(<span class="string">'thetas of newton`s method: '</span>, thetas_nt)</div><div class="line"></div><div class="line"><span class="comment"># 测试用例。可以发现虽然参数不同，但牛顿法和梯度下降法最终的结果是一致的</span></div><div class="line">new_test = np.array([[<span class="number">20</span>, <span class="number">80</span>]])</div><div class="line">new_test_scale = (new_test - x_mean) / x_std</div><div class="line">new_test_scale = np.append(np.ones((len(new_test_scale), <span class="number">1</span>)), new_test_scale, <span class="number">1</span>)</div><div class="line">new_test = np.append(np.ones((len(new_test), <span class="number">1</span>)), new_test, <span class="number">1</span>)</div><div class="line"></div><div class="line">print(<span class="string">'test result of gradient descent:'</span>, <span class="number">1</span> - sigmoid((np.matrix(thetas_gd) * np.matrix(new_test_scale).T).item(<span class="number">0</span>, <span class="number">0</span>)))</div><div class="line">print(<span class="string">'test result of newton`s method: '</span>, <span class="number">1</span> - sigmoid((np.matrix(thetas_nt) * np.matrix(new_test).T).item(<span class="number">0</span>, <span class="number">0</span>)))</div><div class="line"></div><div class="line"><span class="comment"># 绘制分割线 牛顿法和梯度下降法的线基本是重合的，这里各画一半</span></div><div class="line">plt.figure(<span class="number">1</span>, figsize=(<span class="number">8</span>, <span class="number">6</span>))</div><div class="line"><span class="keyword">for</span> k <span class="keyword">in</span> range(len(x_arr)):</div><div class="line">    <span class="keyword">if</span> y_arr[k] &gt; <span class="number">0</span>:</div><div class="line">        plt.scatter(x_arr[k][<span class="number">1</span>], x_arr[k][<span class="number">2</span>])</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        plt.scatter(x_arr[k][<span class="number">1</span>], x_arr[k][<span class="number">2</span>], marker=<span class="string">'x'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 牛顿法的结果</span></div><div class="line">x1_nt = list(range(<span class="number">10</span>, <span class="number">40</span>))</div><div class="line">x2_nt = [<span class="number">-1.0</span> * (thetas_nt[<span class="number">0</span>] + thetas_nt[<span class="number">1</span>] * k) / thetas_nt[<span class="number">2</span>] <span class="keyword">for</span> k <span class="keyword">in</span> x1_nt]</div><div class="line">plt.plot(x1_nt, x2_nt)</div><div class="line"></div><div class="line"><span class="comment"># 梯度下降的结果，注意对归一化的值进行反处理</span></div><div class="line">x1_gd = list(range(<span class="number">40</span>, <span class="number">70</span>))</div><div class="line">x2_gd = <span class="number">-1.0</span> * (thetas_gd[<span class="number">0</span>] + thetas_gd[<span class="number">1</span>] * ((np.array(x1_gd) - x_mean[<span class="number">0</span>]) / x_std[<span class="number">0</span>])) / thetas_gd[<span class="number">2</span>]</div><div class="line">x2_gd = np.array(x2_gd) * x_std[<span class="number">1</span>]+ x_mean[<span class="number">1</span>]</div><div class="line">plt.plot(x1_gd, x2_gd)</div><div class="line"></div><div class="line">plt.xlabel(<span class="string">'Exam 1 score'</span>, fontsize=<span class="string">'medium'</span>); plt.ylabel(<span class="string">'Exam 2 score'</span>, fontsize=<span class="string">'medium'</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure></p>
+<p>上述代码的输出如下：<br><code>thetas of gradient descnet: [-0.056595    1.46279349  1.56073685]</code><br><code>thetas of newton&#39;s method:  [-16.37874341   0.14834077   0.15890845]</code><br><code>test result of gradient descent: 0.668021864744</code><br><code>test result of newton&#39;s method:  0.668021864022</code></p>
+<p><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/logistic/logistic-college-result.png" alt="Alt text"></p>
+<h2 id="二分类与多分类"><a href="#二分类与多分类" class="headerlink" title="二分类与多分类"></a>二分类与多分类</h2><ul>
+<li>多分类可以通过转化为one vs rest 的二分类</li>
+<li>递归rest从而实现多分类</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>julyedu机器学习班</li>
+<li>机器学习 周志华</li>
+<li>吴恩达老师机器学习视频</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag">#机器学习</a>
+          
+            <a href="/tags/逻辑回归/" rel="tag">#逻辑回归</a>
+          
+            <a href="/tags/牛顿法/" rel="tag">#牛顿法</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/25/machine_learning/normal_equation/" rel="next" title="机器学习之Normal Equation求解">
+                <i class="fa fa-chevron-left"></i> 机器学习之Normal Equation求解
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/27/machine_learning/logistic-regression/"
+           data-title="机器学习之逻辑回归" data-url="http://coder-ss.github.io/2016/11/27/machine_learning/logistic-regression/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/favicon.png"
+               alt="coder-ss" />
+          <p class="site-author-name" itemprop="name">coder-ss</p>
+          <p class="site-description motion-element" itemprop="description">do something interesting</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#符号约定"><span class="nav-number">1.</span> <span class="nav-text">符号约定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sigmoid函数"><span class="nav-number">2.</span> <span class="nav-text">sigmoid函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数求解"><span class="nav-number">3.</span> <span class="nav-text">参数求解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#损失函数"><span class="nav-number">3.1.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最大似然估计"><span class="nav-number">3.2.</span> <span class="nav-text">最大似然估计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#牛顿法"><span class="nav-number">4.</span> <span class="nav-text">牛顿法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实践"><span class="nav-number">5.</span> <span class="nav-text">实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二分类与多分类"><span class="nav-number">6.</span> <span class="nav-text">二分类与多分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coder-ss</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"totoo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
