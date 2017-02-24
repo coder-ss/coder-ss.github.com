@@ -1,0 +1,743 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="机器学习,高等数学," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="高等数学中关于极限、微积分等的一些基础。介绍了两边夹定理、极限存在定理、基本求导法则、泰勒公式、凸函数的概念、分部积分法等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习之高数基础">
+<meta property="og:url" content="http://coder-ss.github.io/2016/05/04/machine_learning/advanced-mathematics/index.html">
+<meta property="og:site_name" content="coder_ss's blog">
+<meta property="og:description" content="高等数学中关于极限、微积分等的一些基础。介绍了两边夹定理、极限存在定理、基本求导法则、泰勒公式、凸函数的概念、分部积分法等内容。">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/advanced_mathematics/mathematics_two_side_theorem.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/advanced_mathematics/mathematics_convex_funciton.png">
+<meta property="og:updated_time" content="2017-02-24T13:53:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习之高数基础">
+<meta name="twitter:description" content="高等数学中关于极限、微积分等的一些基础。介绍了两边夹定理、极限存在定理、基本求导法则、泰勒公式、凸函数的概念、分部积分法等内容。">
+<meta name="twitter:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/advanced_mathematics/mathematics_two_side_theorem.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://coder-ss.github.io/2016/05/04/machine_learning/advanced-mathematics/"/>
+
+
+  <title> 机器学习之高数基础 | coder_ss's blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?7d7157a5836d43e3ad7dbd42e82697f3";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">coder_ss's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">do something interesting</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                机器学习之高数基础
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-04T20:55:00+08:00" content="2016-05-04">
+              2016-05-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">machine_learning</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/04/machine_learning/advanced-mathematics/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/04/machine_learning/advanced-mathematics/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="极限相关"><a href="#极限相关" class="headerlink" title="极限相关"></a>极限相关</h2><h3 id="两边夹定理"><a href="#两边夹定理" class="headerlink" title="两边夹定理"></a>两边夹定理</h3><p>当 $x\in U(x_0,r)$ 时，有 $g(x)\leq f(x) \leq h(x)$ 成立，并且 $\lim \limits_{x\to x_0}g(x)=A$，$\lim \limits_{x\to x_0}h(x)=A$，那么</p>
+<script type="math/tex; mode=display">\lim \limits\_{x\to x\_0}f(x)=A</script><blockquote>
+<p>利用两边夹定理可以求一些函数的极限。例如求 $\frac{\sin x}{x}$ 的极限：</p>
+<p>有如下基于单位圆做的一个图</p>
+<p><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/advanced_mathematics/mathematics_two_side_theorem.png" alt="Alt text"></p>
+<p> 把 $x$ 当作弧 $AB$ 的长，有</p>
+<script type="math/tex; mode=display">\sin x<x<\tan x,\ x\in U(0,\varepsilon)</script><p>同时除以 $\sin x$，有 </p>
+<script type="math/tex; mode=display">1<\frac{x}{\sin x}<\frac{1}{\cos x}</script><p>即 </p>
+<script type="math/tex; mode=display">\cos x<\frac{\sin x}{x}<1</script><p>因为 $\lim \limits_{x\to 0}\cos x=\cos 0 = 1$，由两边夹定理有</p>
+<script type="math/tex; mode=display">\lim \limits_{x\to 0}\frac{\sin x}{x}=1</script></blockquote>
+<h3 id="极限存在定理"><a href="#极限存在定理" class="headerlink" title="极限存在定理"></a>极限存在定理</h3><p><strong>定理</strong> 单调有界数列必有极限</p>
+<p>单增数列有上界，则其必有极限</p>
+<blockquote>
+<p>如下的数列 $x_n$ 有上界：</p>
+<script type="math/tex; mode=display">\begin{align*}
+x_n&=\left(1+\frac{1}{n}\right)^n \\
+&=1+C_n^1\frac{1}{n}+C_n^2\frac{1}{n^2}+C_n^3\frac{1}{n^3}+\cdots+C_n^n\frac{1}{n^n} \\
+&=1+n\cdot \frac{1}{n}+\frac{n(n-1)}{2!}\cdot\frac{1}{n^2} +\frac{n(n-1)(n-2)}{3!}\cdot\frac{1}{n^3}+\cdots + \frac{n(n-1)(n-2)\cdots1}{n!}\cdot\frac{1}{n^n} \\
+&=1+1+\frac{1}{2!}\left(1-\frac{1}{n}\right) + \frac{1}{3!}\left(1-\frac{1}{n}\right)\left(1-\frac{2}{n}\right)+\cdots + \frac{1}{n!}\left(1-\frac{1}{n}\right)\left(1-\frac{2}{n}\right)\cdots\left(1-\frac{n-1}{n}\right) \\
+&<1+1+\frac{1}{2!}+\frac{1}{3!}+\cdots+\frac{1}{n!} \\
+&<1+1+\frac{1}{2}+\frac{1}{2^2}+\cdots+\frac{1}{2^{n-1}} \\
+&=3-\frac{1}{2^{n-1}} \\
+&<3
+\end{align*}</script><p>且数列单增：$x_n&lt;x_{n+1}$<br>所以数列 $x_n$ 有极限，记作 $e$（也就是自然常数）</p>
+<p>上面用到了二项式定理</p>
+<script type="math/tex; mode=display">(x+y)^n=\sum_{k=0}^{n}C_n^k x^{n-k}y^k</script><p>其中，$C_n^k=\frac{n!}{k!(n-k)!}$</p>
+</blockquote>
+<h2 id="微分相关"><a href="#微分相关" class="headerlink" title="微分相关"></a>微分相关</h2><h3 id="基本求导公式"><a href="#基本求导公式" class="headerlink" title="基本求导公式"></a>基本求导公式</h3><p>非正式的说：</p>
+<ul>
+<li>导数就是曲线的斜率。反应了曲线变化的快慢。</li>
+<li>二阶导数是斜率变化快慢的反应。反应了曲线的凸凹性。</li>
+</ul>
+<p>常用求导：</p>
+<ul>
+<li>$C\prime=0$</li>
+<li>$(x^n)\prime=nx^{n-1}$</li>
+<li>$(\sin x)\prime=\cos x$</li>
+<li>$(\cos x)\prime=-\sin x$</li>
+<li>$(a^x)\prime=a^xlna$</li>
+<li>$(e^x)\prime=e^x$</li>
+<li>$(log_ax)\prime=\frac{1}{x}log_ae$</li>
+<li>$lnx=\frac{1}{x}$</li>
+<li>$(u+v)\prime=u\prime+v\prime$</li>
+<li>$(uv)\prime=u\prime v+uv\prime$</li>
+</ul>
+<p>小技巧：</p>
+<ul>
+<li>求幂指函数 $x^x$ 的最小值（幂指函数的处理思路）：取对数再求导</li>
+</ul>
+<h3 id="泰勒-Taylor-公式"><a href="#泰勒-Taylor-公式" class="headerlink" title="泰勒(Taylor)公式"></a>泰勒(Taylor)公式</h3><script type="math/tex; mode=display">f(x)=f(x_0)+f\prime(x_0)(x-x_0)+ \frac{f\prime\prime(x_0)}{2!} (x-x_0)^2 +\cdots+ \frac{f^{(n)}}{n!}(x-x_0)^n+R_n(x)</script><p>其中</p>
+<script type="math/tex; mode=display">R_n(x)=\frac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)^{n+1}</script><p>称为拉格朗日型余项，这里 $\xi$ 是 $x_0$ 与 $x$ 之间的某个值。<br>不需要精确计算 $R_n(x)$ 时，</p>
+<script type="math/tex; mode=display">R_n(x)=o[(x-x_0)^n]</script><p>称为<strong>佩亚诺(Peano)型余项</strong>，$o[(x-x_0)^n]$ 是比 $(x-x_0)^n$ 高阶的无穷小。</p>
+<p>通俗的讲，泰勒公式就是用多项式函数去逼近光滑函数。</p>
+<p>当 $x_0=0$，$\xi=\theta x\ (0&lt;\theta&lt;1)$ 时，可得<strong>麦克劳林(Maclaurin)公式</strong>：</p>
+<script type="math/tex; mode=display">f(x)=f(0)+f\prime(0)x+\frac{f\prime\prime(0)}{2!}x^2+\cdots+\frac{f^{(n)}(0)}{n!}x^n+\frac{f^{(n+1)}(\theta x)}{(n+1)!}x^{n+1}</script><p>带佩亚诺余项的麦克劳林公式：</p>
+<script type="math/tex; mode=display">f(x)=f(0)+f\prime(0)x+\frac{f\prime\prime(0)}{2!}x^2+\cdots+\frac{f^{(n)}(0)}{n!}x^n+o(x^n)</script><blockquote>
+<p>例如，用来计算 $e^x$、$\sin x$：<br>$e^x=1+x+\frac{x^2}{2!}+\cdots+\frac{x^n}{n!}+R_n$<br>$\sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\frac{x^7}{7!}+\cdots+(-1)^{m-1}\frac{x^{2m-1}}{(2m-1)!}+R_{2m}$</p>
+</blockquote>
+<h3 id="方向导数与梯度（多元函数微分）"><a href="#方向导数与梯度（多元函数微分）" class="headerlink" title="方向导数与梯度（多元函数微分）"></a>方向导数与梯度（多元函数微分）</h3><p>如果函数 $f(x,y)$ 在点 $P_0(x_0,y_0)$ 可微分，那么函数在该点沿任一方向 $l$ 的<strong>方向导数</strong>存在，且有</p>
+<script type="math/tex; mode=display">\frac{\partial f}{\partial l}\mid_{(x_0,y_0)}=f_x(x_0,y_0)\cos\alpha+f_y(x_0,y_0)\cos\beta</script><p>其中 $\cos\alpha$，$\cos\beta$ 是方向 $l$ 的方向余弦（$\alpha$ 为 $l$ 与 $x$ 轴、$y$ 轴的夹角）。</p>
+<p>在二元函数的情形，设函数 $f(x,y)$ 在平面区域 $D$ 内具有一阶连续偏导数，则对于每一点 $P_0(x_0,y_0)\in D$，都可定出一个向量</p>
+<script type="math/tex; mode=display">f_x(x_0,y_0)\boldsymbol{i}+f_y(x_0,y_0)\boldsymbol{j}</script><p>这向量称为函数 $f(x,y)$ 在点 $P_0(x_0,y_0)$ 的<strong>梯度</strong>，记作 $\mathbf{grad}\ f(x_0,y_0)$ 或 $\nabla f(x_0,y_0)$</p>
+<p>梯度方向是函数在该点变化最快的方向。</p>
+<h3 id="凸函数"><a href="#凸函数" class="headerlink" title="凸函数"></a>凸函数</h3><p>若函数 $f$ 的定义域 $\mathbf{dom}\ f$ 为凸集，且满足 $\forall x,y\in \mathbf{dom}\ f,\ 0\leq\theta\leq1$，有</p>
+<script type="math/tex; mode=display">f(\theta x+(1-\theta)y)\leq\theta f(x)+(1-\theta)f(y)</script><p>则称 $f$ 为凸函数。</p>
+<p><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/advanced_mathematics/mathematics_convex_funciton.png" alt="Alt text"></p>
+<p>扩展到n个变量：</p>
+<script type="math/tex; mode=display">f(\theta_1x_1+\cdots+\theta_nx_n)\leq\theta_1f(x_1)+\cdots+\theta_n(x_n)</script><p>其中 $0\leq\theta_i\leq1,\ \theta_1+\cdots+\theta_n=1$。</p>
+<p><strong>凸函数的判定</strong>：</p>
+<p>$f(x)$ 在区间 $[a,b]$上连续，在 $(a,b)$ 内二阶可导，那么</p>
+<ul>
+<li>若 $f\prime\prime(x)&gt;0$，则 $f(x)$ 是凸的；</li>
+<li>若 $f\prime\prime(x)&lt;0$，则 $f(x)$ 是凹的。</li>
+</ul>
+<h2 id="积分相关"><a href="#积分相关" class="headerlink" title="积分相关"></a>积分相关</h2><h3 id="分部积分法"><a href="#分部积分法" class="headerlink" title="分部积分法"></a>分部积分法</h3><script type="math/tex; mode=display">\int udv=uv-\int vdu</script><blockquote>
+<p>推导过程如下：</p>
+<script type="math/tex; mode=display">(uv)\prime=u\prime v+uv\prime</script><p>移项，得</p>
+<script type="math/tex; mode=display">uv\prime=(uv)\prime-u\prime v</script><p>两边求不定积分，得</p>
+<script type="math/tex; mode=display">\int uv\prime dx=\int(uv)\prime dx-\int u\prime vdx</script><p>即</p>
+<script type="math/tex; mode=display">\int uv\prime dx=uv-\int u\prime vdx</script><p>即 </p>
+<script type="math/tex; mode=display">\int udv=uv-\int vdu</script><p>举例：</p>
+<script type="math/tex; mode=display">\int lnxdx=xlnx-\int xdlnx=xlnx-\int x\cdot \frac{1}{x}dx=xlnx-x</script></blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>高等数学</li>
+<li>七月在线机器学习课程</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag">#机器学习</a>
+          
+            <a href="/tags/高等数学/" rel="tag">#高等数学</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/08/regular/regular-php-practice-2/" rel="next" title="php实战正则表达式（二）：提取html元素">
+                <i class="fa fa-chevron-left"></i> php实战正则表达式（二）：提取html元素
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/08/machine_learning/probability_statistics/" rel="prev" title="机器学习之概率统计基础">
+                机器学习之概率统计基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/04/machine_learning/advanced-mathematics/"
+           data-title="机器学习之高数基础" data-url="http://coder-ss.github.io/2016/05/04/machine_learning/advanced-mathematics/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/favicon.png"
+               alt="coder-ss" />
+          <p class="site-author-name" itemprop="name">coder-ss</p>
+          <p class="site-description motion-element" itemprop="description">do something interesting</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#极限相关"><span class="nav-number">1.</span> <span class="nav-text">极限相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#两边夹定理"><span class="nav-number">1.1.</span> <span class="nav-text">两边夹定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#极限存在定理"><span class="nav-number">1.2.</span> <span class="nav-text">极限存在定理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微分相关"><span class="nav-number">2.</span> <span class="nav-text">微分相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本求导公式"><span class="nav-number">2.1.</span> <span class="nav-text">基本求导公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#泰勒-Taylor-公式"><span class="nav-number">2.2.</span> <span class="nav-text">泰勒(Taylor)公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方向导数与梯度（多元函数微分）"><span class="nav-number">2.3.</span> <span class="nav-text">方向导数与梯度（多元函数微分）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#凸函数"><span class="nav-number">2.4.</span> <span class="nav-text">凸函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#积分相关"><span class="nav-number">3.</span> <span class="nav-text">积分相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分部积分法"><span class="nav-number">3.1.</span> <span class="nav-text">分部积分法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coder-ss</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"totoo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
