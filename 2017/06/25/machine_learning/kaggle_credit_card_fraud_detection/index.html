@@ -1,0 +1,854 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="机器学习,Kaggle,逻辑回归," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="理论是枯燥的，实践是艰难的，一个机器学习领域的新手在有一点理论基础后该如何一步步深入实践呢？已经有很多大神建议我们好好利用Kaggle及其类似的学习、竞赛平台，既然我是小白，那么就老老实实接受大神们的建议吧。这篇文章就是对Kaggle上Credit Card Fraud Detection这份数据集的学习。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习小白的Kaggle学习：信用卡诈骗识别">
+<meta property="og:url" content="http://coder-ss.github.io/2017/06/25/machine_learning/kaggle_credit_card_fraud_detection/index.html">
+<meta property="og:site_name" content="coder_ss's blog">
+<meta property="og:description" content="理论是枯燥的，实践是艰难的，一个机器学习领域的新手在有一点理论基础后该如何一步步深入实践呢？已经有很多大神建议我们好好利用Kaggle及其类似的学习、竞赛平台，既然我是小白，那么就老老实实接受大神们的建议吧。这篇文章就是对Kaggle上Credit Card Fraud Detection这份数据集的学习。">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/kaggle/credit_fruad_confusion1.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/kaggle/credit_fruad_confusion2.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/kaggle/credit_fruad_roc.png">
+<meta property="og:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/kaggle/credit_fruad_pr.png">
+<meta property="og:updated_time" content="2017-06-25T06:07:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习小白的Kaggle学习：信用卡诈骗识别">
+<meta name="twitter:description" content="理论是枯燥的，实践是艰难的，一个机器学习领域的新手在有一点理论基础后该如何一步步深入实践呢？已经有很多大神建议我们好好利用Kaggle及其类似的学习、竞赛平台，既然我是小白，那么就老老实实接受大神们的建议吧。这篇文章就是对Kaggle上Credit Card Fraud Detection这份数据集的学习。">
+<meta name="twitter:image" content="http://7qn7rt.com1.z0.glb.clouddn.com/ml/kaggle/credit_fruad_confusion1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://coder-ss.github.io/2017/06/25/machine_learning/kaggle_credit_card_fraud_detection/"/>
+
+
+  <title> 机器学习小白的Kaggle学习：信用卡诈骗识别 | coder_ss's blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?7d7157a5836d43e3ad7dbd42e82697f3";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">coder_ss's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">do something interesting</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                机器学习小白的Kaggle学习：信用卡诈骗识别
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-25T13:59:00+08:00" content="2017-06-25">
+              2017-06-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">machine_learning</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/06/25/machine_learning/kaggle_credit_card_fraud_detection/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/25/machine_learning/kaggle_credit_card_fraud_detection/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>理论是枯燥的，实践是艰难的，一个机器学习领域的新手在有一点理论基础后该如何一步步深入实践呢？已经有很多大神建议我们好好利用Kaggle及其类似的学习、竞赛平台，既然我是小白，那么就老老实实接受大神们的建议吧。这篇文章就是对Kaggle上<a href="https://www.kaggle.com/dalpozz/creditcardfraud" target="_blank" rel="external">Credit Card Fraud Detection</a>这份数据集的学习。</p>
+<p>其实，我下载了数据集之后也是束手无策的，别说不知道怎么去调用sklearn包里的函数来建模，就是利用NumPy和Pandas来对数据进行处理、分析也要去查查什么操作该用什么函数。所以，既然是学习，而且是刚刚开始的学习，就不要想着完全依靠自己来完成了。更厚颜无耻地，我决定从阅读Kaggle上这个数据集里<a href="https://www.kaggle.com/joparga3/in-depth-skewed-data-classif-93-recall-acc-now" target="_blank" rel="external">点赞数最高的kernel</a>开始。这篇文章的内容基本来源于这个kernel，我所做的工作可能主要在于翻译和整理成文章的形式，此外，有一些基本知识的补充。</p>
+<h2 id="数据集简介"><a href="#数据集简介" class="headerlink" title="数据集简介"></a>数据集简介</h2><p>这是一份欧洲信用卡使用者的消费数据，284807条记录中有492条消费属于信用卡诈骗，因此这是一份极度不均衡的数据。</p>
+<p>数据已经经过了PCA降维，由于保密的原因，原始的特征信息和背景信息已经基本被干掉了，只剩下名字为V1到V28的28个特征和Time、Amount。Time可以理解为消费时间，但是是相对的，Amount是消费金额。</p>
+<p>每条记录有一个Class，表示是否是信用卡诈骗，1表示诈骗，0表示正常消费。</p>
+<p>使用Pandas加载数据，然后看看数据到底长啥样：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line">%matplotlib inline</div><div class="line"></div><div class="line">data = pd.read_csv(<span class="string">"input/creditcard.csv"</span>)</div><div class="line">data.head()</div></pre></td></tr></table></figure></p>
+<p>输出结果：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">-</th>
+<th style="text-align:center">Time</th>
+<th style="text-align:center">V1</th>
+<th style="text-align:center">V2</th>
+<th style="text-align:center">…</th>
+<th style="text-align:center">V28</th>
+<th style="text-align:center">Amount</th>
+<th style="text-align:center">Class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.0</td>
+<td style="text-align:center">-1.359807</td>
+<td style="text-align:center">-0.072781</td>
+<td style="text-align:center">…</td>
+<td style="text-align:center">-0.021053</td>
+<td style="text-align:center">149.62</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.0</td>
+<td style="text-align:center">1.191857</td>
+<td style="text-align:center">0.266151</td>
+<td style="text-align:center">…</td>
+<td style="text-align:center">0.014724</td>
+<td style="text-align:center">2.69</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">1.0</td>
+<td style="text-align:center">-1.358354</td>
+<td style="text-align:center">-1.340163</td>
+<td style="text-align:center">…</td>
+<td style="text-align:center">-0.059752</td>
+<td style="text-align:center">378.66</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">1.0</td>
+<td style="text-align:center">-0.966272</td>
+<td style="text-align:center">-0.185226</td>
+<td style="text-align:center">…</td>
+<td style="text-align:center">-0.061458</td>
+<td style="text-align:center">123.50</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2.0</td>
+<td style="text-align:center">-1.158233</td>
+<td style="text-align:center">0.877737</td>
+<td style="text-align:center">…</td>
+<td style="text-align:center">0.215153</td>
+<td style="text-align:center">69.99</td>
+<td style="text-align:center">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>对类别进行一个统计，看看数据的不均衡程度：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">count_class = pd.value_counts(data[<span class="string">'Class'</span>], sort=<span class="keyword">True</span>).sort_index()</div><div class="line">print(count_class)</div></pre></td></tr></table></figure></p>
+<p>可以看到确实只有492条的Class为1（属于诈骗），数据非常不均衡。</p>
+<blockquote>
+<p>0    284315<br>1       492<br>Name: Class, dtype: int64</p>
+</blockquote>
+<p>对于数据不均衡问题，一般有如下处理方法：</p>
+<ul>
+<li>收集更多数据。显然这里不可行</li>
+<li>重采样，使不同分类数据的比例接近<ul>
+<li>过采样，对数据占比少的分类的数据进行copy</li>
+<li>欠采样，从数据占比多的分类中选取部分数据来使用</li>
+</ul>
+</li>
+<li>更改性能指标<ul>
+<li>F1score</li>
+<li>代价敏感学习</li>
+<li>Precision、Recall等</li>
+</ul>
+</li>
+</ul>
+<h2 id="处理方法"><a href="#处理方法" class="headerlink" title="处理方法"></a>处理方法</h2><ol>
+<li>一般情况下是需要进行特征处理的，但这份数据的特征已经处理过了，所以这一步不需要了。</li>
+<li>对数据进行欠采样，并基于逻辑回归来比较欠采样和不进行欠采样的效果。</li>
+<li>使用Precision、Recall、ROC等指标来评估模型。</li>
+</ol>
+<h2 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h2><p>虽然无需特征处理，但也需要进行一些简单的数据处理，例如Amount特征标准化、重采样、训练集数据集划分等。</p>
+<h3 id="规范化Amount特征"><a href="#规范化Amount特征" class="headerlink" title="规范化Amount特征"></a>规范化Amount特征</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</div><div class="line"></div><div class="line">data[<span class="string">'normAmount'</span>] = StandardScaler().fit_transform(data[<span class="string">'Amount'</span>].reshape(<span class="number">-1</span>, <span class="number">1</span>))</div><div class="line">data.drop([<span class="string">'Time'</span>, <span class="string">'Amount'</span>], axis=<span class="number">1</span>, inplace=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+<h3 id="将数据拆分成特征和标签"><a href="#将数据拆分成特征和标签" class="headerlink" title="将数据拆分成特征和标签"></a>将数据拆分成特征和标签</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">X = data.ix[:, data.columns != <span class="string">'Class'</span>]</div><div class="line">y = data.ix[:, data.columns == <span class="string">'Class'</span>]</div></pre></td></tr></table></figure>
+<h3 id="欠采样"><a href="#欠采样" class="headerlink" title="欠采样"></a>欠采样</h3><p>这里使用最简单的欠采样的方法来得到一份分布均衡的样本：有多少欺诈交易就从正常交易中随机选择多少条记录。<br>有一个叫做SMOTE的过采样方法很流行，如果要过采样的话可以采用，这里暂不使用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 少数类（欺诈交易）的数量，这些交易的index</span></div><div class="line">number_records_fraud = len(data[data.Class == <span class="number">1</span>])</div><div class="line">fraud_indices = np.array(data[data.Class == <span class="number">1</span>].index)</div><div class="line"></div><div class="line"><span class="comment"># 从正常交易的index中 随机选出 跟欺诈交易数量相等的index</span></div><div class="line">normal_indices = data[data.Class == <span class="number">0</span>].index</div><div class="line">random_normal_indices = np.random.choice(normal_indices, number_records_fraud, replace=<span class="keyword">False</span>)</div><div class="line"></div><div class="line"><span class="comment"># 要采样数据的index</span></div><div class="line">under_sample_indices = np.concatenate([fraud_indices, random_normal_indices])</div><div class="line"></div><div class="line"><span class="comment"># 欠采样得到的数据</span></div><div class="line">under_sample_data = data.iloc[under_sample_indices, :]</div><div class="line"></div><div class="line">X_undersample = under_sample_data.ix[:, under_sample_data.columns != <span class="string">'Class'</span>]</div><div class="line">y_undersample = under_sample_data.ix[:, under_sample_data.columns == <span class="string">'Class'</span>]</div><div class="line"></div><div class="line"><span class="comment"># Showing ratio</span></div><div class="line">print(<span class="string">"Percentage of normal transactions: "</span>, len(under_sample_data[under_sample_data.Class == <span class="number">0</span>])/len(under_sample_data))</div><div class="line">print(<span class="string">"Percentage of fraud transactions: "</span>, len(under_sample_data[under_sample_data.Class == <span class="number">1</span>])/len(under_sample_data))</div><div class="line">print(<span class="string">"Total number of transactions in resampled data: "</span>, len(under_sample_data))</div></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<blockquote>
+<p>Percentage of normal transactions:  0.5<br>Percentage of fraud transactions:  0.5<br>Total number of transactions in resampled data:  984</p>
+</blockquote>
+<h3 id="划分数据集、测试集"><a href="#划分数据集、测试集" class="headerlink" title="划分数据集、测试集"></a>划分数据集、测试集</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sklearn.cross_validation <span class="keyword">import</span> train_test_split</div><div class="line"></div><div class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.3</span>, random_state=<span class="number">0</span>)</div><div class="line"></div><div class="line">print(<span class="string">"Number transactions train dataset: "</span>, X_train.shape[<span class="number">0</span>])</div><div class="line">print(<span class="string">"Number transactions test dataset"</span>, X_test.shape[<span class="number">0</span>])</div><div class="line">print(<span class="string">"Total number of transactions: "</span>, len(X_train) + len(X_test))</div><div class="line"></div><div class="line">X_train_undersample, X_test_undersample, y_train_undersample, y_test_undersample = \</div><div class="line">train_test_split(X_undersample, y_undersample, test_size=<span class="number">0.3</span>, random_state=<span class="number">0</span>)</div><div class="line"></div><div class="line">print(<span class="string">""</span>)</div><div class="line">print(<span class="string">"Number transactions train dataset: "</span>, len(X_train_undersample))</div><div class="line">print(<span class="string">"Number transactions test dataset: "</span>, len(X_test_undersample))</div><div class="line">print(<span class="string">"Total number of transactions: "</span>, len(X_train_undersample) + len(X_test_undersample))</div></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<blockquote>
+<p>Number transactions train dataset:  199364<br>Number transactions test dataset 85443<br>Total number of transactions:  284807</p>
+<p>Number transactions train dataset:  688<br>Number transactions test dataset:  296<br>Total number of transactions:  984</p>
+</blockquote>
+<h2 id="基于欠采样数据的学习"><a href="#基于欠采样数据的学习" class="headerlink" title="基于欠采样数据的学习"></a>基于欠采样数据的学习</h2><p>在开始看代码之前首先要了解几个基本概念：真正例（True Positive）、假正例（False Positive）、真反例（True Negative）、假反例（False Negative）。对二分类问题，根据样本的真实标签和预测结果可以划分如下：</p>
+<table align="center">
+<thead>
+<tr><th rowspan="2">真实情况</th><th colspan="2" align="center">预测结果</th></tr>
+<tr><th align="center">正例</th><th align="center">反例</th></tr>
+</thead>
+<tbody>
+<tr><td align="center">正例</td><td>真正例（TP）</td><td>假反例（FN）</td></tr>
+<tr><td align="center">反例</td><td>假正例（FP）</td><td>真反例（TN）</td></tr>
+</tbody>
+</table>
+
+<p>还需要了解几个性能指标：精度（Accuracy）、查准率（Precision，又称准确率）、查全率（Recall，又称召回率）。</p>
+<ul>
+<li>Accuracy = (TP + TN)  / total</li>
+<li>Precision = TP / (TP + FP)</li>
+<li>Recall = TP / (TP + FN)</li>
+</ul>
+<p>对Precision和Recall通俗的理解：</p>
+<ul>
+<li>Precision：判别为正例的结果中真正例的比率</li>
+<li>Recall：所有正例中，判别结果是正例的比率</li>
+</ul>
+<p>也需要了解一个测试方法：k折交叉验证法（k-fold cross validation）。将数据集D划分为k个大小相同的互斥的子集，即 $D = D_1 \cup D_2 \cup \dots \cup D_k, D_i \cap D_j = \varnothing (i \neq j) $ 。每个子集 $D_i$ 都尽可能保持数据分布的一致性，即从D中通过分层采样得到。然后，每次用k-1个子集的并集作为训练集，余下的那个子集作为测试集；这样就可获得k组训练/测试集，从而可以进行k此训练和测试，最终返回的是这k次测试结果的均值。</p>
+<p>在后面我们绘制ROC曲线、P-R曲线时也会对它们进行简单介绍。如果想对这些概念进行进一步了解，建议阅读周志华老师的《机器学习》第二章“模型评估与选择”。</p>
+<p>这里使用了“逻辑回归”这个机器学习方法，所以还需要对逻辑回归先有一个了解。可以阅读周志华老师的《机器学习》第三章“线性模型”，3.3节的“对数几率回归”就是逻辑回归。<br>也可以参考我之前的学习笔记<a href="http://coderss.me/2016/11/10/machine_learning/linear-regression/" target="_blank" rel="external">机器学习之线性回归</a>、<a href="http://coderss.me/2016/11/27/machine_learning/logistic-regression/" target="_blank" rel="external">机器学习之逻辑回归</a>。</p>
+<p>下面的代码先实现了一个函数：通过k折交叉验证（这里k=5），利用逻辑回归模型，在给定数据集的基础上，从一组给定的模型参数（C_param）中，选出最优的模型参数。考虑到实际场景，我们希望尽可能找出信用卡欺诈的消费，所以，这里“最优”的判断使用的参数是召回率。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</div><div class="line"><span class="keyword">from</span> sklearn.cross_validation <span class="keyword">import</span> KFold, cross_val_score</div><div class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> confusion_matrix, precision_recall_curve, roc_auc_score, roc_curve, \</div><div class="line">recall_score, classification_report, auc</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_Kfold_scores</span><span class="params">(X_train_data, y_train_data)</span>:</span></div><div class="line">    fold = KFold(len(y_train_data), <span class="number">5</span>, shuffle=<span class="keyword">False</span>)</div><div class="line">    </div><div class="line">    <span class="comment"># 候选C_param</span></div><div class="line">    c_param_range = [<span class="number">0.01</span>, <span class="number">0.1</span>, <span class="number">1</span>, <span class="number">10</span>, <span class="number">100</span>]</div><div class="line">    </div><div class="line">    result_table = pd.DataFrame(index=range(len(c_param_range), <span class="number">2</span>), columns=[<span class="string">'C_parameter'</span>, <span class="string">'Mean recall score'</span>])</div><div class="line">    result_table[<span class="string">'C_parameter'</span>] = c_param_range</div><div class="line">    </div><div class="line">    j = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> c_param <span class="keyword">in</span> c_param_range:</div><div class="line">        print(<span class="string">'====================================='</span>)</div><div class="line">        print(<span class="string">'C parameter: '</span>, c_param)</div><div class="line">        print(<span class="string">'-------------------------------------'</span>)</div><div class="line">        print(<span class="string">''</span>)</div><div class="line">        </div><div class="line">        recall_accs = []</div><div class="line">        <span class="comment"># the k-fold will give 2 lists: train_indices = indices[0], test_indices = indices[1]</span></div><div class="line">        <span class="keyword">for</span> iteration, indices <span class="keyword">in</span> enumerate(fold, start=<span class="number">1</span>):</div><div class="line">            <span class="comment"># 建立逻辑回归模型</span></div><div class="line">            lr = LogisticRegression(C = c_param, penalty=<span class="string">'l1'</span>)</div><div class="line">            <span class="comment"># 训练</span></div><div class="line">            lr.fit(X_train_data.iloc[indices[<span class="number">0</span>], :], y_train_data.iloc[indices[<span class="number">0</span>], :].values.ravel())</div><div class="line">            <span class="comment"># 预测</span></div><div class="line">            y_pred_undersample = lr.predict(X_train_data.iloc[indices[<span class="number">1</span>], :].values)</div><div class="line">            </div><div class="line">            <span class="comment"># 召回率计算</span></div><div class="line">            recall_acc = recall_score(y_train_data.iloc[indices[<span class="number">1</span>], :].values, y_pred_undersample)</div><div class="line">            recall_accs.append(recall_acc)</div><div class="line">            </div><div class="line">            print(<span class="string">'Iteration '</span>, iteration, <span class="string">' recall score: '</span>, recall_acc)</div><div class="line">            </div><div class="line">        result_table.ix[j, <span class="string">'Mean recall score'</span>] = np.mean(recall_accs)</div><div class="line">        j += <span class="number">1</span></div><div class="line">        print(<span class="string">''</span>)</div><div class="line">        print(<span class="string">'Mean recall score '</span>, np.mean(recall_accs))</div><div class="line">        print(<span class="string">''</span>)</div><div class="line"></div><div class="line">    <span class="comment"># 召回率最高的C_param</span></div><div class="line">    best_c = result_table.loc[result_table[<span class="string">'Mean recall score'</span>].idxmax()][<span class="string">'C_parameter'</span>]</div><div class="line">    </div><div class="line">    print(<span class="string">'*********************************************************************************'</span>)</div><div class="line">    print(<span class="string">'Best model to choose from cross validation is with C parameter = '</span>, best_c)</div><div class="line">    print(<span class="string">'*********************************************************************************'</span>)</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> best_c</div></pre></td></tr></table></figure>
+<p>在欠采样的数据集上调用函数<code>print_Kfold_scores</code>:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">best_c = print_Kfold_scores(X_train_undersample, y_train_undersample)</div></pre></td></tr></table></figure></p>
+<p>输出如下：</p>
+<blockquote>
+<p>=====================================<br>C parameter:  0.01<br>-——————————————————</p>
+<p>Iteration  1  recall score:  0.931506849315<br>Iteration  2  recall score:  0.917808219178<br>Iteration  3  recall score:  1.0<br>Iteration  4  recall score:  0.959459459459<br>Iteration  5  recall score:  0.954545454545</p>
+<p>Mean recall score  0.9526639965</p>
+<p>=====================================<br>C parameter:  0.1<br>-——————————————————</p>
+<p>Iteration  1  recall score:  0.849315068493<br>Iteration  2  recall score:  0.86301369863<br>Iteration  3  recall score:  0.932203389831<br>Iteration  4  recall score:  0.945945945946<br>Iteration  5  recall score:  0.909090909091</p>
+<p>Mean recall score  0.899913802398</p>
+<p>=====================================<br>C parameter:  1<br>-——————————————————</p>
+<p>Iteration  1  recall score:  0.849315068493<br>Iteration  2  recall score:  0.904109589041<br>Iteration  3  recall score:  0.983050847458<br>Iteration  4  recall score:  0.945945945946<br>Iteration  5  recall score:  0.924242424242</p>
+<p>Mean recall score  0.921332775036</p>
+<p>=====================================<br>C parameter:  10<br>-——————————————————</p>
+<p>Iteration  1  recall score:  0.86301369863<br>Iteration  2  recall score:  0.890410958904<br>Iteration  3  recall score:  0.983050847458<br>Iteration  4  recall score:  0.945945945946<br>Iteration  5  recall score:  0.924242424242</p>
+<p>Mean recall score  0.921332775036</p>
+<p>=====================================<br>C parameter:  100<br>-——————————————————</p>
+<p>Iteration  1  recall score:  0.86301369863<br>Iteration  2  recall score:  0.890410958904<br>Iteration  3  recall score:  0.983050847458<br>Iteration  4  recall score:  0.945945945946<br>Iteration  5  recall score:  0.924242424242</p>
+<p>Mean recall score  0.921332775036</p>
+<p>********************************************************************************<br>Best model to choose from cross validation is with C parameter =  0.01<br>********************************************************************************</p>
+</blockquote>
+<p>可以发现，逻辑回归模型的参数C取0.01时召回率最高。这就是我们基于欠采样数据学习得到的模型：参数C=0.01的逻辑回归模型。</p>
+<h2 id="模型在测试集上的表现"><a href="#模型在测试集上的表现" class="headerlink" title="模型在测试集上的表现"></a>模型在测试集上的表现</h2><p>接下来，我们需要看看上面学习得到的模型在测试集上的表现。混淆矩阵可以对分类结果给出一个直观的认识，我们先实现混淆矩阵的绘制函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> itertools</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_confusion_matrix</span><span class="params">(cm, classes,</span></span></div><div class="line">                         normalize=False,</div><div class="line">                         title=<span class="string">"Confusion matrix"</span>,</div><div class="line">                         cmap=plt.cm.Blues):</div><div class="line">    plt.imshow(cm, interpolation=<span class="string">"nearest"</span>, cmap=cmap) <span class="comment">#interpolation：插值</span></div><div class="line">    plt.title(title)</div><div class="line">    plt.colorbar()</div><div class="line">    tick_marks = np.arange(len(classes))</div><div class="line">    plt.xticks(tick_marks, classes, rotation=<span class="number">0</span>) <span class="comment"># x刻度 第一个参数是location，第二个参数是label</span></div><div class="line">    plt.yticks(tick_marks, classes) <span class="comment"># y刻度</span></div><div class="line">    </div><div class="line">    <span class="comment"># 归一化，这里不需要使用</span></div><div class="line">    <span class="keyword">if</span> normalize:</div><div class="line">        cm = cm.astype(<span class="string">'float'</span>) / cm.sum(axis=<span class="number">1</span>)[:, np.newaxis]</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="number">1</span></div><div class="line">    </div><div class="line">    <span class="comment"># 给每个区域写具体的值</span></div><div class="line">    thresh = cm.max() / <span class="number">2</span></div><div class="line">    <span class="keyword">for</span> i, j <span class="keyword">in</span> itertools.product(range(cm.shape[<span class="number">0</span>]), range(cm.shape[<span class="number">1</span>])):</div><div class="line">        plt.text(j, i, cm[i, j], horizontalalignment=<span class="string">"center"</span>, color=<span class="string">"white"</span> <span class="keyword">if</span> cm[i, j] &gt; thresh <span class="keyword">else</span> <span class="string">"black"</span>) </div><div class="line">    </div><div class="line">    plt.tight_layout() <span class="comment"># Automatically adjust subplot parameters to give specified padding.</span></div><div class="line">    plt.ylabel(<span class="string">"True label"</span>)</div><div class="line">    plt.xlabel(<span class="string">"Predicted label"</span>)</div></pre></td></tr></table></figure>
+<p>首先，看看模型在欠采样数据的测试集上的表现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 逻辑回归，C_parameter使用上面比较得到的最优参数(0.01)。</span></div><div class="line">lr = LogisticRegression(C = best_c, penalty = <span class="string">'l1'</span>)</div><div class="line">lr.fit(X_train_undersample,y_train_undersample.values.ravel()) <span class="comment">#训练数据：欠采样的训练集</span></div><div class="line">y_pred_undersample = lr.predict(X_test_undersample.values) <span class="comment">#预测数据：欠采样的测试集</span></div><div class="line"></div><div class="line"><span class="comment"># 计算混淆矩阵</span></div><div class="line">cnf_matrix = confusion_matrix(y_test_undersample,y_pred_undersample)</div><div class="line">np.set_printoptions(precision=<span class="number">2</span>)</div><div class="line"></div><div class="line">print(<span class="string">"Recall metric in the testing dataset: "</span>, cnf_matrix[<span class="number">1</span>,<span class="number">1</span>]/(cnf_matrix[<span class="number">1</span>,<span class="number">0</span>]+cnf_matrix[<span class="number">1</span>,<span class="number">1</span>]))</div><div class="line"></div><div class="line"><span class="comment"># 绘制 non-normalized 的混淆矩阵</span></div><div class="line">class_names = [<span class="number">0</span>,<span class="number">1</span>]</div><div class="line">plt.figure()</div><div class="line">plot_confusion_matrix(cnf_matrix</div><div class="line">                      , classes=class_names</div><div class="line">                      , title=<span class="string">'Confusion matrix'</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p>输出结果如下：</p>
+<blockquote>
+<p>Recall metric in the testing dataset:  0.931972789116<br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/kaggle/credit_fruad_confusion1.png" alt="confusion matrix plot"></p>
+</blockquote>
+<p>可以看到模型在欠采样数据集上的召回率达到了93.2%，作为一个简单的模型来说已经相当不错啦，那进一步来看看模型在全部数据的测试集上的表现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 逻辑回归，C_parameter使用上面比较得到的最优参数。</span></div><div class="line">lr = LogisticRegression(C = best_c, penalty = <span class="string">'l1'</span>)</div><div class="line">lr.fit(X_train_undersample,y_train_undersample.values.ravel()) <span class="comment">#训练数据：欠采样的训练集</span></div><div class="line">y_pred = lr.predict(X_test.values) <span class="comment">#预测数据：所有数据的测试集</span></div><div class="line"></div><div class="line"><span class="comment"># 计算混淆矩阵</span></div><div class="line">cnf_matrix = confusion_matrix(y_test, y_pred)</div><div class="line">np.set_printoptions(precision=<span class="number">2</span>)</div><div class="line"></div><div class="line">print(<span class="string">"Recall metric in the testing dataset: "</span>, cnf_matrix[<span class="number">1</span>,<span class="number">1</span>]/(cnf_matrix[<span class="number">1</span>,<span class="number">0</span>]+cnf_matrix[<span class="number">1</span>,<span class="number">1</span>]))</div><div class="line"></div><div class="line"><span class="comment"># 绘制 non-normalized 的混淆矩阵</span></div><div class="line">class_names = [<span class="number">0</span>,<span class="number">1</span>]</div><div class="line">plt.figure()</div><div class="line">plot_confusion_matrix(cnf_matrix</div><div class="line">                      , classes=class_names</div><div class="line">                      , title=<span class="string">'Confusion matrix'</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p>输出结果如下：</p>
+<blockquote>
+<p>Recall metric in the testing dataset:  0.918367346939<br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/kaggle/credit_fruad_confusion2.png" alt="confusion matrix plot"></p>
+</blockquote>
+<p>可以看到召回率还是比较理想的，但是准确率就不太好了。</p>
+<h2 id="ROC曲线和P-R曲线"><a href="#ROC曲线和P-R曲线" class="headerlink" title="ROC曲线和P-R曲线"></a>ROC曲线和P-R曲线</h2><p>作为学习，我们看看ROC曲线和Precision-Recall曲线的绘制。这里给出它们的介绍和绘制代码、结果，至于这两个曲线具体的作用留着读者自己去感受吧。</p>
+<p>ROC全称是“受试者工作特征”（Receiver Operating Characteristic）曲线。我们根据学习器的预测结果对样例进行排序，排在前面的是学习器认为“最可能”是正例的样本，排在最后的则是学习器认为“最不可能”是正例的样本。按此顺序逐个把样本作为正例进行预测，每次计算出两个重要量的值，分别以它们为横、纵坐标作图，就得到了“ROC曲线”。纵轴是“真正例率”（True Positive Rate，TPR），横轴是“假正例率”（False Positive Rate，FPR）：</p>
+<ul>
+<li>TPR = TP / (TP + FN)</li>
+<li>FPR = FP / (TN + FP)</li>
+</ul>
+<p>我个人对“真正例率”和“假正例率”通俗的理解：</p>
+<ul>
+<li>真正例率：所有正例中，判别结果是正例的比率</li>
+<li>假正例率：所有反例中，判别结果是正例的比率</li>
+</ul>
+<p>AUC（Area Under ROC Curve）：ROC曲线下的面积。</p>
+<p>同样的，我们根据学习器的结果对样例进行排序，按此顺序逐个把样本作为正例进行预测，每次可以计算出当前的查全率（Recall）、查准率（Precision）。以Precision为纵轴、Recall为横轴作图，就得到了Precision-Recall曲线，简称P-R曲线。</p>
+<p>以下为绘制ROC曲线的代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 回归模型</span></div><div class="line">lr = LogisticRegression(C = best_c, penalty=<span class="string">'l1'</span>)</div><div class="line"><span class="comment"># decision_function(X): Predict confidence scores for samples.</span></div><div class="line"><span class="comment"># 模型学习、预测每个样本的得分</span></div><div class="line">y_pred_undersample_score = lr.fit(X_train_undersample, y_train_undersample.values.ravel())\</div><div class="line">.decision_function(X_test_undersample.values)</div><div class="line"></div><div class="line"><span class="comment"># 计算fpr、tpr</span></div><div class="line">fpr, tpr, thresholds = roc_curve(y_test_undersample.values.ravel(), y_pred_undersample_score)</div><div class="line">roc_auc = auc(fpr, tpr)</div><div class="line"></div><div class="line"><span class="comment"># 绘制ROC曲线</span></div><div class="line">plt.title(<span class="string">'Receiver Operating Characteristic'</span>)</div><div class="line">plt.plot(fpr, tpr, label=<span class="string">'AUC = %.2f'</span> % roc_auc)</div><div class="line">plt.legend(loc=<span class="string">'lower right'</span>)</div><div class="line">plt.plot([<span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">1</span>], <span class="string">'r--'</span>)</div><div class="line">plt.xlim([<span class="number">-0.1</span>, <span class="number">1.0</span>])</div><div class="line">plt.ylim([<span class="number">-0.1</span>, <span class="number">1.01</span>])</div><div class="line">plt.ylabel(<span class="string">'True Positive Rate'</span>)</div><div class="line">plt.xlabel(<span class="string">'False Positive Rate'</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure></p>
+<p>下图为绘制得到的ROC曲线，对比以下对应于随机猜测模型的虚线，效果还是不错的。<br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/kaggle/credit_fruad_roc.png" alt="ROC Cruve"></p>
+<p>以下为绘制P-R曲线的代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 计算precision和recall</span></div><div class="line">precision, recall, threshold = precision_recall_curve(y_test_undersample.values.ravel(), y_pred_undersample_score)</div><div class="line"></div><div class="line"><span class="comment"># 绘制P-R曲线</span></div><div class="line">plt.title(<span class="string">'Precision-Recall Curve'</span>)</div><div class="line">plt.plot(recall, precision)</div><div class="line">plt.plot([<span class="number">0</span>,<span class="number">1</span>], [<span class="number">0</span>,<span class="number">1</span>], <span class="string">'r--'</span>)</div><div class="line">plt.xlim([<span class="number">0.0</span>, <span class="number">1.10</span>])</div><div class="line">plt.ylim([<span class="number">0.0</span>, <span class="number">1.10</span>])</div><div class="line">plt.xlabel(<span class="string">'Recall'</span>)</div><div class="line">plt.ylabel(<span class="string">'Precision'</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure></p>
+<p>绘制得到的P-R曲线：<br><img src="http://7qn7rt.com1.z0.glb.clouddn.com/ml/kaggle/credit_fruad_pr.png" alt="Precison-Recall Cruve"></p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>作为一个小白的初次kaggle体验到这里就准备结束了，原<a href="https://www.kaggle.com/joparga3/in-depth-skewed-data-classif-93-recall-acc-now" target="_blank" rel="external">kernel</a>中还有对整个数据集使用同样方法来训练的探索。不管怎样，还是强烈建议大家花时间去阅读原kernel，写的确实挺好。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag">#机器学习</a>
+          
+            <a href="/tags/Kaggle/" rel="tag">#Kaggle</a>
+          
+            <a href="/tags/逻辑回归/" rel="tag">#逻辑回归</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/11/machine_learning/numpy_summary/" rel="next" title="NumPy基础">
+                <i class="fa fa-chevron-left"></i> NumPy基础
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/06/25/machine_learning/kaggle_credit_card_fraud_detection/"
+           data-title="机器学习小白的Kaggle学习：信用卡诈骗识别" data-url="http://coder-ss.github.io/2017/06/25/machine_learning/kaggle_credit_card_fraud_detection/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/favicon.png"
+               alt="coder-ss" />
+          <p class="site-author-name" itemprop="name">coder-ss</p>
+          <p class="site-description motion-element" itemprop="description">do something interesting</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集简介"><span class="nav-number">1.</span> <span class="nav-text">数据集简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理方法"><span class="nav-number">3.</span> <span class="nav-text">处理方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据准备"><span class="nav-number">4.</span> <span class="nav-text">数据准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#规范化Amount特征"><span class="nav-number">4.1.</span> <span class="nav-text">规范化Amount特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将数据拆分成特征和标签"><span class="nav-number">4.2.</span> <span class="nav-text">将数据拆分成特征和标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#欠采样"><span class="nav-number">4.3.</span> <span class="nav-text">欠采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#划分数据集、测试集"><span class="nav-number">4.4.</span> <span class="nav-text">划分数据集、测试集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于欠采样数据的学习"><span class="nav-number">5.</span> <span class="nav-text">基于欠采样数据的学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型在测试集上的表现"><span class="nav-number">6.</span> <span class="nav-text">模型在测试集上的表现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC曲线和P-R曲线"><span class="nav-number">7.</span> <span class="nav-text">ROC曲线和P-R曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">8.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coder-ss</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"totoo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
